@@ -1,0 +1,29 @@
+original version, no optimisation flags (100 time steps):
+
+(gcc (Ubuntu/Linaro 4.6.4-1ubuntu1~12.04) 4.6.4)
+
+real	0m16.821s
+user	0m16.765s
+sys	0m0.004s
+
+-03
+
+real	0m3.409s
+user	0m3.388s
+sys	0m0.008s
+
+-ffast-math
+
+real	0m2.960s
+user	0m2.948s
+sys	0m0.000s
+
+-march=native -mtune=native
+
+real	0m2.572s
+user	0m2.552s
+sys	0m0.008s
+
+http://en.chys.info/2010/04/what-exactly-marchnative-means/
+
+-imultiarch x86_64-linux-gnu - -march=corei7-avx -mcx16 -msahf -mno-movbe -maes -mpclmul -mpopcnt -mno-abm -mno-lwp -mno-fma -mno-fma4 -mno-xop -mno-bmi -mno-tbm -mavx -msse4.2 -msse4.1 -mno-rdrnd -mno-f16c -mno-fsgsbase --param l1-cache-size=32 --param l1-cache-line-size=64 --param l2-cache-size=4096 -mtune=corei7-avx -quiet -dumpbase - -auxbase-strip /dev/null -fstack-protector

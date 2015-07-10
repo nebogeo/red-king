@@ -1,0 +1,44 @@
+TARGET  := coevol-range
+TARGET_LIB := libcoevol-range.a
+
+SRCS :=   	src/range_spedup_final.cpp
+
+# @CFLAGS@
+#-Ofast -std=c++11 -ffast-math -Wno-unused
+# -march=native -mtune=native
+CCFLAGS = -O3 -ffast-math -march=native -mtune=native -Isrc
+LDFLAGS = @LDFLAGS@
+LIBS    = @LIBS@
+
+CC = @CXX@
+AR = ar
+OBJS      := ${SRCS:.cpp=.o}
+DEPS      := ${SRCS:.cpp=.dep}
+XDEPS     := $(wildcard ${DEPS})
+.PHONY: all clean distclean
+all:: ${TARGET}
+
+ifneq (${XDEPS},)
+include ${XDEPS}
+endif
+
+${TARGET}: ${OBJS} ${COBJS}
+	${CC} ${LDFLAGS} -o $@ $^ ${LIBS}
+
+${OBJS}: %.o: %.cpp %.dep
+	${CC} ${CCFLAGS} -o $@ -c $<
+
+${DEPS}: %.dep: %.cpp Makefile
+	${CC} ${CCFLAGS} -MM $< > $@
+
+library: ${OBJS} ${COBJS}
+	$(AR) $(ARFLAGS) ${TARGET_LIB} ${OBJS} ${COBJS}
+
+clean:: cleandeps
+	-rm -f *~ src/*.o src/*/*.o ${TARGET}
+
+cleandeps::
+	-rm -f src/*.dep src/*/*.dep
+
+distclean:: clean
+	-rm -rf config.status autom4te.cache config.log Makefile

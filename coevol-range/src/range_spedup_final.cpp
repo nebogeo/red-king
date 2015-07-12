@@ -1,5 +1,7 @@
 #include "range_spedup_final.h"
 
+using namespace std;
+
 /***************************************
  * Main program
  ***************************************/

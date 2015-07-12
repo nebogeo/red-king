@@ -15,6 +15,9 @@
 /* Define to 1 if you have the `portaudio' library (-lportaudio). */
 #undef HAVE_LIBPORTAUDIO
 
+/* Define to 1 if you have the `sndfile' library (-lsndfile). */
+#undef HAVE_LIBSNDFILE
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 

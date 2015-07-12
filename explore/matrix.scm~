@@ -1,0 +1,20 @@
+#lang racket
+
+
+; /* Define cost functions (trade-offs) */
+;	for (i=0; i<N; i++) {
+;		a[i]=AMAX-(AMAX-AMIN)*(1-(u[i]-UMAX)/(UMIN-UMAX))/(1+A_P*(u[i]-UMAX)/(UMIN-UMAX)); /* Host trade-off */
+;		beta[i]=BEMAXTIME-(BEMAXTIME-BETMIN)*(1-(v[i]-VMAX)/(VMIN-VMAX))/(1+BETA_P*(v[i]-VMAX)/(VMIN-VMAX)); /* Parasite trade-off */
+;	}
+;
+;    /* Define host-parasite interaction matrix */
+;    for (i=0; i<N; i++){
+;        for (j=0; j<N; j++){
+;            E[i][j] = beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
+;        }
+;    }
+
+
+
+
+(square 40 "solid" "slateblue")

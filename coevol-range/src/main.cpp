@@ -30,6 +30,8 @@ void run_audio(void* c, unsigned int frames) {
     synth.render(audio->left_out);
     synth2.render(audio->right_out);
 
+    audio->maybe_record();
+
     //s->process(frames,a->left_out.get_non_const_buffer());
 //    sleep(1);
 
@@ -60,6 +62,10 @@ int main() {
 		beta[i]=BEMAXTIME-(BEMAXTIME-BETMIN)*(1-(v[i]-VMAX)/(VMIN-VMAX))/(1+BETA_P*(v[i]-VMAX)/(VMIN-VMAX)); /* Parasite trade-off */
 	}
 
+    for (i=0; i<N; i++){
+        cerr<<beta[i]<<endl;
+    }
+
     /* Define host-parasite interaction matrix */
     for (i=0; i<N; i++){
         for (j=0; j<N; j++){
@@ -78,9 +84,11 @@ int main() {
 
     audio = new audio_device("evolution",44100,2048);
 	audio->m_client.set_callback(run_audio, &stepper);
+    audio->start_recording("evol_out");
 
     synth.set_freq(0.01);
     synth2.set_freq(0.01);
+
 
     for (;;) { sleep(1); }
 

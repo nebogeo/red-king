@@ -14,6 +14,7 @@ public:
 private:
 
     float *m_level;
+    float *m_level_actual;
     float *m_oscs;
     float m_freq;
     u32 m_num_oscs;

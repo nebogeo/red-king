@@ -19,7 +19,9 @@
 #include <jellyfish/audio.h>
 #include "model/model.h"
 #include "synth/additive_synth.h"
-
+#include <QtGui>
+#include "qt/MainWindow.h"
+#include "qt/canvas.h"
 
 #include <unistd.h>
 using namespace std;
@@ -55,10 +57,22 @@ void run_audio(void* c, unsigned int frames) {
 }
 
 
-int main() {
-  red_king::model m;
-
+int main(int argc, char **argv) {
+  QApplication app(argc, argv);
   srand(::time(NULL));
+  red_king::model m;
+  MainWindow mainWin;
+
+  mainWin.show();
+
+  canvas mycanvas;
+  mycanvas.m_parasites = m.get_parasites();
+  mycanvas.m_hosts = m.get_hosts();
+  mainWin.m_Ui.canvas_holder->addWidget(&mycanvas);
+
+  //  mycanvas.show();
+
+
 
   audio = new audio_device("evolution",44100,2048);
   audio->m_client.set_callback(run_audio, &m);
@@ -67,8 +81,5 @@ int main() {
   synth.set_freq(0.01);
   synth2.set_freq(0.01);
 
-
-  for (;;) { sleep(1); }
-
-  return 1;
+  return app.exec();
 }

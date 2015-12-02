@@ -16,7 +16,7 @@
 
 #include "model.h"
 #include "range_spedup_final.h"
-#include <jellyfish/core/types.h>
+#include "jellyfish/core/types.h"
 
 using namespace red_king;
 

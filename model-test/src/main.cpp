@@ -4,6 +4,8 @@
 #include "coevol_stepper.h"
 #include "additive_synth.h"
 
+#include <unistd.h>
+
 
 using namespace std;
 
@@ -84,7 +86,7 @@ int main() {
 
     audio = new audio_device("evolution",44100,2048);
 	audio->m_client.set_callback(run_audio, &stepper);
-    audio->start_recording("evol_out");
+    //audio->start_recording("evol_out");
 
     synth.set_freq(0.01);
     synth2.set_freq(0.01);

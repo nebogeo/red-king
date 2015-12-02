@@ -7,6 +7,9 @@ public:
     coevol_stepper(double **xout, double *u, double *v, double **E, double *a, double *beta);
     void step();
 
+
+
+
     double *u, *v, **E, *a;
     double *x0, *y, **y0;
     double  rtype, r1, r2, xtotal, xcum, temp;

@@ -1,16 +1,76 @@
-#include "range_spedup_final.h"
+/*************************************************
+ Coevolution of resistance/infectivity range
+ *************************************************/
 
-using namespace std;
+#include <iostream>
+#include <fstream>
+#include <math.h>
+#include <stdlib.h>
+
+/******************************************
+ * Parameters that could be changed via GUI
+ ******************************************/
+
+/* Model parameters */
+#define Q 0.5
+#define B 0.5
+#define ALPHA 1.5
+#define GAM 0.5
+#define WHO 0.5	/* Controls relative mutation rates */
+#define BETA_P -0.434
+#define A_P 2.615
+#define DEM 0
+
+/* Function parameters */
+#define BETMIN 0.491
+#define BEMAXTIME 17.117
+#define AMIN 0.782
+#define AMAX 5.454
+
+/******************************************
+ * Fixed parameters for solver
+ ******************************************/
+#define UMIN 0.0 /* Minimum host trait */
+#define UMAX 10.0 /* Maximum host trait */
+#define VMIN 0.0 /* Minimum parasite trait */
+#define VMAX 10.0 /* Maximum parasite trait */
+#define TINY 1e-6 /* Constant value for solver */
+
+/* These parameters affect accuracy (hence speed)*/
+#define N 50 /* Number of host and parasite phenotypes */
+#define HSTART 20 /* Initial host phenotype */
+#define PSTART 25 /* Initial parasite phenotype */
+#define NEVOL 500 /* Number of iterations (evolutionary timesteps) - ideally this needs to be higher */
+#define MAXTIME 1000 /* Duration for ecological dynamics */
+#define MAXSTEPS 1e6 /* Maximum number of steps for ODE solver */
+#define INTERVAL 100 /* Check if the system is close to equilibrium */
+#define EPSILON 1e-4 /* Extinction tolerance */
+#define EQTOL 1e-2 /* Equilibrium tolerance */
+#define EPS 1e-6 /* ODE solver tolerance */
+
+/*************************************
+ * Function prototypes
+ *************************************/
+void ad(double **xout, double *u, double *v, double E[][N], double *a, double *beta);
+void orig_rungkut(double *x, double y[][N], double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
+void my_rungkut(double *x, double y[][N], double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
+void rkqs(double *x,double y[][N],double *dxdt,double dydt[][N],double *h,double *hnext,double *xscale,double yscale[][N],double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
+void rkck(double *x,double y[][N], double *dxdt,double dydt[][N],double *xout,double yout[][N],double *xerr,double yerr[][N],double h, double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
+void dynamic(double *x, double y[][N], double *u, double *v, double E[][N], double *a, double *k, double k1[][N], int nh, int np, int *host_ind, int *par_ind);
+double FMAX(double,double);
+double FMIN(double,double);
+double** array_maker(int rows, int cols);
+void free_array(double **array, int rows);
 
 /***************************************
  * Main program
  ***************************************/
-int _main (int argc, char* argv[]) {
-
+int main (int argc, char* argv[]) {
+    
     double u[N], v[N], a[N], beta[N], E[N][N], **xout;
     int i, j;
     char filename[100];
-
+    
     /* Create output file */
     sprintf(filename, "range_spedup_final.txt");
     std::cout << "filename:" << filename << "\n";
@@ -25,39 +85,39 @@ int _main (int argc, char* argv[]) {
         std::cout << "Cannot create file\n";
         exit(1);
     }
-
+        
     /* Initialise discretised trait values */
 	for (i=0; i<N; i++) {
 		u[i]=UMIN+(UMAX-UMIN)*i/(N-1); /* Host */
 		v[i]=VMIN+(VMAX-VMIN)*i/(N-1); /* Parasite */
 	}
-
+	    
     /**********************************************************************
-     * This section is where the trade-offs and host-parasite interactions
+     * This section is where the trade-offs and host-parasite interactions 
      * are defined (i.e. where the user would make changes via a GUI)
      *********************************************************************/
-
+    
     /* Define cost functions (trade-offs) */
 	for (i=0; i<N; i++) {
 		a[i]=AMAX-(AMAX-AMIN)*(1-(u[i]-UMAX)/(UMIN-UMAX))/(1+A_P*(u[i]-UMAX)/(UMIN-UMAX)); /* Host trade-off */
 		beta[i]=BEMAXTIME-(BEMAXTIME-BETMIN)*(1-(v[i]-VMAX)/(VMIN-VMAX))/(1+BETA_P*(v[i]-VMAX)/(VMIN-VMAX)); /* Parasite trade-off */
 	}
-
+    
     /* Define host-parasite interaction matrix */
     for (i=0; i<N; i++){
         for (j=0; j<N; j++){
             E[i][j] = beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
         }
     }
-
+    
     /**********************************************************************
      * End of user-defined section
      *********************************************************************/
-
+    
     /* Call adaptive dynamics routine (main solver) */
     xout = array_maker(2*N+2,NEVOL);
     ad(xout,u,v,E,a,beta);
-
+    
     /* Output to file */
     for (i=0; i<NEVOL; i++) {
         for (j=0; j<(N*2+2); j++) {
@@ -72,30 +132,30 @@ int _main (int argc, char* argv[]) {
  * Adaptive dynamics function
  ***************************************/
 void ad(double **xout, double *u, double *v, double E[][N], double *a, double *beta){
-
+    
     double x0[N], y[N], y0[N][N];
     double  rtype, r1, r2, xtotal, xcum, temp;
     int host_ind[N], par_ind[N];
     int i, j, evol_count, nh, np, mutator, pop_choice;
-
-    /* Initialise population numbers */
+    
+    /* Initialise population numbers */    
 	for (i=0; i<N; i++)	{
 		x0[i]=0.0;
 		y[i]=0.0;
 		for (j=0; j<N; j++) {
 			y0[i][j]=0.0;
 		}
-	}
+	}    
     x0[HSTART-1]=1.0;
 	y0[HSTART-1][PSTART-1]=1.0;
     y[PSTART-1]=y0[HSTART-1][PSTART-1];
-
+    
     /* Main loop */
     for (evol_count=0; evol_count<NEVOL; evol_count++) {
-
+        
         /* Find which phenotypes are present */
         nh = 0;
-        np = 0;
+        np = 0;        
         for (i=0; i<N; i++)	{
             if(x0[i]>0){
                 host_ind[nh]=i;
@@ -106,12 +166,12 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
                 np++;
             };
         }
-
+        
         /* Display progress */
         if(evol_count%10==0){
             std::cout << "Timer=" << evol_count << ". Hosts:" << nh << ". Parasites:" << np << "\n";
         }
-
+        
         /* Check if all hosts or parasites have been driven extinct */
         if(nh==0){
             for (i=0; i<N; i++) {
@@ -128,10 +188,10 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
             printf("Breaking - parasites driven extinct\n");
             break;
         }
-
+        
         /* Call ODE solver */
         my_rungkut(x0,y0,u,v,E,a,nh,np,host_ind,par_ind);
-
+        
         /* Check for extinct phenotypes */
         for (i=0; i<N; i++) {
             y[i]=0;
@@ -146,18 +206,18 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
                 }
             }
         }
-
+        
         /* Store densities */
         for (i=0; i<N; i++) {
             xout[i][evol_count]=x0[i];
             xout[i+N][evol_count]=y[i];
         }
-
+        
         /* Mutation routine */
         rtype=double(rand())/RAND_MAX;
         if (rtype<WHO) pop_choice=0;
         else pop_choice=1;
-
+        
         r1=double(rand())/RAND_MAX;
         xtotal = 0.0;
         xcum = 0.0;
@@ -165,7 +225,7 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
             if (pop_choice==0) xtotal+=x0[i];
             if (pop_choice==1) xtotal+=y[i];
         }
-
+        
         for (i=0; i<N; i++) {
             if (pop_choice==0) xcum+=x0[i];
             if (pop_choice==1) xcum+=y[i];
@@ -174,7 +234,7 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
                 break;
             }
         }
-
+        
         r2=double(rand())/RAND_MAX;
         if (r2<0.5 && mutator>0){	/* Mutate up or down? */
             if (pop_choice==0) {
@@ -202,11 +262,11 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
  * ODE solver
  ****************************************/
 void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind){
-
+    
     int i,j,exitflag,count;
     double maxsteps,t,nextcheck;
     double hnext[1], h[1], dxdt[N], dydt[N][N], xscale[N], yscale[N][N], xmax[N], xmin[N], ymax[N][N], ymin[N][N];
-
+    
     /* Other params */
     exitflag = 0;
     count=0;
@@ -220,10 +280,10 @@ void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], 
         xmin[host_ind[i]]=x[host_ind[i]];
         for (j=0; j<np; j++){
             ymax[host_ind[i]][par_ind[j]]=y[host_ind[i]][par_ind[j]];
-            ymin[host_ind[i]][par_ind[j]]=y[host_ind[i]][par_ind[j]];
+            ymin[host_ind[i]][par_ind[j]]=y[host_ind[i]][par_ind[j]];            
         }
     }
-
+    
     /* Main loop: */
     do{
         /* This ensures the final step lands us on the final time point */
@@ -239,10 +299,10 @@ void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], 
         if(t==MAXTIME) {
             exitflag=1;
         }
-
+        
         /* This is where the equations are first solved */
         dynamic(x,y,u,v,E,a,dxdt,dydt,nh,np,host_ind,par_ind);
-
+        
         /* Adjust the step size to maintain accuracy */
         for (i=0; i<N; i++){
             xscale[i]=fabs(x[i])+fabs(dxdt[i]*(*h))+TINY;
@@ -252,8 +312,8 @@ void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], 
         }
         rkqs(x,y,dxdt,dydt,h,hnext,xscale,yscale,u,v,E,a,nh,np,host_ind,par_ind);
         count++;
-
-        /* Check if we're close to equilibrium - if so, finish early */
+        
+        /* Check if we're close to equilibrium - if so, finish early */        
         for (i=0; i<nh; i++){
             xmax[host_ind[i]]=FMAX(xmax[host_ind[i]],x[host_ind[i]]);
             xmin[host_ind[i]]=FMIN(xmin[host_ind[i]],x[host_ind[i]]);
@@ -261,7 +321,7 @@ void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], 
                 ymax[host_ind[i]][par_ind[j]]=FMAX(ymax[host_ind[i]][par_ind[j]],y[host_ind[i]][par_ind[j]]);
                 ymin[host_ind[i]][par_ind[j]]=FMIN(ymin[host_ind[i]][par_ind[j]],y[host_ind[i]][par_ind[j]]);
             }
-        }
+        }                
         if(t>nextcheck){
             exitflag = 1;
             for (i=0; i<nh; i++){
@@ -274,7 +334,7 @@ void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], 
                         exitflag = 0;
                         break;
                     }
-                }
+                }                
             }
             if(exitflag==1){
                 t=MAXTIME;
@@ -290,7 +350,7 @@ void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], 
                 }
             }
         }
-
+        
     }while(count<(MAXSTEPS-1) && t<=MAXTIME && exitflag==0);
 }
 
@@ -302,12 +362,12 @@ void rkqs(double *x,double y[][N],double *dxdt,double dydt[][N],double *h,double
     double xtemp[N], ytemp[N][N], xerr[N], yerr[N][N];
     double htemp,errmax;
     int i,j;
-
+    
     htemp= *h;
-
+    
     rkck(x,y,dxdt,dydt,xtemp,ytemp,xerr,yerr,*h,u,v,E,a,nh,np,host_ind,par_ind);
     *hnext= *h;
-
+    
     for(;;)
     {
         rkck(x,y,dxdt,dydt,xtemp,ytemp,xerr,yerr,*h,u,v,E,a,nh,np,host_ind,par_ind);
@@ -329,7 +389,7 @@ void rkqs(double *x,double y[][N],double *dxdt,double dydt[][N],double *h,double
     else {
         *hnext= 5.0*(*h);
     }
-
+    
     for(i=0;i<N;i++){
         x[i]= xtemp[i];
         for(j=0;j<N;j++){
@@ -353,7 +413,7 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
     c1=37.0/378.0,c3=250.0/621.0,c4=125.0/594.0,c6=512.0/1771.0,dc5=-277.00/14336;
     double dc1=c1-2825.0/27648.0,dc3=c3-18575.0/48384.0,dc4=c4-13525.0/55296.0,
     dc6=c6-0.25;
-
+    
     for(i=0;i<N;i++){
         xtemp[i] = x[i] + b21*h*dxdt[i];
         for (j=0; j<N; j++){
@@ -361,7 +421,7 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
         }
     }
     dynamic(xtemp,ytemp,u,v,E,a,xk2,yk2,nh,np,host_ind,par_ind);
-
+    
     for(i=0;i<N;i++){
         xtemp[i] = x[i]+h*(b31*dxdt[i]+b32*xk2[i]);
         for (j=0; j<N; j++){
@@ -369,7 +429,7 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
         }
     }
     dynamic(xtemp,ytemp,u,v,E,a,xk3,yk3,nh,np,host_ind,par_ind);
-
+    
     for(i=0;i<N;i++){
         xtemp[i]= x[i]+h*(b41*dxdt[i]+b42*xk2[i]+b43*xk3[i]);
         for (j=0; j<N; j++){
@@ -377,7 +437,7 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
         }
     }
     dynamic(xtemp,ytemp,u,v,E,a,xk4,yk4,nh,np,host_ind,par_ind);
-
+    
     for(i=0;i<N;i++){
         xtemp[i]= x[i]+h*(b51*dxdt[i]+b52*xk2[i]+b53*xk3[i]+b54*xk4[i]);
         for (j=0; j<N; j++){
@@ -385,7 +445,7 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
         }
     }
     dynamic(xtemp,ytemp,u,v,E,a,xk5,yk5,nh,np,host_ind,par_ind);
-
+    
     for(i=0;i<N;i++){
         xtemp[i]= x[i]+h*(b61*dxdt[i]+b62*xk2[i]+b63*xk3[i]+b64*xk4[i]+b65*xk5[i]);
         for (j=0; j<N; j++){
@@ -393,7 +453,7 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
         }
     }
     dynamic(xtemp,ytemp,u,v,E,a,xk6,yk6,nh,np,host_ind,par_ind);
-
+    
     for(i=0;i<N;i++){
         xout[i]= x[i]+h*(c1*dxdt[i]+c3*xk3[i]+c4*xk4[i]+c6*xk6[i]);
         xerr[i]= h*(dc1*dxdt[i]+dc3*xk3[i]+dc4*xk4[i]+dc5*xk5[i]+dc6*xk6[i]);
@@ -405,20 +465,20 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
 }
 
 /**************************************************************************
- * Population dynamics function - could expand the model to allow more
+ * Population dynamics function - could expand the model to allow more 
  * user-defined inputs
  *************************************************************************/
 void dynamic(double *x, double y[][N], double *u, double *v, double E[][N], double *a, double *dxdt, double dydt[][N], int nh, int np, int *host_ind, int *par_ind){
-
+	
 	int i,j;
 	double xsum, ysum;
 	double betsum[N], gamsum[N], ystrain[N];
 	double parsum[N][N];
-
+	
 	xsum=ysum=0;
-
+    
     for (i=0; i<N; i++) ystrain[i]=0;
-
+	
 	for (i=0; i<N; i++) {
 		xsum+=x[i];
 		gamsum[i]=0;
@@ -431,7 +491,7 @@ void dynamic(double *x, double y[][N], double *u, double *v, double E[][N], doub
 			parsum[i][j]=0;
 		}
 	}
-
+    
 	for (i=0; i<nh; i++) {
 		for (j=0; j<np; j++) {
 			betsum[host_ind[i]]+=E[host_ind[i]][par_ind[j]]*x[host_ind[i]]*ystrain[par_ind[j]];
@@ -439,7 +499,7 @@ void dynamic(double *x, double y[][N], double *u, double *v, double E[][N], doub
             gamsum[host_ind[i]]+=GAM*y[host_ind[i]][par_ind[j]];
 		}
 	}
-
+    
     /* These are the ODEs to solve */
     for (i=0; i<nh; i++) {
 		dxdt[host_ind[i]] = a[host_ind[i]]*x[host_ind[i]]-Q*(xsum+ysum)*x[host_ind[i]]-B*x[host_ind[i]]-betsum[host_ind[i]];
@@ -474,12 +534,12 @@ double FMIN(double l,double r)
  * Make 2D double array
  ***************************************/
 double** array_maker(int rows, int cols) {
-
+    
     double** new_array;
     new_array = (double**) malloc(rows*sizeof(double*));
     for (int i = 0; i < rows; i++)
         new_array[i] = (double*) malloc(cols*sizeof(double));
-
+    
     return new_array;
 }
 
@@ -487,7 +547,7 @@ double** array_maker(int rows, int cols) {
  * Free 2D double array
  ***************************************/
 void free_array(double **array, int rows) {
-
+    
     for (int i = 0; i < rows; i++) free(array[i]);
     free(array);
 }

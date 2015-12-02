@@ -42,7 +42,7 @@
 #define PSTART 25 /* Initial parasite phenotype */
 #define NEVOL 100 /* Number of iterations (evolutionary timesteps) - ideally this needs to be higher */
 #define MAXTIME 1000 /* Duration for ecological dynamics */
-#define MAXSTEPS 20 //1e6 /* Maximum number of steps for ODE solver */
+#define MAXSTEPS 10 //1e6 /* Maximum number of steps for ODE solver */
 #define INTERVAL 100 /* Check if the system is close to equilibrium */
 #define EPSILON 0 /* Extinction tolerance */
 #define EQTOL 1e-2 /* Equilibrium tolerance */

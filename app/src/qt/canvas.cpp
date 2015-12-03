@@ -23,10 +23,10 @@ void canvas::paintEvent(QPaintEvent *event)
 
     //create a black pen that has solid line
     //and the width is 2.
-    QPen myPen(Qt::white, 4, Qt::SolidLine);
+    QPen myPen(Qt::white, 10, Qt::SolidLine);
     painter.setPen(myPen);
 
-    for (int i=0; i<50; i++) {
+    for (int i=0; i<25; i++) {
       //draw a point
       double v = m_model->get_parasites()[i];
 
@@ -41,9 +41,14 @@ void canvas::paintEvent(QPaintEvent *event)
 
       myPen.setColor(QColor(v*255,0,h*255));
       painter.setPen(myPen);
-      painter.drawPoint(i*5,m_position);
+      painter.drawPoint(i*10,m_position);
     }
 
+    myPen.setColor(QColor(0,0,0));
+    painter.setPen(myPen);
+    for (int i=0; i<25; i++) {
+      painter.drawPoint(i*10,m_position+4);
+    }
     m_position+=4;
 
     if (m_position>500) m_position=0;

@@ -22,6 +22,7 @@
 using namespace std;
 
 int main(int argc, char **argv) {
+  srand(::time(NULL));
   red_king::app red_king;
   QApplication app(argc, argv);
   red_king.init_qt();

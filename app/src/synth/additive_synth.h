@@ -1,6 +1,8 @@
 #include <jellyfish/core/types.h>
 #include <jellyfish/fluxa/sample.h>
 
+#pragma once
+
 namespace spiralcore {
 
 class additive_synth {
@@ -9,6 +11,7 @@ public:
     void set_freq(float f) { m_freq=f; }
     void set_level(u32 n, float l);
     void render(sample &out);
+    void reset();
 
 
 private:

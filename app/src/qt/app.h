@@ -21,7 +21,8 @@
 #include <QtGui>
 #include "MainWindow.h"
 #include "canvas.h"
-#include "graph.h"
+
+#include <pthread.h>
 
 namespace red_king {
 
@@ -38,8 +39,18 @@ class app {
 
   MainWindow *m_main_window;
   canvas *m_canvas;
-  graph_widget *m_host_graph;
-  graph_widget *m_parasite_graph;
+  pthread_mutex_t* m_mutex;
+
+ private:
+
+  class qt_controller {
+  public:
+    QWidget *m_dial;
+    QWidget *m_spin;
+  };
+
+  qt_controller build_param_controller(const QString &name, int low, int high, QLayout *parent);
+
 
 };
 

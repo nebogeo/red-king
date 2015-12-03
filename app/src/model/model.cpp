@@ -22,29 +22,8 @@
 using namespace red_king;
 using namespace std;
 
-/******************************************
- * Parameters that could be changed via GUI
- ******************************************/
-
-/* Function parameters */
-#define BETMIN 0.491
-#define BEMAXTIME 17.117
-#define AMIN 1.782
-#define AMAX 5.454
-#define A_P 2.615
-
-#define BETA_P -0.434
-
 #define WHO 0.5	/* Controls relative mutation rates */
 #define EPSILON 0 /* Extinction tolerance */
-
-/******************************************
- * Fixed parameters for solver
- ******************************************/
-#define UMIN 0.0 /* Minimum host trait */
-#define UMAX 10.0 /* Maximum host trait */
-#define VMIN 0.0 /* Minimum parasite trait */
-#define VMAX 10.0 /* Maximum parasite trait */
 
 void clear(rk_real *ptr) {
   for (int i=0; i<N; i++) {
@@ -113,40 +92,48 @@ void model::init() {
     int pstart = rand()%N;
     x0[hstart]=1.0;
     y0[hstart][pstart]=1.0;
-    y[pstart-1]=y0[hstart-1][pstart-1];
+    y[pstart]=y0[hstart][pstart];
   }
 
-  init_trait_values();
-  init_cost_functions(AMIN, AMAX,
-                      UMIN, UMAX,
-                      A_P,
-                      BETMIN,  BEMAXTIME,
-                      VMIN,  VMAX,
-                      BETA_P);
+
+  m_cost_params.amin = 1.782;
+  m_cost_params.amax = 5.454;
+  m_cost_params.umin = 0;
+  m_cost_params.umax = 10;
+  m_cost_params.a_p = 2.615;
+  m_cost_params.betmin = 0.491;
+  m_cost_params.bemaxtime = 17.117;
+  m_cost_params.vmin = 0;
+  m_cost_params.vmax = 10;
+  m_cost_params.beta_p = -0.434;
+
+  update_cost_functions();
+}
+
+void model::update_cost_functions() {
+  init_trait_values(m_cost_params);
+  init_cost_functions(m_cost_params);
   init_matrix();
 }
 
-void model::init_trait_values() {
+void model::init_trait_values(cost_params &cp) {
   for (int i=0; i<N; i++) {
-    u[i]=UMIN+(UMAX-UMIN)*i/(N-1); /* Host */
-    v[i]=VMIN+(VMAX-VMIN)*i/(N-1); /* Parasite */
+    //u[i]=cp.umin+(cp.umax-cp.umin)*i/(N-1); /* Host */
+    //v[i]=cp.vmin+(cp.vmax-cp.vmin)*i/(N-1); /* Parasite */
+    u[i]=0+(10-0)*i/(N-1); /* Host */
+    v[i]=0+(10-0)*i/(N-1); /* Parasite */
   }
 }
 
-void model::init_cost_functions(rk_real amin, rk_real amax,
-                                rk_real umin, rk_real umax,
-                                rk_real a_p,
-                                rk_real betmin, rk_real bemaxtime,
-                                rk_real vmin, rk_real vmax,
-                                rk_real beta_p) {
+void model::init_cost_functions(cost_params &cp) {
   /**********************************************************************
    * This section is where the trade-offs and host-parasite interactions
    * are defined (i.e. where the user would make changes via a GUI)
    *********************************************************************/
   /* Define cost functions (trade-offs) */
   for (int i=0; i<N; i++) {
-    a[i]=amax-(amax-amin)*(1-(u[i]-umax)/(umin-umax))/(1+a_p*(u[i]-umax)/(umin-umax)); /* Host trade-off */
-    beta[i]=bemaxtime-(bemaxtime-betmin)*(1-(v[i]-vmax)/(vmin-vmax))/(1+beta_p*(v[i]-vmax)/(vmin-vmax)); /* Parasite trade-off */
+    a[i]=10+sin(cp.amin+i*cp.amax/(float)N)*10; //cp.amax-(cp.amax-cp.amin)*(1-(u[i]-cp.umax)/(cp.umin-cp.umax))/(1+cp.a_p*(u[i]-cp.umax)/(cp.umin-cp.umax)); /* Host trade-off */
+    beta[i]=10+sin(cp.vmin+i*cp.vmax/(float)N)*10; //cp.bemaxtime-(cp.bemaxtime-cp.betmin)*(1-(v[i]-cp.vmax)/(cp.vmin-cp.vmax))/(1+cp.beta_p*(v[i]-cp.vmax)/(cp.vmin-cp.vmax)); /* Parasite trade-off */
   }
 }
 
@@ -202,7 +189,7 @@ void model::check_phenotypes(int &nh, int& np) {
     };
   }
 
-  std::cout <<  "Hosts:" << nh << ". Parasites:" << np << "\n";
+  //std::cout <<  "Hosts:" << nh << ". Parasites:" << np << "\n";
 
   /* Check if all hosts or parasites have been driven extinct */
   if(nh==0) {

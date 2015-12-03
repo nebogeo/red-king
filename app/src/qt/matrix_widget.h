@@ -4,14 +4,14 @@
 #include <QWidget>
 #include "../model/model.h"
 
-class graph_widget : public QWidget
+class matrix_widget : public QWidget
 {
     Q_OBJECT
  public:
 
-    graph_widget();
+    matrix_widget();
 
-    void init(int graph_size, rk_real *data, int size);
+    void init(int graph_size, rk_real **data, int size);
     void recalc();
 
  protected:
@@ -21,7 +21,7 @@ class graph_widget : public QWidget
  public slots:
 
  private:
-  rk_real *m_data;
+  rk_real **m_data;
   int m_size;
   int m_graph_size;
 

@@ -1,34 +1,33 @@
-#include "graph.h"
+#include "matrix_widget.h"
 #include <iostream>
 
 using namespace std;
 
-graph_widget::graph_widget()
+matrix_widget::matrix_widget()
 {
 }
 
-void graph_widget::init(int graph_size, rk_real *data, int size) {
+void matrix_widget::init(int graph_size, rk_real **data, int size) {
   m_data=data;
   m_size=size;
   m_graph_size=graph_size;
   recalc();
 }
 
-void graph_widget::recalc() {
+void matrix_widget::recalc() {
   m_min=1e32;
   m_max=0;
   for (int i=0; i<m_size; i++) {
-    if (m_data[i]<m_min) m_min = m_data[i];
-    if (m_data[i]>m_max) m_max = m_data[i];
+    for (int j=0; j<m_size; j++) {
+      if (m_data[i][j]<m_min) m_min = m_data[i][j];
+      if (m_data[i][j]>m_max) m_max = m_data[i][j];
+    }
   }
-
-  m_scale = m_graph_size/(m_max-m_min);
-  m_offset = m_min;
   repaint();
 }
 
 
-void graph_widget::paintEvent(QPaintEvent *event)
+void matrix_widget::paintEvent(QPaintEvent *event)
 {
     //create a QPainter and pass a pointer to the device.
     //A paint device can be a QWidget, a QPixmap or a QImage
@@ -36,7 +35,7 @@ void graph_widget::paintEvent(QPaintEvent *event)
 
     //create a black pen that has solid line
     //and the width is 2.
-    QPen myPen(Qt::black, 2, Qt::SolidLine);
+    QPen myPen(Qt::black, 6, Qt::SolidLine);
     painter.setPen(myPen);
 
     char txt[256];
@@ -47,8 +46,13 @@ void graph_widget::paintEvent(QPaintEvent *event)
     painter.drawRect(0,0,m_graph_size,m_graph_size);
 
     for (int i=0; i<m_size; i++) {
-      painter.drawPoint(i*m_graph_size/(float)m_size,
-                        m_graph_size-((m_data[i]-m_offset)*m_scale));
+      for (int j=0; j<m_size; j++) {
+        float v = (m_data[i][j]-m_min)*(m_max-m_min);
+        myPen.setColor(QColor(v*255,v*255,v*255));
+        painter.setPen(myPen);
+        painter.drawPoint(i*m_graph_size/(float)m_size,
+                          j*m_graph_size/(float)m_size);
+      }
     }
 
 }

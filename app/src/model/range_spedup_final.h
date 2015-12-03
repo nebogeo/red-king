@@ -13,7 +13,7 @@ namespace red_king {
 
 
 /* These parameters affect accuracy (hence speed)*/
-#define N 50 /* Number of host and parasite phenotypes */
+#define N 25 /* Number of host and parasite phenotypes */
 
 
 /*************************************

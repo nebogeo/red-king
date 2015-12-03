@@ -17,29 +17,115 @@
 #include <QtGui>
 #include "ui_redking.h"
 #include "../model/model.h"
+#include "graph.h"
+#include "../synth/additive_synth.h"
+#include "matrix_widget.h"
 
 #include <iostream>
 #include <string>
 
 using namespace std;
+using namespace spiralcore;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow();
+    MainWindow(red_king::model *model);
     Ui_MainWindow m_Ui;
 
     red_king::model *m_model;
+    additive_synth *m_synth_left;
+    additive_synth *m_synth_right;
+
+    pthread_mutex_t* m_mutex;
 
 protected:
 
 private slots:
-  void slot_restart() { m_model->init(); }
-  //void play_slot() { lo_send(m_audio_address,"/start",""); }
+  void slot_restart() {
+    pthread_mutex_lock(m_mutex);
+    m_model->init();
+    m_synth_left->reset();
+    m_synth_right->reset();
+    pthread_mutex_unlock(m_mutex);
+  }
+
+  void slot_amin(int v) {
+    m_model->m_cost_params.amin = v/10.0;
+    m_model->update_cost_functions();
+    m_host_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_amax(int v) {
+    m_model->m_cost_params.amax = v/10.0;
+    m_model->update_cost_functions();
+    m_host_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_umin(int v) {
+    m_model->m_cost_params.umin = v/10.0;
+    m_model->update_cost_functions();
+    m_host_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_umax(int v) {
+    m_model->m_cost_params.umax = v/10.0;
+    m_model->update_cost_functions();
+    m_host_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_ap(int v) {
+    m_model->m_cost_params.a_p = v/10.0;
+    m_model->update_cost_functions();
+    m_host_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_betmin(int v) {
+    m_model->m_cost_params.betmin = v/10.0;
+    m_model->update_cost_functions();
+    m_parasite_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_bemaxtime(int v) {
+    m_model->m_cost_params.bemaxtime = v/10.0;
+    m_model->update_cost_functions();
+    m_parasite_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_vmin(int v) {
+    m_model->m_cost_params.vmin = v/10.0;
+    m_model->update_cost_functions();
+    m_parasite_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_vmax(int v) {
+    m_model->m_cost_params.vmax = v/10.0;
+    m_model->update_cost_functions();
+    m_parasite_graph->recalc();
+    m_matrix->recalc();
+  }
+
+  void slot_betap(int v) {
+    m_model->m_cost_params.beta_p = v/10.0;
+    m_model->update_cost_functions();
+    m_parasite_graph->recalc();
+    m_matrix->recalc();
+  }
 
 
 private:
+  graph_widget *m_host_graph;
+  graph_widget *m_parasite_graph;
+  matrix_widget *m_matrix;
 
 };

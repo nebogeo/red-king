@@ -34,16 +34,23 @@ class model {
     rk_real *get_parasites() { return y; }
     rk_real *get_host_cost() { return a; }
     rk_real *get_parasite_cost() { return beta; }
+    rk_real **get_matrix() { return E; }
+
+    class cost_params {
+    public:
+      rk_real amin, amax, umin, umax,
+        a_p, betmin, bemaxtime,
+        vmin, vmax, beta_p;
+    };
+
+    cost_params m_cost_params;
+
+    void update_cost_functions();
 
  private:
 
-    void init_trait_values();
-    void init_cost_functions(rk_real amin, rk_real amax,
-                                rk_real umin, rk_real umax,
-                                rk_real a_p,
-                                rk_real betmin, rk_real bemaxtime,
-                                rk_real vmin, rk_real vmax,
-                                rk_real beta_p);
+    void init_trait_values(cost_params &cp);
+    void init_cost_functions(cost_params &cp);
     void init_matrix();
 
     void check_phenotypes(int &nh, int& np);

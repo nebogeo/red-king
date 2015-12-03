@@ -23,7 +23,7 @@ using namespace red_king;
 #define TINY 1e-6 /* Constant value for solver */
 
 #define MAXTIME 1000 /* Duration for ecological dynamics */
-#define MAXSTEPS 5 //1e6 /* Maximum number of steps for ODE solver */
+#define MAXSTEPS 100 //1e6 /* Maximum number of steps for ODE solver */
 #define INTERVAL 100 /* Check if the system is close to equilibrium */
 #define EQTOL 1e-2 /* Equilibrium tolerance */
 #define EPS 1e-6 /* ODE solver tolerance */

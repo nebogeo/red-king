@@ -21,6 +21,7 @@
 #include <QtGui>
 #include "MainWindow.h"
 #include "canvas.h"
+#include "graph.h"
 
 namespace red_king {
 
@@ -37,7 +38,8 @@ class app {
 
   MainWindow *m_main_window;
   canvas *m_canvas;
-
+  graph_widget *m_host_graph;
+  graph_widget *m_parasite_graph;
 
 };
 

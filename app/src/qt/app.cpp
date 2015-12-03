@@ -34,7 +34,7 @@ void run_audio(void* c, unsigned int frames) {
     a->m_synth_left.render(a->m_audio->left_out);
     a->m_synth_right.render(a->m_audio->right_out);
 
-    a->m_audio->maybe_record();
+    //a->m_audio->maybe_record();
     //s->process(frames,a->left_out.get_non_const_buffer());
 }
 
@@ -42,15 +42,15 @@ app::app() :
   m_synth_left(BANDS),
   m_synth_right(BANDS)
 {
-  srand(100);//::time(NULL));
+  srand(::time(NULL));
 
 
-  /*  m_audio = new audio_device("evolution",44100,2048);
+  m_audio = new audio_device("evolution",44100,2048*4);
   m_audio->m_client.set_callback(run_audio, this);
-  m_audio->start_recording("evol_out");
+  //m_audio->start_recording("evol_out");
 
   m_synth_left.set_freq(0.001);
-  m_synth_right.set_freq(0.001);*/
+  m_synth_right.set_freq(0.001);
 }
 
 void app::init_qt() {
@@ -60,4 +60,13 @@ void app::init_qt() {
   m_canvas->m_model = &m_model;
   m_main_window->m_Ui.canvas_holder->addWidget(m_canvas);
   m_main_window->m_model = &m_model;
+
+  m_host_graph = new graph_widget();
+  m_host_graph->init(120,m_model.get_host_cost(),50);
+  m_main_window->m_Ui.host_cost_holder->addWidget(m_host_graph);
+
+  m_parasite_graph = new graph_widget();
+  m_parasite_graph->init(120,m_model.get_parasite_cost(),50);
+  m_main_window->m_Ui.parasite_cost_holder->addWidget(m_parasite_graph);
+
 }

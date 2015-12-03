@@ -31,6 +31,12 @@ using namespace std;
 #define BEMAXTIME 17.117
 #define AMIN 1.782
 #define AMAX 5.454
+#define A_P 2.615
+
+#define BETA_P -0.434
+
+#define WHO 0.5	/* Controls relative mutation rates */
+#define EPSILON 0 /* Extinction tolerance */
 
 /******************************************
  * Fixed parameters for solver
@@ -101,13 +107,22 @@ void model::init() {
       y0[i][j]=0.0;
     }
   }
-  x0[HSTART-1]=1.0;
-  y0[HSTART-1][PSTART-1]=1.0;
-  y[PSTART-1]=y0[HSTART-1][PSTART-1];
 
+  for (int i=0; i<5; i++) {
+    int hstart = rand()%N;
+    int pstart = rand()%N;
+    x0[hstart]=1.0;
+    y0[hstart][pstart]=1.0;
+    y[pstart-1]=y0[hstart-1][pstart-1];
+  }
 
   init_trait_values();
-  init_cost_functions();
+  init_cost_functions(AMIN, AMAX,
+                      UMIN, UMAX,
+                      A_P,
+                      BETMIN,  BEMAXTIME,
+                      VMIN,  VMAX,
+                      BETA_P);
   init_matrix();
 }
 
@@ -118,15 +133,20 @@ void model::init_trait_values() {
   }
 }
 
-void model::init_cost_functions() {
+void model::init_cost_functions(rk_real amin, rk_real amax,
+                                rk_real umin, rk_real umax,
+                                rk_real a_p,
+                                rk_real betmin, rk_real bemaxtime,
+                                rk_real vmin, rk_real vmax,
+                                rk_real beta_p) {
   /**********************************************************************
    * This section is where the trade-offs and host-parasite interactions
    * are defined (i.e. where the user would make changes via a GUI)
    *********************************************************************/
   /* Define cost functions (trade-offs) */
   for (int i=0; i<N; i++) {
-    a[i]=AMAX-(AMAX-AMIN)*(1-(u[i]-UMAX)/(UMIN-UMAX))/(1+A_P*(u[i]-UMAX)/(UMIN-UMAX)); /* Host trade-off */
-    beta[i]=BEMAXTIME-(BEMAXTIME-BETMIN)*(1-(v[i]-VMAX)/(VMIN-VMAX))/(1+BETA_P*(v[i]-VMAX)/(VMIN-VMAX)); /* Parasite trade-off */
+    a[i]=amax-(amax-amin)*(1-(u[i]-umax)/(umin-umax))/(1+a_p*(u[i]-umax)/(umin-umax)); /* Host trade-off */
+    beta[i]=bemaxtime-(bemaxtime-betmin)*(1-(v[i]-vmax)/(vmin-vmax))/(1+beta_p*(v[i]-vmax)/(vmin-vmax)); /* Parasite trade-off */
   }
 }
 
@@ -153,10 +173,10 @@ void model::step() {
     y[i]=0;
     if (x0[i]<EPSILON) x0[i]=0;
     for (int j=0; j<N; j++) {
-      if (y0[j][i]<EPSILON) {
+      /*if (y0[j][i]<EPSILON) {
         y0[j][i]=0;
       }
-      else {
+      else*/ {
         // Work out parasite phenotype densities
         y[i]+=y0[j][i];
       }
@@ -171,7 +191,7 @@ void model::step() {
 void model::check_phenotypes(int &nh, int& np) {
   /* Find which phenotypes are present */
   for (int i=0; i<N; i++)	{
-    cerr<<x0[i]<<" "<<y[i]<<endl;
+    //cerr<<x0[i]<<" "<<y[i]<<endl;
     if(x0[i]>0){
       host_ind[nh]=i;
       nh++;

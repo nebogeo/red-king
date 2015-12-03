@@ -13,6 +13,22 @@ using namespace red_king;
  * Adaptive dynamics function
  ***************************************/
 
+/* Model parameters */
+
+#define Q 0.5
+#define B 0.5
+#define ALPHA 1.5
+#define GAM 0.5
+
+#define TINY 1e-6 /* Constant value for solver */
+
+#define MAXTIME 1000 /* Duration for ecological dynamics */
+#define MAXSTEPS 5 //1e6 /* Maximum number of steps for ODE solver */
+#define INTERVAL 100 /* Check if the system is close to equilibrium */
+#define EQTOL 1e-2 /* Equilibrium tolerance */
+#define EPS 1e-6 /* ODE solver tolerance */
+
+
 range::range() {
   y0 = alloc_2dim_array();
 
@@ -41,132 +57,6 @@ rk_real **range::alloc_2dim_array() {
     t[i] = new rk_real[N];
   }
   return t;
-}
-
-void range::ad(rk_real **xout, rk_real *u, rk_real *v, rk_real **E, rk_real *a, rk_real *beta){
-
-    rk_real x0[N], y[N];
-    rk_real  rtype, r1, r2, xtotal, xcum, temp;
-    int host_ind[N], par_ind[N];
-    int i, j, evol_count, nh, np, mutator, pop_choice;
-
-    /* Initialise population numbers */
-	for (i=0; i<N; i++)	{
-		x0[i]=0.0;
-		y[i]=0.0;
-		for (j=0; j<N; j++) {
-			y0[i][j]=0.0;
-		}
-	}
-    x0[HSTART-1]=1.0;
-	y0[HSTART-1][PSTART-1]=1.0;
-    y[PSTART-1]=y0[HSTART-1][PSTART-1];
-
-    /* Main loop */
-    for (evol_count=0; evol_count<NEVOL; evol_count++) {
-
-        /* Find which phenotypes are present */
-        nh = 0;
-        np = 0;
-        for (i=0; i<N; i++)	{
-            if(x0[i]>0){
-                host_ind[nh]=i;
-                nh++;
-            }
-            if(y[i]>0){
-                par_ind[np]=i;
-                np++;
-            };
-        }
-
-        /* Display progress */
-        if(evol_count%10==0){
-            std::cout << "Timer=" << evol_count << ". Hosts:" << nh << ". Parasites:" << np << "\n";
-        }
-
-        /* Check if all hosts or parasites have been driven extinct */
-        if(nh==0){
-            for (i=0; i<N; i++) {
-                x0[i]=0;
-                y[i]=0;
-            }
-            printf("Breaking - hosts driven extinct\n");
-            break;
-        }
-        if(np==0){
-            for (i=0; i<N; i++) {
-                y[i]=0;
-            }
-            printf("Breaking - parasites driven extinct\n");
-            break;
-        }
-
-        /* Call ODE solver */
-        my_rungkut(x0,y0,u,v,E,a,nh,np,host_ind,par_ind);
-
-        /* Check for extinct phenotypes */
-        for (i=0; i<N; i++) {
-            y[i]=0;
-            if (x0[i]<EPSILON) x0[i]=0;
-            for (j=0; j<N; j++) {
-                if (y0[j][i]<EPSILON) {
-                    y0[j][i]=0;
-                }
-                else{
-                    /* Work out parasite phenotype densities */
-                    y[i]+=y0[j][i];
-                }
-            }
-        }
-
-        /* Store densities */
-        for (i=0; i<N; i++) {
-            xout[i][evol_count]=x0[i];
-            xout[i+N][evol_count]=y[i];
-        }
-
-        /* Mutation routine */
-        rtype=rk_real(rand())/RAND_MAX;
-        if (rtype<WHO) pop_choice=0;
-        else pop_choice=1;
-
-        r1=rk_real(rand())/RAND_MAX;
-        xtotal = 0.0;
-        xcum = 0.0;
-        for (i=0; i<N; i++) {
-            if (pop_choice==0) xtotal+=x0[i];
-            if (pop_choice==1) xtotal+=y[i];
-        }
-
-        for (i=0; i<N; i++) {
-            if (pop_choice==0) xcum+=x0[i];
-            if (pop_choice==1) xcum+=y[i];
-            if (r1 < xcum/xtotal) {	/* Find which strain will mutate */
-                mutator=i;
-                break;
-            }
-        }
-
-        r2=rk_real(rand())/RAND_MAX;
-        if (r2<0.5 && mutator>0){	/* Mutate up or down? */
-            if (pop_choice==0) {
-                x0[mutator-1]+=x0[mutator]/10.0;
-                for (j=0; j<N; j++) {
-                    y0[mutator-1][j]+=y0[mutator][j]/10.0;
-                }
-            }
-            else for (j=0; j<N; j++) y0[j][mutator-1]+=y0[j][mutator]/10.0;
-        }
-        else if (r2>0.5 && mutator<N-1){
-            if (pop_choice==0) {
-                x0[mutator+1]+=x0[mutator]/10.0;
-                for (j=0; j<N; j++) {
-                    y0[mutator+1][j]+=y0[mutator][j]/10.0;
-                }
-            }
-            else for (j=0; j<N; j++) y0[j][mutator+1]+=y0[j][mutator]/10.0;
-        }
-    }
 }
 
 

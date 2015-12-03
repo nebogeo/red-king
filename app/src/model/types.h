@@ -1,1 +1,1 @@
-typedef double rk_real;
+typedef float rk_real;

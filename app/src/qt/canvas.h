@@ -1,5 +1,4 @@
-#ifndef MYWIDGET_H
-#define MYWIDGET_H
+#pragma once
 
 #include <QtGui>
 #include <QWidget>
@@ -23,5 +22,3 @@ class canvas : public QWidget
  private:
   int m_position;
 };
-
-#endif // MYWIDGET_H

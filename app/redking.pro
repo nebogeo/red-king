@@ -13,19 +13,21 @@ QT += core gui
 HEADERS += src/qt/MainWindow.h \
            src/qt/ui_redking.h \
            src/qt/canvas.h \
+           src/qt/app.h \
 
 SOURCES += src/qt/MainWindow.cpp \
            src/qt/canvas.cpp \
+           src/qt/app.cpp \
            src/model/range_spedup_final.cpp \
 		   src/model/model.cpp \
 		   src/synth/additive_synth.cpp \
 	 	   src/main.cpp
 
-INCLUDEPATH += ../src
-LIBS += -L.. -ljellyfish -lportaudio -lsndfile -llo -ldl -lpthread -lm
-#CONFIG+=debug
+INCLUDEPATH += .
+LIBS += -ljellyfish -lportaudio -lsndfile -llo -ldl -lpthread -lm
+CONFIG+=debug
 
-QMAKE_CXXFLAGS += -Wall -Wno-unused -std=c++11 -DDONT_USE_FLUXA_GRAPH
+QMAKE_CXXFLAGS += -ggdb -Wall -Wno-unused -std=c++11 -DDONT_USE_FLUXA_GRAPH
 
 # assets
 RESOURCES     = redking.qrc

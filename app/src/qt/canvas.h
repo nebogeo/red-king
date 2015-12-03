@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QWidget>
+#include "../model/model.h"
 
 class canvas : public QWidget
 {
@@ -10,11 +11,10 @@ class canvas : public QWidget
  public:
 
     canvas();
-    double *m_parasites;
-    double *m_hosts;
+    red_king::model *m_model;
 
  protected:
-    void paintEvent(QPaintEvent *event);
+   void paintEvent(QPaintEvent *event);
  signals:
 
  public slots:

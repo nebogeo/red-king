@@ -14,7 +14,13 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+#include "types.h"
+
+#pragma once
+
 namespace red_king {
+
+class range;
 
 class model {
  public:
@@ -24,8 +30,8 @@ class model {
     void init();
     void step();
 
-    double *get_hosts() { return x0; }
-    double *get_parasites() { return y; }
+    rk_real *get_hosts() { return x0; }
+    rk_real *get_parasites() { return y; }
 
  private:
 
@@ -33,18 +39,18 @@ class model {
     void init_cost_functions();
     void init_matrix();
 
+    void check_phenotypes(int &nh, int& np);
+    void mutate();
+
+    // the underlying model
+    range *m_range;
+
     // parameters for the input
-    double *u, *v, **E, *a, *beta;
+    rk_real *u, *v, **E, *a, *beta;
 
     // parameters for the model
-    double *x0, *y, **y0;
-    double  rtype, r1, r2, xtotal, xcum, temp;
+    rk_real *x0, *y, **y0;
     int *host_ind, *par_ind;
-    int i, j, evol_count, nh, np, mutator, pop_choice;
-
-    // result stored here
-    double **xout;
-
 };
 
 }

@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'redkingJw4886.ui'
+** Form generated from reading UI file 'redkingSF4886.ui'
 **
 ** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef REDKINGJW4886_H
-#define REDKINGJW4886_H
+#ifndef REDKINGSF4886_H
+#define REDKINGSF4886_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -70,6 +70,7 @@ public:
         MainWindow->setStatusBar(statusbar);
 
         retranslateUi(MainWindow);
+        QObject::connect(pushButton, SIGNAL(released()), MainWindow, SLOT(slot_restart()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -88,4 +89,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // REDKINGJW4886_H
+#endif // REDKINGSF4886_H

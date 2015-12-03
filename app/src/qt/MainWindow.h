@@ -16,6 +16,7 @@
 
 #include <QtGui>
 #include "ui_redking.h"
+#include "../model/model.h"
 
 #include <iostream>
 #include <string>
@@ -30,10 +31,12 @@ public:
     MainWindow();
     Ui_MainWindow m_Ui;
 
+    red_king::model *m_model;
+
 protected:
 
 private slots:
-
+  void slot_restart() { m_model->init(); }
   //void play_slot() { lo_send(m_audio_address,"/start",""); }
 
 

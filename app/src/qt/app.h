@@ -14,22 +14,31 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-#include <iostream>
+#include <jellyfish/core/types.h>
+#include <jellyfish/audio.h>
+#include "../model/model.h"
+#include "../synth/additive_synth.h"
 #include <QtGui>
-#include "qt/app.h"
-#include <unistd.h>
+#include "MainWindow.h"
+#include "canvas.h"
 
-using namespace std;
+namespace red_king {
 
-int main(int argc, char **argv) {
-  red_king::app red_king;
-  QApplication app(argc, argv);
-  red_king.init_qt();
-  return app.exec();
+class app {
+ public:
+  app();
+  void init_qt();
 
-  while (true) {
-    red_king.m_model.step();
+  audio_device *m_audio;
+  additive_synth m_synth_left;
+  additive_synth m_synth_right;
 
-  }
+  model m_model;
 
-}
+  MainWindow *m_main_window;
+  canvas *m_canvas;
+
+
+};
+
+};

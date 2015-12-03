@@ -7,6 +7,10 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "types.h"
+
+namespace red_king {
+
 /* Model parameters */
 #define Q 0.5
 #define B 0.5
@@ -26,7 +30,7 @@
 #define PSTART 25 /* Initial parasite phenotype */
 #define NEVOL 100 /* Number of iterations (evolutionary timesteps) - ideally this needs to be higher */
 #define MAXTIME 1000 /* Duration for ecological dynamics */
-#define MAXSTEPS 10 //1e6 /* Maximum number of steps for ODE solver */
+#define MAXSTEPS 100 //1e6 /* Maximum number of steps for ODE solver */
 #define INTERVAL 100 /* Check if the system is close to equilibrium */
 #define EPSILON 0 /* Extinction tolerance */
 #define EQTOL 1e-2 /* Equilibrium tolerance */
@@ -36,13 +40,38 @@
 /*************************************
  * Function prototypes
  *************************************/
-void ad(double **xout, double *u, double *v, double E[][N], double *a, double *beta);
-void orig_rungkut(double *x, double y[][N], double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
-void my_rungkut(double *x, double y[][N], double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
-void rkqs(double *x,double y[][N],double *dxdt,double dydt[][N],double *h,double *hnext,double *xscale,double yscale[][N],double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
-void rkck(double *x,double y[][N], double *dxdt,double dydt[][N],double *xout,double yout[][N],double *xerr,double yerr[][N],double h, double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind);
-void dynamic(double *x, double y[][N], double *u, double *v, double E[][N], double *a, double *k, double k1[][N], int nh, int np, int *host_ind, int *par_ind);
-double FMAX(double,double);
-double FMIN(double,double);
-double** array_maker(int rows, int cols);
-void free_array(double **array, int rows);
+class range {
+
+ public:
+  range();
+
+  void my_rungkut(rk_real *x, rk_real **y, rk_real *u, rk_real *v, rk_real **E, rk_real *a, int nh, int np, int *host_ind, int *par_ind);
+
+
+ private:
+  void ad(rk_real **xout, rk_real *u, rk_real *v, rk_real **E, rk_real *a, rk_real *beta);
+  void rkqs(rk_real *x,rk_real **y,rk_real *dxdt,rk_real **dydt,rk_real *h,rk_real *hnext,rk_real *xscale,rk_real **yscale,rk_real *u, rk_real *v, rk_real **E, rk_real *a, int nh, int np, int *host_ind, int *par_ind);
+  void rkck(rk_real *x,rk_real **y, rk_real *dxdt,rk_real **dydt,rk_real *xout,rk_real **yout,rk_real *xerr,rk_real **yerr,rk_real h, rk_real *u, rk_real *v, rk_real **E, rk_real *a, int nh, int np, int *host_ind, int *par_ind);
+  void dynamic(rk_real *x, rk_real **y, rk_real *u, rk_real *v, rk_real **E, rk_real *a, rk_real *k, rk_real **k1, int nh, int np, int *host_ind, int *par_ind);
+  rk_real FMAX(rk_real,rk_real);
+  rk_real FMIN(rk_real,rk_real);
+
+  rk_real **alloc_2dim_array();
+
+  rk_real **y0;
+  rk_real **dydt;
+  rk_real **yscale;
+  rk_real **ymax;
+  rk_real **ymin;
+
+  rk_real **ytemp;
+  rk_real **yerr;
+
+  rk_real **yk1, **yk2, **yk3, **yk4, **yk5, **yk6;
+
+  rk_real **parsum;
+
+
+};
+
+}

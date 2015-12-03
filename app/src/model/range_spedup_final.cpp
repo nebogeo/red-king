@@ -7,14 +7,46 @@
 #include "range_spedup_final.h"
 
 using namespace std;
+using namespace red_king;
 
 /***************************************
  * Adaptive dynamics function
  ***************************************/
-void ad(double **xout, double *u, double *v, double E[][N], double *a, double *beta){
 
-    double x0[N], y[N], y0[N][N];
-    double  rtype, r1, r2, xtotal, xcum, temp;
+range::range() {
+  y0 = alloc_2dim_array();
+
+  y0  = alloc_2dim_array();
+  dydt  = alloc_2dim_array();
+  yscale  = alloc_2dim_array();
+  ymax  = alloc_2dim_array();
+  ymin  = alloc_2dim_array();
+
+  ytemp  = alloc_2dim_array();
+  yerr  = alloc_2dim_array();
+
+  yk1 = alloc_2dim_array();
+  yk2 = alloc_2dim_array();
+  yk3 = alloc_2dim_array();
+  yk4 = alloc_2dim_array();
+  yk5 = alloc_2dim_array();
+  yk6  = alloc_2dim_array();
+
+  parsum  = alloc_2dim_array();
+}
+
+rk_real **range::alloc_2dim_array() {
+  rk_real **t = new rk_real*[N];
+  for (int i=0; i<N; i++) {
+    t[i] = new rk_real[N];
+  }
+  return t;
+}
+
+void range::ad(rk_real **xout, rk_real *u, rk_real *v, rk_real **E, rk_real *a, rk_real *beta){
+
+    rk_real x0[N], y[N];
+    rk_real  rtype, r1, r2, xtotal, xcum, temp;
     int host_ind[N], par_ind[N];
     int i, j, evol_count, nh, np, mutator, pop_choice;
 
@@ -94,11 +126,11 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
         }
 
         /* Mutation routine */
-        rtype=double(rand())/RAND_MAX;
+        rtype=rk_real(rand())/RAND_MAX;
         if (rtype<WHO) pop_choice=0;
         else pop_choice=1;
 
-        r1=double(rand())/RAND_MAX;
+        r1=rk_real(rand())/RAND_MAX;
         xtotal = 0.0;
         xcum = 0.0;
         for (i=0; i<N; i++) {
@@ -115,7 +147,7 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
             }
         }
 
-        r2=double(rand())/RAND_MAX;
+        r2=rk_real(rand())/RAND_MAX;
         if (r2<0.5 && mutator>0){	/* Mutate up or down? */
             if (pop_choice==0) {
                 x0[mutator-1]+=x0[mutator]/10.0;
@@ -141,11 +173,11 @@ void ad(double **xout, double *u, double *v, double E[][N], double *a, double *b
 /*****************************************
  * ODE solver
  ****************************************/
-void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind){
+void range::my_rungkut (rk_real *x, rk_real **y, rk_real *u, rk_real *v, rk_real **E, rk_real *a, int nh, int np, int *host_ind, int *par_ind){
 
     int i,j,exitflag,count;
-    double maxsteps,t,nextcheck;
-    double hnext[1], h[1], dxdt[N], dydt[N][N], xscale[N], yscale[N][N], xmax[N], xmin[N], ymax[N][N], ymin[N][N];
+    rk_real maxsteps,t,nextcheck;
+    rk_real hnext[1], h[1], dxdt[N], /*dydt[N][N],*/ xscale[N], /*yscale[N][N],*/ xmax[N], xmin[N]/*, ymax[N][N], ymin[N][N]*/;
 
     /* Other params */
     exitflag = 0;
@@ -237,10 +269,10 @@ void my_rungkut (double *x, double y[][N], double *u, double *v, double E[][N], 
 /*****************************************
  * This generates the adaptive step-size
  ****************************************/
-void rkqs(double *x,double y[][N],double *dxdt,double dydt[][N],double *h,double *hnext,double *xscale,double yscale[][N],double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind)
+void range::rkqs(rk_real *x,rk_real **y,rk_real *dxdt,rk_real **dydt,rk_real *h,rk_real *hnext,rk_real *xscale,rk_real **yscale,rk_real *u, rk_real *v, rk_real **E, rk_real *a, int nh, int np, int *host_ind, int *par_ind)
 {
-    double xtemp[N], ytemp[N][N], xerr[N], yerr[N][N];
-    double htemp,errmax;
+    rk_real xtemp[N], /*ytemp[N][N],*/ xerr[N];//, yerr[N][N];
+    rk_real htemp,errmax;
     int i,j;
 
     htemp= *h;
@@ -281,17 +313,18 @@ void rkqs(double *x,double y[][N],double *dxdt,double dydt[][N],double *h,double
 /*****************************************
  * This is the standard RK solver
  ****************************************/
-void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,double yout[][N],double *xerr,double yerr[][N],double h, double *u, double *v, double E[][N], double *a, int nh, int np, int *host_ind, int *par_ind)
+void range::rkck(rk_real *x,rk_real **y,rk_real *dxdt,rk_real **dydt,rk_real *xout,rk_real **yout,rk_real *xerr,rk_real **yerr,rk_real h, rk_real *u, rk_real *v, rk_real **E, rk_real *a, int nh, int np, int *host_ind, int *par_ind)
 {
     int i,j;
-	double xk1[N], xk2[N], xk3[N], xk4[N], xk5[N], xk6[N];
-	double yk1[N][N], yk2[N][N], yk3[N][N], yk4[N][N], yk5[N][N], yk6[N][N];
-	double xtemp[N], ytemp[N][N];
-    static double b21=0.2,b31=3.0/40.0,b32=9.0/40.0,b41=0.3,b42=-0.9,b43=1.2,
+	rk_real xk1[N], xk2[N], xk3[N], xk4[N], xk5[N], xk6[N];
+	//rk_real yk1[N][N], yk2[N][N], yk3[N][N], yk4[N][N], yk5[N][N], yk6[N][N];
+	rk_real xtemp[N]; //, ytemp[N][N];
+
+    rk_real b21=0.2,b31=3.0/40.0,b32=9.0/40.0,b41=0.3,b42=-0.9,b43=1.2,
     b51=-11.0/54.0,b52=2.5,b53=-70.0/27.0,b54=35.0/27.0,b61=1631.0/55296,
     b62=175.0/512.0,b63=575.0/13824.0,b64=44275.0/110592,b65=253.0/4096.0,
     c1=37.0/378.0,c3=250.0/621.0,c4=125.0/594.0,c6=512.0/1771.0,dc5=-277.00/14336;
-    double dc1=c1-2825.0/27648.0,dc3=c3-18575.0/48384.0,dc4=c4-13525.0/55296.0,
+    rk_real dc1=c1-2825.0/27648.0,dc3=c3-18575.0/48384.0,dc4=c4-13525.0/55296.0,
     dc6=c6-0.25;
 
     for(i=0;i<N;i++){
@@ -348,14 +381,14 @@ void rkck(double *x,double y[][N],double *dxdt,double dydt[][N],double *xout,dou
  * Population dynamics function - could expand the model to allow more
  * user-defined inputs
  *************************************************************************/
-void dynamic(double *x, double y[][N], double *u, double *v, double E[][N], double *a, double *dxdt, double dydt[][N], int nh, int np, int *host_ind, int *par_ind){
+void range::dynamic(rk_real *x, rk_real **y, rk_real *u, rk_real *v, rk_real **E, rk_real *a, rk_real *dxdt, rk_real **dydt, int nh, int np, int *host_ind, int *par_ind){
 
 	int i,j;
-	double xsum, ysum;
-	double betsum[N], gamsum[N], ystrain[N];
-	double parsum[N][N];
+	rk_real xsum, ysum;
+	rk_real betsum[N], gamsum[N], ystrain[N];
+	//rk_real parsum[N][N];
 
-	xsum=ysum=0;
+    xsum=ysum=0;
 
     for (i=0; i<N; i++) ystrain[i]=0;
 
@@ -395,7 +428,7 @@ void dynamic(double *x, double y[][N], double *u, double *v, double E[][N], doub
 /***************************************
  * Simple max function
  ***************************************/
-double FMAX(double l,double r)
+rk_real range::FMAX(rk_real l,rk_real r)
 {
     if(l>r)return l;
     else   return r;
@@ -404,30 +437,8 @@ double FMAX(double l,double r)
 /***************************************
  * Simple min function
  ***************************************/
-double FMIN(double l,double r)
+rk_real range::FMIN(rk_real l,rk_real r)
 {
     if(l<r)return l;
     else   return r;
-}
-
-/***************************************
- * Make 2D double array
- ***************************************/
-double** array_maker(int rows, int cols) {
-
-    double** new_array;
-    new_array = (double**) malloc(rows*sizeof(double*));
-    for (int i = 0; i < rows; i++)
-        new_array[i] = (double*) malloc(cols*sizeof(double));
-
-    return new_array;
-}
-
-/***************************************
- * Free 2D double array
- ***************************************/
-void free_array(double **array, int rows) {
-
-    for (int i = 0; i < rows; i++) free(array[i]);
-    free(array);
 }

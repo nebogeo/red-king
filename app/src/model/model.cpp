@@ -118,10 +118,10 @@ void model::update_cost_functions() {
 
 void model::init_trait_values(cost_params &cp) {
   for (int i=0; i<N; i++) {
-    //u[i]=cp.umin+(cp.umax-cp.umin)*i/(N-1); /* Host */
-    //v[i]=cp.vmin+(cp.vmax-cp.vmin)*i/(N-1); /* Parasite */
-    u[i]=0+(10-0)*i/(N-1); /* Host */
-    v[i]=0+(10-0)*i/(N-1); /* Parasite */
+    u[i]=cp.umin+(cp.umax-cp.umin)*i/(N-1); /* Host */
+    v[i]=cp.vmin+(cp.vmax-cp.vmin)*i/(N-1); /* Parasite */
+    //u[i]=0+(10-0)*i/(N-1); /* Host */
+    //v[i]=0+(10-0)*i/(N-1); /* Parasite */
   }
 }
 
@@ -132,8 +132,8 @@ void model::init_cost_functions(cost_params &cp) {
    *********************************************************************/
   /* Define cost functions (trade-offs) */
   for (int i=0; i<N; i++) {
-    a[i]=10+sin(cp.amin+i*cp.amax/(float)N)*10; //cp.amax-(cp.amax-cp.amin)*(1-(u[i]-cp.umax)/(cp.umin-cp.umax))/(1+cp.a_p*(u[i]-cp.umax)/(cp.umin-cp.umax)); /* Host trade-off */
-    beta[i]=10+sin(cp.vmin+i*cp.vmax/(float)N)*10; //cp.bemaxtime-(cp.bemaxtime-cp.betmin)*(1-(v[i]-cp.vmax)/(cp.vmin-cp.vmax))/(1+cp.beta_p*(v[i]-cp.vmax)/(cp.vmin-cp.vmax)); /* Parasite trade-off */
+    a[i]=cp.amax-(cp.amax-cp.amin)*(1-(u[i]-cp.umax)/(cp.umin-cp.umax))/(1+cp.a_p*(u[i]-cp.umax)/(cp.umin-cp.umax)); /* Host trade-off */
+    beta[i]=cp.bemaxtime-(cp.bemaxtime-cp.betmin)*(1-(v[i]-cp.vmax)/(cp.vmin-cp.vmax))/(1+cp.beta_p*(v[i]-cp.vmax)/(cp.vmin-cp.vmax)); /* Parasite trade-off */
   }
 }
 
@@ -141,7 +141,8 @@ void model::init_matrix() {
   /* Define host-parasite interaction matrix */
   for (int i=0; i<N; i++){
     for (int j=0; j<N; j++){
-      E[i][j] = beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
+      E[i][j] =
+        beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
     }
   }
 }
@@ -160,10 +161,9 @@ void model::step() {
     y[i]=0;
     if (x0[i]<EPSILON) x0[i]=0;
     for (int j=0; j<N; j++) {
-      /*if (y0[j][i]<EPSILON) {
+      if (y0[j][i]<EPSILON) {
         y0[j][i]=0;
-      }
-      else*/ {
+      } else {
         // Work out parasite phenotype densities
         y[i]+=y0[j][i];
       }

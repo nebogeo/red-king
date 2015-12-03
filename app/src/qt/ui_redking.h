@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'redkingEf4886.ui'
+** Form generated from reading UI file 'redkingYA4886.ui'
 **
 ** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef REDKINGEF4886_H
-#define REDKINGEF4886_H
+#ifndef REDKINGYA4886_H
+#define REDKINGYA4886_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -165,7 +165,7 @@ public:
         label_3->setText(QApplication::translate("MainWindow", "Simulation", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "Parasite cost function", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "Host cost function", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("MainWindow", "Matrix", 0, QApplication::UnicodeUTF8));
+        label_5->setText(QApplication::translate("MainWindow", "Interaction matrix", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
@@ -176,4 +176,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // REDKINGEF4886_H
+#endif // REDKINGYA4886_H

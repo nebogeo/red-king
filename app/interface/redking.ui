@@ -161,7 +161,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Matrix</string>
+        <string>Interaction matrix</string>
        </property>
       </widget>
      </item>

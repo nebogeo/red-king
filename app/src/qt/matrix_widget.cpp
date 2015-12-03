@@ -47,8 +47,8 @@ void matrix_widget::paintEvent(QPaintEvent *event)
 
     for (int i=0; i<m_size; i++) {
       for (int j=0; j<m_size; j++) {
-        float v = (m_data[i][j]-m_min)*(m_max-m_min);
-        myPen.setColor(QColor(v*255,v*255,v*255));
+        int v = abs(m_data[i][j]*10);
+        myPen.setColor(QColor(v%255,v%255,v%255));
         painter.setPen(myPen);
         painter.drawPoint(i*m_graph_size/(float)m_size,
                           j*m_graph_size/(float)m_size);

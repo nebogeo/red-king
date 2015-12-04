@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>661</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,20 +17,13 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>291</width>
-      <height>561</height>
+      <x>0</x>
+      <y>0</y>
+      <width>331</width>
+      <height>591</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>RESTART</string>
-       </property>
-      </widget>
-     </item>
      <item>
       <layout class="QVBoxLayout" name="host_params_holder">
        <item>
@@ -65,6 +58,13 @@
        </item>
       </layout>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Reset simulation</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -95,10 +95,10 @@
    <widget class="QWidget" name="verticalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>170</y>
-      <width>171</width>
-      <height>171</height>
+      <x>330</x>
+      <y>150</y>
+      <width>151</width>
+      <height>151</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="parasite_cost_holder">
@@ -120,10 +120,10 @@
    <widget class="QWidget" name="verticalLayoutWidget_4">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>330</x>
       <y>0</y>
-      <width>171</width>
-      <height>171</height>
+      <width>151</width>
+      <height>151</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="host_cost_holder">
@@ -145,10 +145,10 @@
    <widget class="QWidget" name="verticalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>340</y>
-      <width>171</width>
-      <height>171</height>
+      <x>330</x>
+      <y>300</y>
+      <width>151</width>
+      <height>291</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="matrix_holder">
@@ -166,6 +166,19 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>600</y>
+      <width>97</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Model D</string>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -188,10 +201,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>slot_model(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>78</x>
+     <y>590</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slot_restart()</slot>
   <slot>slot_umin(int)</slot>
   <slot>slot_umin(double)</slot>
+  <slot>slot_model(bool)</slot>
  </slots>
 </ui>

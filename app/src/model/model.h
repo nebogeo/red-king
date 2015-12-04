@@ -30,6 +30,8 @@ class model {
     void init();
     void step();
 
+    void set_model(int s) { m_model=s; }
+
     rk_real *get_hosts() { return x0; }
     rk_real *get_parasites() { return y; }
     rk_real *get_host_cost() { return a; }
@@ -65,6 +67,8 @@ class model {
     // parameters for the model
     rk_real *x0, *y, **y0;
     int *host_ind, *par_ind;
+    int m_model;
+
 };
 
 }

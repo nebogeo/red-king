@@ -47,6 +47,7 @@ void cleari(int *ptr) {
 
 model::model() {
   m_range = new range();
+  m_model = 0;
 
   u = new rk_real[N];
   v = new rk_real[N];
@@ -61,6 +62,18 @@ model::model() {
   for (u32 i=0; i<N; i++) y0[i]=new rk_real[N];
   host_ind=new int[N];
   par_ind=new int[N];
+
+  m_cost_params.amin = 1.782;
+  m_cost_params.amax = 5.454;
+  m_cost_params.umin = 0;
+  m_cost_params.umax = 10;
+  m_cost_params.a_p = 2.615;
+  m_cost_params.betmin = 0.491;
+  m_cost_params.bemaxtime = 17.117;
+  m_cost_params.vmin = 0;
+  m_cost_params.vmax = 10;
+  m_cost_params.beta_p = -0.434;
+
 
   init();
 }
@@ -94,18 +107,6 @@ void model::init() {
     y0[hstart][pstart]=1.0;
     y[pstart]=y0[hstart][pstart];
   }
-
-
-  m_cost_params.amin = 1.782;
-  m_cost_params.amax = 5.454;
-  m_cost_params.umin = 0;
-  m_cost_params.umax = 10;
-  m_cost_params.a_p = 2.615;
-  m_cost_params.betmin = 0.491;
-  m_cost_params.bemaxtime = 17.117;
-  m_cost_params.vmin = 0;
-  m_cost_params.vmax = 10;
-  m_cost_params.beta_p = -0.434;
 
   update_cost_functions();
 }
@@ -141,8 +142,12 @@ void model::init_matrix() {
   /* Define host-parasite interaction matrix */
   for (int i=0; i<N; i++){
     for (int j=0; j<N; j++){
-      E[i][j] =
-        beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
+      if (m_model==0) {
+        E[i][j] = beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
+      } else {
+        rk_real t = (v[j]-u[i])/(0.8*v[i]+0.25);
+        E[i][j] = beta[j]*exp(-(t*t));
+      }
     }
   }
 }

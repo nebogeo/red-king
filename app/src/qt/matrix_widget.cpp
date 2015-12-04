@@ -23,6 +23,8 @@ void matrix_widget::recalc() {
       if (m_data[i][j]>m_max) m_max = m_data[i][j];
     }
   }
+  m_scale = m_graph_size/(m_max-m_min);
+  m_offset = m_min;
   repaint();
 }
 
@@ -38,13 +40,6 @@ void matrix_widget::paintEvent(QPaintEvent *event)
     QPen myPen(Qt::black, 6, Qt::SolidLine);
     painter.setPen(myPen);
 
-    char txt[256];
-    sprintf(txt,"%f",m_max);
-    painter.drawText(QPoint(2, 12), txt);
-    sprintf(txt,"%f",m_min);
-    painter.drawText(QPoint(2, m_graph_size-3), txt);
-    painter.drawRect(0,0,m_graph_size,m_graph_size);
-
     for (int i=0; i<m_size; i++) {
       for (int j=0; j<m_size; j++) {
         int v = abs(m_data[i][j]*10);
@@ -54,5 +49,33 @@ void matrix_widget::paintEvent(QPaintEvent *event)
                           j*m_graph_size/(float)m_size);
       }
     }
+
+
+    char txt[256];
+    sprintf(txt,"%f",m_max);
+    painter.drawText(QPoint(2, m_graph_size+12+10), txt);
+    sprintf(txt,"%f",m_min);
+    painter.drawText(QPoint(2, (m_graph_size-3)+m_graph_size+10), txt);
+    QPen myPen2(Qt::black, 1, Qt::SolidLine);
+    painter.setPen(myPen2);
+    painter.drawRect(0,0,m_graph_size,m_graph_size);
+    painter.drawRect(0,m_graph_size+10,m_graph_size,m_graph_size);
+
+    for (int j=0; j<m_size; j+=5) {
+      int x,y=0;
+      int lx = 0;
+      int ly = (m_graph_size-((m_data[0][j]-m_offset)*m_scale)
+                +m_graph_size)+10;
+
+      for (int i=0; i<m_size; i++) {
+        x=i*m_graph_size/(float)m_size;
+        y=(m_graph_size-((m_data[i][j]-m_offset)*m_scale)
+           +m_graph_size)+10;
+        painter.drawLine(x,y,lx,ly);
+        lx=x;
+        ly=y;
+      }
+    }
+
 
 }

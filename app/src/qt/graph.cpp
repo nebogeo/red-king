@@ -36,7 +36,7 @@ void graph_widget::paintEvent(QPaintEvent *event)
 
     //create a black pen that has solid line
     //and the width is 2.
-    QPen myPen(Qt::black, 2, Qt::SolidLine);
+    QPen myPen(Qt::black, 1, Qt::SolidLine);
     painter.setPen(myPen);
 
     char txt[256];
@@ -46,9 +46,15 @@ void graph_widget::paintEvent(QPaintEvent *event)
     painter.drawText(QPoint(2, m_graph_size-3), txt);
     painter.drawRect(0,0,m_graph_size,m_graph_size);
 
+    int x,y=0;
+    int lx = 0;
+    int ly = m_graph_size-((m_data[0]-m_offset)*m_scale);
     for (int i=0; i<m_size; i++) {
-      painter.drawPoint(i*m_graph_size/(float)m_size,
-                        m_graph_size-((m_data[i]-m_offset)*m_scale));
+      x = i*m_graph_size/(float)m_size;
+      y = m_graph_size-((m_data[i]-m_offset)*m_scale);
+      painter.drawLine(x,y,lx,ly);
+      lx=x;
+      ly=y;
     }
 
 }

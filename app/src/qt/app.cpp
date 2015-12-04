@@ -70,41 +70,41 @@ void app::init_qt() {
   m_main_window->m_Ui.canvas_holder->addWidget(m_canvas);
 
   qt_controller c;
-  c = build_param_controller("AMIN",0,100,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("AMIN",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_amin(int)));
   //  QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_amin(double)));
 
-  c = build_param_controller("AMAX",0,100,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("AMAX",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_amax(int)));
   //  QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_amax(double)));
 
-  c = build_param_controller("UMIN",0,100,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("UMIN",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_umin(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_umin(double)));
 
-  c = build_param_controller("UMAX",0,100,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("UMAX",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_umax(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_uax(double)));
 
-  c = build_param_controller("A_P",-100,100,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("A_P",-10,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_ap(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_ap(double)));
 
 
 
-  c = build_param_controller("BETMIN",0,100,m_main_window->m_Ui.parasite_params_holder);
+  c = build_param_controller("BETMIN",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_betmin(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_betmin(double)));
-  c = build_param_controller("BEMAXTIME",0,100,m_main_window->m_Ui.parasite_params_holder);
+  c = build_param_controller("BEMAXTIME",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_bemaxtime(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_bemaxtime(double)));
-  c = build_param_controller("VMIN",0,100,m_main_window->m_Ui.parasite_params_holder);
+  c = build_param_controller("VMIN",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_vmin(int)));
   //  QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_vmin(double)));
-  c = build_param_controller("VMAX",0,100,m_main_window->m_Ui.parasite_params_holder);
+  c = build_param_controller("VMAX",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_vmax(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_vmax(double)));
-  c = build_param_controller("BETA_P",-100,100,m_main_window->m_Ui.parasite_params_holder);
+  c = build_param_controller("BETA_P",-10,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_betap(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_betap(double)));
 
@@ -118,9 +118,6 @@ app::qt_controller app::build_param_controller(const QString &name, int low, int
   mainWidget->setGeometry(QRect(330, 390, 127, 54));
   QHBoxLayout *mainLayout = new QHBoxLayout(mainWidget);
   mainLayout->setContentsMargins(0, 0, 0, 0);
-  QDial *dial = new QDial(mainWidget);
-  dial->setRange(low, high);
-  mainLayout->addWidget(dial);
   QHBoxLayout *innerLayout = new QHBoxLayout();
   QLabel *label = new QLabel(mainWidget);
   label->setText(name);
@@ -130,6 +127,9 @@ app::qt_controller app::build_param_controller(const QString &name, int low, int
   // innerLayout->addWidget(spin);
 
   mainLayout->addLayout(innerLayout);
+  QSlider *dial = new QSlider(Qt::Horizontal,mainWidget);
+  dial->setRange(low, high);
+  mainLayout->addWidget(dial);
 
   parent->addWidget(mainWidget);
 

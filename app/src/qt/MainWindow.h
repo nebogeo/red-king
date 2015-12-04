@@ -52,76 +52,68 @@ private slots:
     pthread_mutex_unlock(m_mutex);
   }
 
+  void slot_model(bool s) {
+    if (s) m_model->set_model(1);
+    else m_model->set_model(0);
+    update_model();
+  }
+
   void slot_amin(int v) {
     m_model->m_cost_params.amin = v/10.0;
-    m_model->update_cost_functions();
-    m_host_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_amax(int v) {
     m_model->m_cost_params.amax = v/10.0;
-    m_model->update_cost_functions();
-    m_host_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_umin(int v) {
     m_model->m_cost_params.umin = v/10.0;
-    m_model->update_cost_functions();
-    m_host_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_umax(int v) {
     m_model->m_cost_params.umax = v/10.0;
-    m_model->update_cost_functions();
-    m_host_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_ap(int v) {
     m_model->m_cost_params.a_p = v/10.0;
-    m_model->update_cost_functions();
-    m_host_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_betmin(int v) {
     m_model->m_cost_params.betmin = v/10.0;
-    m_model->update_cost_functions();
-    m_parasite_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_bemaxtime(int v) {
     m_model->m_cost_params.bemaxtime = v/10.0;
-    m_model->update_cost_functions();
-    m_parasite_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_vmin(int v) {
     m_model->m_cost_params.vmin = v/10.0;
-    m_model->update_cost_functions();
-    m_parasite_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_vmax(int v) {
     m_model->m_cost_params.vmax = v/10.0;
-    m_model->update_cost_functions();
-    m_parasite_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
   void slot_betap(int v) {
     m_model->m_cost_params.beta_p = v/10.0;
-    m_model->update_cost_functions();
-    m_parasite_graph->recalc();
-    m_matrix->recalc();
+    update_model();
   }
 
+  void update_model() {
+    m_model->update_cost_functions();
+    m_parasite_graph->recalc();
+    m_host_graph->recalc();
+    m_matrix->recalc();
+  }
 
 private:
   graph_widget *m_host_graph;

@@ -19,20 +19,20 @@ void additive_synth::reset() {
 }
 
 void additive_synth::set_level(u32 n, float l) {
-    m_level[n]=l;
+    m_level[m_num_oscs-n]=l;
 }
 
 void additive_synth::render(sample &out) {
   for (u32 b=0; b<m_num_oscs; ++b) {
-    m_level_actual[b] = m_level_actual[b] * 0.5 +
-          m_level[b] * 0.5;
+    m_level_actual[b] = m_level_actual[b] * 0.9 +
+          m_level[b] * 0.1;
     //m_level_actual[b] = m_level[b];
   }
 
   for (u32 i=0; i<out.get_length(); ++i) {
     out[i]=0;
     for (u32 b=0; b<m_num_oscs; ++b) {
-      out[i]+=0.1*sin(m_oscs[b])*m_level_actual[b];
+      out[i]+=0.1*sin(fmod(m_oscs[b],2*3.141))*m_level_actual[b];
       m_oscs[b]+=m_freq*(float)(b+1)*0.5;
     }
   }

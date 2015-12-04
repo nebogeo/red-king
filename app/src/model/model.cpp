@@ -145,7 +145,7 @@ void model::init_matrix() {
       if (m_model==0) {
         E[i][j] = beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
       } else {
-        rk_real t = (v[j]-u[i])/(0.8*v[i]+0.25);
+        rk_real t = (v[j]-u[i])/(0.8*(v[i]+0.25));
         E[i][j] = beta[j]*exp(-(t*t));
       }
     }

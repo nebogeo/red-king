@@ -117,7 +117,7 @@ app::qt_controller app::build_param_controller(const QString &name, int low, int
   QWidget *mainWidget = new QWidget();
   mainWidget->setGeometry(QRect(330, 390, 127, 54));
   QHBoxLayout *mainLayout = new QHBoxLayout(mainWidget);
-  mainLayout->setContentsMargins(0, 0, 0, 0);
+  mainLayout->setContentsMargins(10, 10, 10, 10);
   QHBoxLayout *innerLayout = new QHBoxLayout();
   QLabel *label = new QLabel(mainWidget);
   label->setText(name);

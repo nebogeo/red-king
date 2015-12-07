@@ -12,14 +12,14 @@ QT += core gui
 # Input
 HEADERS += src/qt/MainWindow.h \
            src/qt/ui_redking.h \
-           src/qt/canvas.h \
+           src/qt/canvas_widget.h \
            src/qt/matrix_widget.h \
-           src/qt/graph.h \
+           src/qt/graph_widget.h \
            src/qt/app.h \
 
 SOURCES += src/qt/MainWindow.cpp \
-           src/qt/canvas.cpp \
-           src/qt/graph.cpp \
+           src/qt/canvas_widget.cpp \
+           src/qt/graph_widget.cpp \
            src/qt/matrix_widget.cpp \
            src/qt/app.cpp \
            src/model/range_spedup_final.cpp \

@@ -69,6 +69,8 @@ class model {
     int *host_ind, *par_ind;
     int m_model;
 
+    rk_real *last_x0, *last_y;
+
 };
 
 }

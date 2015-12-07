@@ -15,6 +15,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 #include <iostream>
+#include <string.h> // memcpy
 #include "model.h"
 #include "range_spedup_final.h"
 #include "jellyfish/core/types.h"
@@ -45,6 +46,14 @@ void cleari(int *ptr) {
   }
 }
 
+rk_real diff(rk_real *a, rk_real *b, size_t len) {
+  rk_real t=0;
+  for (size_t i=0; i<len; i++) {
+    t+=a[i]-b[i];
+  }
+  return t/(float)len;
+}
+
 model::model() {
   m_range = new range();
   m_model = 0;
@@ -58,6 +67,8 @@ model::model() {
 
   x0 = new rk_real[N];
   y = new rk_real[N];
+  last_x0 = new rk_real[N];
+  last_y = new rk_real[N];
   y0 = new rk_real*[N];
   for (u32 i=0; i<N; i++) y0[i]=new rk_real[N];
   host_ind=new int[N];
@@ -100,7 +111,7 @@ void model::init() {
     }
   }
 
-  for (int i=0; i<5; i++) {
+  for (int i=0; i<1; i++) {
     int hstart = rand()%N;
     int pstart = rand()%N;
     x0[hstart]=1.0;
@@ -145,7 +156,7 @@ void model::init_matrix() {
       if (m_model==0) {
         E[i][j] = beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
       } else {
-        rk_real t = (v[j]-u[i])/(0.8*(v[i]+0.25));
+        rk_real t = (v[j]-u[i])/(0.8*v[i]+0.25);
         E[i][j] = beta[j]*exp(-(t*t));
       }
     }
@@ -176,6 +187,11 @@ void model::step() {
   }
 
   mutate();
+
+  //cerr<<diff(x0,last_x0,N)+diff(y,last_y,N)<<endl;
+  //memcpy(last_x0,x0,sizeof(rk_real)*N);
+  //memcpy(last_y,y,sizeof(rk_real)*N);
+
 }
 
 

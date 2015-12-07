@@ -15,10 +15,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 
 #include "app.h"
+#include "../model/types.h"
 
 using namespace red_king;
 
-#define BANDS 25
+#define BANDS N
 
 void run_audio(void* c, unsigned int frames) {
     app *a = (app *)c;
@@ -64,7 +65,7 @@ void app::init_qt() {
   m_main_window->m_synth_left = &m_synth_left;
   m_main_window->m_synth_right = &m_synth_right;
 
-  m_canvas = new canvas();
+  m_canvas = new canvas_widget();
   m_main_window->show();
   m_canvas->m_model = &m_model;
   m_main_window->m_Ui.canvas_holder->addWidget(m_canvas);

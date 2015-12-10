@@ -1,14 +1,13 @@
-TARGET  := redking
-TARGET_LIB := redking.a
+TARGET  := redking.a
 
 SRCS :=   	src/model/range_spedup_final.cpp \
 			src/model/model.cpp \
-			src/synth/additive_synth.cpp \
-	 		src/main.cpp
+			src/synth/additive_synth.cpp
 
-CCFLAGS = -g -O3 -ffast-math -march=native -mtune=native -Isrc @CFLAGS@
+CCFLAGS = -g -O3 -ffast-math -march=native -mtune=native -fPIC -Isrc @CFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS    = @LIBS@
+PYTHON_INCLUDE = -I/usr/include/python2.7/
 
 CC = @CXX@
 AR = ar
@@ -23,16 +22,19 @@ include ${XDEPS}
 endif
 
 ${TARGET}: ${OBJS} ${COBJS}
-	${CC} ${LDFLAGS} -o $@ $^ ${LIBS}
+	$(AR) $(ARFLAGS) ${TARGET} ${OBJS} ${COBJS}
+	swig -c++ -python swig/redking.i
+	g++ ${CCFLAGS} -c swig/redking_wrap.cxx ${PYTHON_INCLUDE}
+	g++ -shared ${OBJS} redking_wrap.o ${LIBS} -o swig/_redking.so
+	cp swig/_redking.so ../python
+	cp swig/redking.py ../python
+	#	g++ -shared ${OBJS} redking_wrap.o ${LIBS} -o redking.so
 
 ${OBJS}: %.o: %.cpp %.dep
 	${CC} ${CCFLAGS} -o $@ -c $<
 
 ${DEPS}: %.dep: %.cpp Makefile
 	${CC} ${CCFLAGS} -MM $< > $@
-
-library: ${OBJS} ${COBJS}
-	$(AR) $(ARFLAGS) ${TARGET_LIB} ${OBJS} ${COBJS}
 
 clean:: cleandeps
 	-rm -f *~ src/*.o src/*/*.o ${TARGET}

@@ -45,16 +45,15 @@ void canvas_widget::paintEvent(QPaintEvent *event)
 
     for (int i=0; i<N; i++) {
       //draw a point
-      double v = m_model->get_parasites()[i];
+      double v = log10(m_model->get_parasites()[i])*50.0;
 
       if (v>1.0) v=1;
       if (v<0.0) v=0;
 
-      double h = m_model->get_hosts()[i];
+      double h = log10(m_model->get_hosts()[i])*50.0;
       if (h>1.0) h=1;
       if (h<0.0) h=0;
 
-      //cerr<<v<<" "<<h<<endl;
 
       myPen.setColor(QColor(v*255,0,h*255));
       painter.setPen(myPen);

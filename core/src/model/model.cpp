@@ -85,11 +85,14 @@ model::model() {
   m_cost_params.vmax = 10;
   m_cost_params.beta_p = -0.434;
 
+  m_hstart = 10;
+  m_pstart = 12;
 
   init();
 }
 
 void model::init() {
+  srand(0);
 
   clear(u);
   clear(v);
@@ -111,13 +114,9 @@ void model::init() {
     }
   }
 
-  for (int i=0; i<1; i++) {
-    int hstart = rand()%N;
-    int pstart = rand()%N;
-    x0[hstart]=1.0;
-    y0[hstart][pstart]=1.0;
-    y[pstart]=y0[hstart][pstart];
-  }
+  x0[m_hstart]=1.0;
+  y0[m_hstart][m_pstart]=1.0;
+  y[m_pstart]=y0[m_hstart][m_pstart];
 
   update_cost_functions();
 }
@@ -128,7 +127,7 @@ void model::update_cost_functions() {
   init_matrix();
 }
 
-void model::init_trait_values(cost_params &cp) {
+void model::init_trait_values(model_cost_params &cp) {
   for (int i=0; i<N; i++) {
     u[i]=cp.umin+(cp.umax-cp.umin)*i/(N-1); /* Host */
     v[i]=cp.vmin+(cp.vmax-cp.vmin)*i/(N-1); /* Parasite */
@@ -137,7 +136,7 @@ void model::init_trait_values(cost_params &cp) {
   }
 }
 
-void model::init_cost_functions(cost_params &cp) {
+void model::init_cost_functions(model_cost_params &cp) {
   /**********************************************************************
    * This section is where the trade-offs and host-parasite interactions
    * are defined (i.e. where the user would make changes via a GUI)
@@ -218,14 +217,14 @@ void model::check_phenotypes(int &nh, int& np) {
       x0[i]=0;
       y[i]=0;
     }
-    printf("Breaking - hosts driven extinct\n");
+    //printf("Breaking - hosts driven extinct\n");
     return;
   }
   if(np==0){
     for (int i=0; i<N; i++) {
       y[i]=0;
     }
-    printf("Breaking - parasites driven extinct\n");
+    //printf("Breaking - parasites driven extinct\n");
     return;
   }
 }

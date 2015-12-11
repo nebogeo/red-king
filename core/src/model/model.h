@@ -22,6 +22,14 @@ namespace red_king {
 
 class range;
 
+ class model_cost_params {
+ public:
+   rk_real amin, amax, umin, umax,
+     a_p, betmin, bemaxtime,
+     vmin, vmax, beta_p;
+ };
+
+
 class model {
  public:
 
@@ -38,21 +46,19 @@ class model {
     rk_real *get_parasite_cost() { return beta; }
     rk_real **get_matrix() { return E; }
 
-    class cost_params {
-    public:
-      rk_real amin, amax, umin, umax,
-        a_p, betmin, bemaxtime,
-        vmin, vmax, beta_p;
-    };
+    unsigned int size() { return N; }
 
-    cost_params m_cost_params;
+    model_cost_params m_cost_params;
 
     void update_cost_functions();
 
+    int m_hstart;
+    int m_pstart;
+
  private:
 
-    void init_trait_values(cost_params &cp);
-    void init_cost_functions(cost_params &cp);
+    void init_trait_values(model_cost_params &cp);
+    void init_cost_functions(model_cost_params &cp);
     void init_matrix();
 
     void check_phenotypes(int &nh, int& np);

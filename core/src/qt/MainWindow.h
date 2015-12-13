@@ -69,12 +69,12 @@ private slots:
   }
 
   void slot_umin(int v) {
-    m_model->m_cost_params.umin = v/10.0;
+    m_model->m_cost_params.umin = v/100.0;
     update_model();
   }
 
   void slot_umax(int v) {
-    m_model->m_cost_params.umax = v/10.0;
+    m_model->m_cost_params.umax = v/100.0;
     update_model();
   }
 
@@ -93,13 +93,23 @@ private slots:
     update_model();
   }
 
+  void slot_g(int v) {
+    m_model->m_cost_params.g = v/100.0;
+    update_model();
+  }
+
+  void slot_h(int v) {
+    m_model->m_cost_params.h = v/1000.0;
+    update_model();
+  }
+
   void slot_vmin(int v) {
-    m_model->m_cost_params.vmin = v/10.0;
+    m_model->m_cost_params.vmin = v/100.0;
     update_model();
   }
 
   void slot_vmax(int v) {
-    m_model->m_cost_params.vmax = v/10.0;
+    m_model->m_cost_params.vmax = v/100.0;
     update_model();
   }
 

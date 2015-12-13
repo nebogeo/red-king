@@ -29,15 +29,15 @@ MainWindow::MainWindow(red_king::model *model)
   m_Ui.setupUi(this);
 
   m_host_graph = new graph_widget();
-  m_host_graph->init(120,m_model->get_host_cost(),25);
+  m_host_graph->init(120,m_model->get_host_cost(),N);
   m_Ui.host_cost_holder->addWidget(m_host_graph);
 
   m_parasite_graph = new graph_widget();
-  m_parasite_graph->init(120,m_model->get_parasite_cost(),25);
+  m_parasite_graph->init(120,m_model->get_parasite_cost(),N);
   m_Ui.parasite_cost_holder->addWidget(m_parasite_graph);
 
   m_matrix = new matrix_widget();
-  m_matrix->init(120,m_model->get_matrix(),25);
+  m_matrix->init(120,m_model->get_matrix(),N);
   m_Ui.matrix_holder->addWidget(m_matrix);
 
 }

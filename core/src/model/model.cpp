@@ -24,7 +24,7 @@ using namespace red_king;
 using namespace std;
 
 #define WHO 0.5	/* Controls relative mutation rates */
-#define EPSILON 0 /* Extinction tolerance */
+#define EPSILON 0.01 /* Extinction tolerance */
 
 void clear(rk_real *ptr) {
   for (int i=0; i<N; i++) {
@@ -74,16 +74,19 @@ model::model() {
   host_ind=new int[N];
   par_ind=new int[N];
 
-  m_cost_params.amin = 1.782;
-  m_cost_params.amax = 5.454;
+  m_cost_params.amin = 0;
+  m_cost_params.amax = 9.4;
+  m_cost_params.a_p = 2;
+  m_cost_params.betmin = 0;
+  m_cost_params.bemaxtime = 11.8;
+  m_cost_params.beta_p = 0.8;
+  m_cost_params.g = 13.5;
+  m_cost_params.h = 1.2;
+
   m_cost_params.umin = 0;
-  m_cost_params.umax = 10;
-  m_cost_params.a_p = 2.615;
-  m_cost_params.betmin = 0.491;
-  m_cost_params.bemaxtime = 17.117;
+  m_cost_params.umax = 1;
   m_cost_params.vmin = 0;
-  m_cost_params.vmax = 10;
-  m_cost_params.beta_p = -0.434;
+  m_cost_params.vmax = 1;
 
   m_hstart = 10;
   m_pstart = 12;
@@ -124,7 +127,7 @@ void model::init() {
 void model::update_cost_functions() {
   init_trait_values(m_cost_params);
   init_cost_functions(m_cost_params);
-  init_matrix();
+  init_matrix(m_cost_params);
 }
 
 void model::init_trait_values(model_cost_params &cp) {
@@ -143,19 +146,24 @@ void model::init_cost_functions(model_cost_params &cp) {
    *********************************************************************/
   /* Define cost functions (trade-offs) */
   for (int i=0; i<N; i++) {
-    a[i]=cp.amax-(cp.amax-cp.amin)*(1-(u[i]-cp.umax)/(cp.umin-cp.umax))/(1+cp.a_p*(u[i]-cp.umax)/(cp.umin-cp.umax)); /* Host trade-off */
-    beta[i]=cp.bemaxtime-(cp.bemaxtime-cp.betmin)*(1-(v[i]-cp.vmax)/(cp.vmin-cp.vmax))/(1+cp.beta_p*(v[i]-cp.vmax)/(cp.vmin-cp.vmax)); /* Parasite trade-off */
+    //a[i]=cp.amax-(cp.amax-cp.amin)*(1-(u[i]-cp.umax)/(cp.umin-cp.umax))/(1+cp.a_p*(u[i]-cp.umax)/(cp.umin-cp.umax)); /* Host trade-off */
+    //beta[i]=cp.bemaxtime-(cp.bemaxtime-cp.betmin)*(1-(v[i]-cp.vmax)/(cp.vmin-cp.vmax))/(1+cp.beta_p*(v[i]-cp.vmax)/(cp.vmin-cp.vmax)); /* Parasite trade-off */
+
+    a[i]=cp.amax-(cp.amax-cp.amin)*(powf(u[i],cp.a_p)); /* Host trade-off */
+    beta[i]=cp.bemaxtime-(cp.bemaxtime-cp.betmin)*powf(v[i],cp.beta_p); /* Parasite trade-off */
+
+
   }
 }
 
-void model::init_matrix() {
+void model::init_matrix(model_cost_params &cp) {
   /* Define host-parasite interaction matrix */
   for (int i=0; i<N; i++){
     for (int j=0; j<N; j++){
       if (m_model==0) {
-        E[i][j] = beta[j]*(1-1/(1+exp(-2*(u[i]-v[j]))));
+        E[i][j] = beta[j]*(1-1/(1+exp(-cp.g*(u[i]-v[j]))));
       } else {
-        rk_real t = (v[j]-u[i])/(0.8*v[i]+0.25);
+        rk_real t = (v[j]-u[i])/(cp.g*0.1*v[i]+cp.h);
         E[i][j] = beta[j]*exp(-(t*t));
       }
     }
@@ -217,14 +225,14 @@ void model::check_phenotypes(int &nh, int& np) {
       x0[i]=0;
       y[i]=0;
     }
-    //printf("Breaking - hosts driven extinct\n");
+    printf("Breaking - hosts driven extinct\n");
     return;
   }
   if(np==0){
     for (int i=0; i<N; i++) {
       y[i]=0;
     }
-    //printf("Breaking - parasites driven extinct\n");
+    printf("Breaking - parasites driven extinct\n");
     return;
   }
 }

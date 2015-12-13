@@ -26,7 +26,7 @@ class range;
  public:
    rk_real amin, amax, umin, umax,
      a_p, betmin, bemaxtime,
-     vmin, vmax, beta_p;
+     vmin, vmax, beta_p, g, h;
  };
 
 
@@ -59,7 +59,7 @@ class model {
 
     void init_trait_values(model_cost_params &cp);
     void init_cost_functions(model_cost_params &cp);
-    void init_matrix();
+    void init_matrix(model_cost_params &cp);
 
     void check_phenotypes(int &nh, int& np);
     void mutate();

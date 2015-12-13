@@ -45,12 +45,14 @@ void canvas_widget::paintEvent(QPaintEvent *event)
 
     for (int i=0; i<N; i++) {
       //draw a point
-      double v = log10(m_model->get_parasites()[i])*50.0;
+      //double v = log2(m_model->get_parasites()[i])*50.0;
+      double v = m_model->get_parasites()[i];
 
       if (v>1.0) v=1;
       if (v<0.0) v=0;
 
-      double h = log10(m_model->get_hosts()[i])*50.0;
+      //double h = log2(m_model->get_hosts()[i])*50.0;
+      double h = m_model->get_hosts()[i];
       if (h>1.0) h=1;
       if (h<0.0) h=0;
 
@@ -65,8 +67,8 @@ void canvas_widget::paintEvent(QPaintEvent *event)
     for (int i=0; i<N; i++) {
       painter.drawPoint(i*10,m_position+4);
     }
-    m_position+=4;
+    m_position+=1;
 
-    if (m_position>500) m_position=0;
+    if (m_position>550) m_position=0;
 
 }

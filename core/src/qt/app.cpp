@@ -29,11 +29,12 @@ void run_audio(void* c, unsigned int frames) {
     pthread_mutex_lock(a->m_mutex);
     a->m_model.step();
 
+
     for (u32 i=0; i<BANDS; i++) {
-           a->m_synth_left.set_level(i%BANDS,a->m_model.get_hosts()[i]+
-                              a->m_model.get_parasites()[i]);
-      a->m_synth_left.set_level(i%BANDS,a->m_model.get_hosts()[i]);
-      a->m_synth_right.set_level(i%BANDS,a->m_model.get_parasites()[i]);
+      a->m_synth_left.set_level(i%BANDS,a->m_model.get_hosts()[i]+
+                                a->m_model.get_parasites()[i]);
+      //a->m_synth_left.set_level(i%BANDS,a->m_model.get_hosts()[i]);
+      //a->m_synth_right.set_level(i%BANDS,a->m_model.get_parasites()[i]);
     }
     pthread_mutex_unlock(a->m_mutex);
 
@@ -71,14 +72,15 @@ void app::init_qt() {
   m_main_window->m_Ui.canvas_holder->addWidget(m_canvas);
 
   qt_controller c;
-  c = build_param_controller("AMIN",0,200,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("amin",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_amin(int)));
   //  QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_amin(double)));
 
-  c = build_param_controller("AMAX",0,200,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("amax",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_amax(int)));
   //  QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_amax(double)));
 
+  /*
   c = build_param_controller("UMIN",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_umin(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_umin(double)));
@@ -86,29 +88,39 @@ void app::init_qt() {
   c = build_param_controller("UMAX",0,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_umax(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_uax(double)));
+  */
 
-  c = build_param_controller("A_P",-10,200,m_main_window->m_Ui.host_params_holder);
+  c = build_param_controller("a_p",-10,200,m_main_window->m_Ui.host_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_ap(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_ap(double)));
 
 
 
-  c = build_param_controller("BETMIN",0,200,m_main_window->m_Ui.parasite_params_holder);
+  c = build_param_controller("betamin",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_betmin(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_betmin(double)));
-  c = build_param_controller("BEMAXTIME",0,200,m_main_window->m_Ui.parasite_params_holder);
+  c = build_param_controller("betamax",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_bemaxtime(int)));
+
+
+
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_bemaxtime(double)));
+  /*
   c = build_param_controller("VMIN",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_vmin(int)));
   //  QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_vmin(double)));
   c = build_param_controller("VMAX",0,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_vmax(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_vmax(double)));
-  c = build_param_controller("BETA_P",-10,200,m_main_window->m_Ui.parasite_params_holder);
+  */
+  c = build_param_controller("beta p",-10,200,m_main_window->m_Ui.parasite_params_holder);
   QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_betap(int)));
   // QObject::connect(c.m_spin, SIGNAL(valueChanged(double)), m_main_window, SLOT(slot_betap(double)));
 
+  c = build_param_controller("g",-2000,2000,m_main_window->m_Ui.parasite_params_holder);
+  QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_g(int)));
+  c = build_param_controller("h",-2000,2000,m_main_window->m_Ui.parasite_params_holder);
+  QObject::connect(c.m_dial, SIGNAL(valueChanged(int)), m_main_window, SLOT(slot_h(int)));
 
 }
 

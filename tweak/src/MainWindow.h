@@ -16,9 +16,9 @@
 
 #include <QtGui>
 #include "ui_redking.h"
-#include "../model/model.h"
+#include "model/model.h"
 #include "graph_widget.h"
-#include "../synth/additive_synth.h"
+#include "synth/additive_synth.h"
 #include "matrix_widget.h"
 
 #include <iostream>

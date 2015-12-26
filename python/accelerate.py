@@ -45,7 +45,8 @@ class synth:
         ret = 0
         t = self.t/float(self.t_max)
         for i in range(0,len(self.oscs)):
-            l = self.level[i]*t + self.last_level[i]*(1-t)
+            #l = self.level[i]*t + self.last_level[i]*(1-t)
+            l = self.level[i]
             ret += math.sin(self.oscs[i])*l
             self.oscs[i]+=self.freq*(i+1)
         self.t+=1
@@ -72,25 +73,23 @@ def grain_render(m,s,frames,buf,pos,step):
         buf[pos]=s.render()*env
         pos+=1
         #print(out[i])
-        if i%step==0:
-            t = combined_array(m)
-            #diff = compare(t,last)
-            #av_change = (av_change+diff)/2.0
-            #if diff>max_change: max_change=diff
-            #print(i,av_change,max_change)
-            s.update(t)
-            last = t
-            m.step()
+        t = combined_array(m)
+        #diff = compare(t,last)
+        #av_change = (av_change+diff)/2.0
+        #if diff>max_change: max_change=diff
+        #print(i,av_change,max_change)
+        s.level = copy.copy(t)
+        last = t
+        m.step()
     return pos
 
 def path(m,s,filename,grains,frames,step):
     out = np.zeros(frames*grains,dtype=np.float32)
     pos = 0
     for i in range(0,grains):
-        v = i/float(grains)+0.8
-        #m.m_cost_params.g=(v-0.1)*16.0
-        #m.m_cost_params.beta_p=0.8+(1-v)
-        print(m.m_cost_params.beta_p)
+        v = i/float(grains)
+        m.m_cost_params.g=(v*30.0)-5.0
+        #m.m_cost_params.beta_p=1.8+(1-v)
         m.init()
         print(i,m.m_cost_params.g)
         pos = grain_render(m,s,frames,out,pos,step)
@@ -101,10 +100,10 @@ m = redking.model()
 # m.set_model(1)
 # m.m_cost_params.amin = 0
 # m.m_cost_params.amax = 5.4
-# m.m_cost_params.a_p = 2.4
+#m.m_cost_params.a_p = 2.4
 # m.m_cost_params.betamin = 0
 # m.m_cost_params.bemaxtime = 9.3
-# m.m_cost_params.beta_p = 2.9
+#m.m_cost_params.beta_p = 2.9
 # m.m_cost_params.g = -0.2
 # m.m_cost_params.h = 0.4
 
@@ -117,6 +116,6 @@ s = synth(m.size())
 
 #path(m,s,"test4.wav",500,2000,10)
 
-path(m,s,"single-run.wav",1,500000,100)
+#path(m,s,"single-run.wav",1,5000,1)
 
-#path(m,s,"test.wav",50,25000,20)
+path(m,s,"test3.wav",5000,1000,20)

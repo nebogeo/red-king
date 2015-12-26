@@ -14,27 +14,23 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-#pragma once
-
+#include <iostream>
 #include <QtGui>
-#include <QWidget>
-#include "../model/model.h"
+#include "app.h"
+#include <unistd.h>
 
-class canvas_widget : public QWidget
-{
-    Q_OBJECT
- public:
+using namespace std;
 
-    canvas_widget();
-    red_king::model *m_model;
+int main(int argc, char **argv) {
+  srand(::time(NULL));
+  red_king::app red_king;
+  QApplication app(argc, argv);
+  red_king.init_qt();
+  return app.exec();
 
- protected:
-   void paintEvent(QPaintEvent *event);
- signals:
+  while (true) {
+    red_king.m_model.step();
 
- public slots:
-   void animate() { repaint(); }
+  }
 
- private:
-  int m_position;
-};
+}

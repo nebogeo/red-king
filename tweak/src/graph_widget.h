@@ -14,44 +14,32 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-#include <jellyfish/core/types.h>
-#include <jellyfish/audio.h>
+#pragma once
+
 #include <QtGui>
-#include "MainWindow.h"
-#include "canvas_widget.h"
-#include "../model/model.h"
-#include "../synth/additive_synth.h"
+#include <QWidget>
+#include "model/model.h"
 
-#include <pthread.h>
-
-namespace red_king {
-
-class app {
+class graph_widget : public QWidget
+{
+    Q_OBJECT
  public:
-  app();
-  void init_qt();
 
-  audio_device *m_audio;
-  additive_synth m_synth_left;
-  additive_synth m_synth_right;
+    graph_widget();
 
-  model m_model;
+    void init(int graph_size, rk_real *data, int size);
+    void recalc();
 
-  MainWindow *m_main_window;
-  canvas_widget *m_canvas;
-  pthread_mutex_t* m_mutex;
+ protected:
+    void paintEvent(QPaintEvent *event);
+ signals:
+
+ public slots:
 
  private:
+  rk_real *m_data;
+  int m_size;
+  int m_graph_size;
 
-  class qt_controller {
-  public:
-    QWidget *m_dial;
-    QWidget *m_spin;
-  };
-
-  qt_controller build_param_controller(const QString &name, int low, int high, QLayout *parent);
-
-
-};
-
+  rk_real m_scale,m_offset,m_min,m_max;
 };

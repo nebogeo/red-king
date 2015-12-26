@@ -16,7 +16,7 @@
 
 #include "canvas_widget.h"
 #include <iostream>
-#include "../model/types.h"
+#include "model/types.h"
 
 using namespace std;
 

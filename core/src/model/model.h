@@ -15,6 +15,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 #include "types.h"
+#include <iostream>
 
 #pragma once
 
@@ -24,9 +25,22 @@ class range;
 
  class model_cost_params {
  public:
+   model_cost_params() {
+     amin=0; amax=1;
+     umin=0; umax=1;
+     a_p=0; betmin=0; bemaxtime=1;
+     vmin=0; vmax=1; beta_p=0; g=0; h=0;
+   }
+
    rk_real amin, amax, umin, umax,
      a_p, betmin, bemaxtime,
      vmin, vmax, beta_p, g, h;
+
+   void print() {
+     std::cerr<<amin<<" "<<amax<<" "<<umin<<" "<<umax<<" "<<a_p<<" "<<
+       betmin<<" "<<bemaxtime<<" "<<vmin<<" "<<vmax<<" "<<beta_p<<" "<<
+       g<<" "<<h<<std::endl;
+   }
  };
 
 

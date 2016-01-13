@@ -59,6 +59,7 @@ class model {
     rk_real *get_host_cost() { return a; }
     rk_real *get_parasite_cost() { return beta; }
     rk_real **get_matrix() { return E; }
+    rk_real *get_matrix_row(int row) { return E[row]; }
 
     unsigned int size() { return N; }
 

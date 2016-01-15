@@ -20,7 +20,8 @@ import scipy.io.wavfile
 import redking
 import copy
 import random
-import simulation
+from simulation import *
+import iso226
 
 class synth:
     def __init__(self,bands):
@@ -30,10 +31,19 @@ class synth:
         self.last_level = [0 for i in range(0,bands)]
         self.t = 0
         self.t_max = 10
+        self.loudness_curve = iso226.iso226(1,[i*20 for i in range(1,bands+1)])
+        self.loudness_curve = map(lambda i: i*0.1, self.loudness_curve)
+        for i in self.loudness_curve: print i
 
     def update(self,level):
         self.last_level=copy.copy(self.level)
         self.level = copy.copy(level)
+        # clamp
+        for i in range(0,len(self.level)):
+            self.level[i]*=self.loudness_curve[i]
+            if self.level[i]>1: self.level[i]=1
+            if self.level[i]<0: self.level[i]=0
+
         self.t = 0
 
     def render(self):
@@ -134,7 +144,7 @@ def big_seed(i):
     print("->")
     print_cp(b)
     print("")
-    #blendpath(m,a,b,s,"random_path-"+str(i)+"-0-big.wav",2500,6000,10,0.75)
+    blendpath(m,a,b,s,"random_path-"+str(i)+"-0-big.wav",2500,6000,10,0.75)
 
 m = redking.model()
 #m.set_model(0)

@@ -22,20 +22,17 @@ SOURCES += src/MainWindow.cpp \
            src/graph_widget.cpp \
            src/matrix_widget.cpp \
            src/app.cpp \
-           ../core/src/model/range_spedup_final.cpp \
-		   ../core/src/model/model.cpp \
-		   ../core/src/synth/additive_synth.cpp \
+           src/model/range_spedup_final.cpp \
+		   src/model/model.cpp \
+		   src/synth/additive_synth.cpp \
 	 	   src/main.cpp \
-           ../../jellyfish/src/fluxa/sample.cpp \
-#           ../../jellyfish/src/fluxa/ring_buffer.cpp \
-#           ../../jellyfish/src/fluxa/command_ring_buffer.cpp \
-           ../../jellyfish/src/audio/portaudio_client.cpp \
-           ../../jellyfish/src/audio.cpp \
-#           ../../jellyfish/src/fluxa/OSC_server.cpp \
-           ../../jellyfish/src/fluxa/allocator.cpp \
-           ../../jellyfish/src/core/stream.cpp
+           src/jellyfish/fluxa/sample.cpp \
+           src/jellyfish/audio/portaudio_client.cpp \
+           src/jellyfish/audio.cpp \
+           src/jellyfish/fluxa/allocator.cpp \
+           src/jellyfish/core/stream.cpp
 
-INCLUDEPATH += . ../core/src
+INCLUDEPATH += . src/
 LIBS += -lportaudio -lsndfile -llo -ldl -lpthread -lm
 CONFIG+=debug
 

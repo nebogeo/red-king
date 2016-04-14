@@ -1,0 +1,11 @@
+[Desktop Entry]
+  Version=0.1
+  Type=Application
+  Terminal=false
+  Name=redking
+  Exec=/usr/bin/redking
+  Comment=Listen to co-evolution
+  Icon=
+  StartupNotify=false
+  Encoding=UTF-8
+  Categories=Audio

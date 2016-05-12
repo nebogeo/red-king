@@ -40,3 +40,9 @@ QMAKE_CXXFLAGS += -ggdb -Wall -Wno-unused -std=c++11 -DDONT_USE_FLUXA_GRAPH
 
 # assets
 RESOURCES     = redking.qrc
+
+isEmpty(PREFIX) {
+ PREFIX = /usr/local
+}
+target.path = $$PREFIX/bin/
+INSTALLS += target

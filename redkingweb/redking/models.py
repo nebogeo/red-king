@@ -8,5 +8,6 @@ class Sim(models.Model):
     status = models.IntegerField(default=0)
     base_name = models.CharField(max_length=4096)
     params = models.CharField(max_length=4096)
+    length = models.FloatField(default=0)
     def __unicode__(self):
         return str(self.base_name+"-"+str(self.created_date));

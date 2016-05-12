@@ -2,6 +2,12 @@
 
 {% block stuff %}
 {% for sim in sims %}
-<p>{{ sim.base_name }}<p>
+<p>id: <b>{{ sim.base_name }}</b> generated: {{ sim.created_date }}</p>
+<p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
+  <audio controls>
+    <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.wav" type="audio/wav">
+      your browser does not support audio...
+  </audio>
+<p><small>{{ sim.length }} secs long : {{ sim.params }}</small></p>
 {% endfor %}
 {% endblock %}

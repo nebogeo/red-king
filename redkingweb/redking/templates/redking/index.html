@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block stuff %}
+{% for sim in sims %}
+<p>{{ sim.base_name }}<p>
+{% endfor %}
+{% endblock %}

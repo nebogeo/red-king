@@ -1,0 +1,5 @@
+db.sqlite3
+*.pyc
+redkingweb/migrations/*
+redkingweb/settings.py
+media/simulations/*

@@ -1,22 +1,27 @@
 {% extends "base.html" %}
 
 {% block stuff %}
+
+{% if is_paginated %}
+<div class="pagination">
+  <span class="page-links">
+    {% if page_obj.has_previous %}
+    <a href="/?page={{ page_obj.previous_page_number }}">previous</a>
+    {% endif %}
+    <span class="page-current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+    {% if page_obj.has_next %}
+    <a href="/?page={{ page_obj.next_page_number }}">next</a>
+    {% endif %}
+  </span>
+</div>
+{% endif %}
+
 <div class="row">
   <div class="col-xs-6">
-    {% for sim in sims1 %}
-    <div class="sim">
-      <p>Created: {{ sim.created_date }}</p>
-      <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
-      <audio controls>
-        <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.wav" type="audio/wav">
-          your browser does not support audio...
-      </audio>
-    </div>
-    {% endfor %}
-  </div>
-  <div class="col-xs-6">
-    {% for sim in sims2 %}
-    <div class="sim">
+    {% for sim in object_list %}
+    <div class="sim" style="color:{{ sim.colour }};">
       <p>Created: {{ sim.created_date }}</p>
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
       <audio controls>

@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.views import generic
 from models import *
+import random
 
-def index(request):
-    context = {}
-    context['sims1'] = Sim.objects.all().order_by('-created_date')[:5]
-    context['sims2'] = Sim.objects.all().order_by('-created_date')[5:10]
-    return render(request, 'redking/index.html', context)
+def random_colour():
+    l = ["#ffe400","#ff8400","#fe647e","#6fb3c8"]
+    return l[random.randrange(0,len(l))]
+
+class SimListView(generic.ListView):
+    queryset = Sim.objects.order_by('-created_date')
+    template_name = 'redking/index.html'
+    paginate_by = 10
 
 class SimView(generic.DetailView):
     model = Sim

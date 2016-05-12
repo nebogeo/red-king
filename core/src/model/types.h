@@ -14,8 +14,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-#include "fixed.h"
-#include "ac_config.h"
 
 #ifndef FLX_TYPES
 #define FLX_TYPES
@@ -42,31 +40,13 @@ typedef int s32;
 typedef unsigned long long int u64;
 typedef long long int s64;
 typedef float f32;
-typedef spiralcore::Fixed x32;
 #endif
 
-// get namespace bb everywhere, for differentiating from
-// std::list where both are needed :/
-#include "list.h"
-using namespace bb;
 
-#ifdef FLX_LINUX
-//-Linux/RPI---------------------------
-// use the fixed point version here
-//#define flx_real x32
-#define flx_real float
 
-#else
-#ifdef _EE
-//-PS2----------------------------------
-#define flx_real float
-#define sqrt sqrtf
-#define isascii( c ) (!((c) & 0x80))
+typedef double rk_real;
 
-#else
-//-Android------------------------------
-#define flx_real x32
-#endif
-#endif
+/* These parameters affect accuracy (hence speed)*/
+#define N 25 /* Number of host and parasite phenotypes */
 
 #endif // FLX_TYPES

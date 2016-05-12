@@ -18,7 +18,7 @@
 #include <string.h> // memcpy
 #include "model.h"
 #include "range_spedup_final.h"
-#include "jellyfish/core/types.h"
+#include "types.h"
 
 using namespace red_king;
 using namespace std;

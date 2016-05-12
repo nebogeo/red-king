@@ -2,7 +2,7 @@ TARGET  := redking.a
 
 SRCS :=   	src/model/range_spedup_final.cpp \
 			src/model/model.cpp \
-			src/synth/additive_synth.cpp
+#			src/synth/additive_synth.cpp
 
 CCFLAGS = -g -O3 -ffast-math -march=native -mtune=native -fPIC -Isrc -g -O2
 LDFLAGS = 

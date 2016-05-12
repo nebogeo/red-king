@@ -1,0 +1,11 @@
+body {
+    color: white;
+    background: darkred;
+}
+
+.sim {
+    margin: 1em;
+    padding: 1em;
+    border-radius: 1em;
+    background: black;
+}

@@ -4,7 +4,8 @@ from models import *
 
 def index(request):
     context = {}
-    context['sims'] = Sim.objects.all().order_by('-created_date')
+    context['sims1'] = Sim.objects.all().order_by('-created_date')[:5]
+    context['sims2'] = Sim.objects.all().order_by('-created_date')[5:10]
     return render(request, 'redking/index.html', context)
 
 class SimView(generic.DetailView):

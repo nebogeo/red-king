@@ -23,8 +23,8 @@ import random
 # setting up and blending cost parameters
 def random_cp():
     cp = redking.model_cost_params()
-    cp.amin = random.uniform(0,10)
-    cp.amax = random.uniform(cp.amin,10)
+    cp.amin = 0
+    cp.amax = 10
     cp.a_p = random.uniform(0,5)+0.1
     cp.betmin = random.uniform(0,10)
     cp.bemaxtime = random.uniform(cp.betmin,10)

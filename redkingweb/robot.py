@@ -16,6 +16,7 @@
 
 import os
 import math
+import time
 import hashlib
 import numpy as np
 import scipy.io.wavfile
@@ -36,8 +37,8 @@ from django.db.models import Max, Count, Sum
 django.setup()
 
 # time in seconds, step in samples
-def render_sim(model,synth,time,synth_step):
-    sim_length = time*44100
+def render_sim(model,synth,time_length,synth_step):
+    sim_length = time_length*44100
     out = np.zeros(sim_length,dtype=np.float32)
     steps = sim_length/synth_step
     synth.t_max=synth_step
@@ -50,6 +51,7 @@ def render_sim(model,synth,time,synth_step):
         th.render(model)
         synth.update(combined_array(model))
         model.step()
+        #time.sleep(0.3)
 
     return out,th
 

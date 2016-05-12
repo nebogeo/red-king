@@ -2,13 +2,10 @@
 {% load i18n %}
 <html lang="en">
   <head>
-    <title>red king web robot</title>
+    <title>Red King web robot</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   </head>
   <body>
-    <header>
-      <h1>red king web robot</h1>
-    </header>
 
     <script src="{{ MEDIA_URL }}js/jquery-1.11.1.min.js"></script>
     <script src="{{ MEDIA_URL }}js/jquery-ui.min.js"></script>
@@ -17,6 +14,10 @@
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css" />
 
     <div class="container">
+      <header>
+        <h1>Red King web robot v0.1 (beta)</h1>
+        Making sound from co-evolution
+      </header>
       <section class="content">
         {% block stuff %}{% endblock %}
       </section>

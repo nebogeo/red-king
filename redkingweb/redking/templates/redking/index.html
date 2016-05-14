@@ -36,16 +36,17 @@
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/shocked.png" height=20></div>
       </p>
       <p>Completed: {{ sim.created_date }}</p>
-      <details>
-        <summary>Details...</summary>
-        <div class="row">
-          <p class="col-xs-2">length:</p>
-          <p class="col-xs-10">{{ sim.length }} secs</p>
-          <p class="col-xs-2">params:</p>
-          <p class="col-xs-10">{{ sim.params }}</p>
-          <p class="col-xs-2">md5:</p>
-          <p class="col-xs-10">{{ sim.base_name }}</p>
-      </details>
+
+      <div class="grow">
+        <p>Simulation details...</p>
+        <p class="col-xs-2">length:</p>
+        <p class="col-xs-10">{{ sim.length }} secs</p>
+        <p class="col-xs-2">params:</p>
+        <p class="col-xs-10">{{ sim.params }}</p>
+        <p class="col-xs-2">md5:</p>
+        <p class="col-xs-10">{{ sim.base_name }}</p>
+      </div>
+
     </div>
     {% endfor %}
   </div>

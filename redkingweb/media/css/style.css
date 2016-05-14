@@ -22,6 +22,18 @@ body {
      transform:scale(1.25);
 }
 
+.grow {
+    height: 1.3em;
+    transition: height 0.5s;
+    -webkit-transition: height 0.5s;
+    overflow: hidden;
+}
+.grow:hover {
+    height: 12em;
+}
+
+
+
 /*#ffe400
 #ff8400
 #fe647e

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Red King Simulation Sonification
 # Copyright (C) 2016 Foam Kernow
 #
@@ -65,7 +66,10 @@ def run(location):
     m.init()
     s = synth.synth(m.size())
     out,th = render_sim(m,s,length,100)
-    scipy.io.wavfile.write(location+base_name+".wav",44100,out)
+    wavname = location+base_name+".wav"
+    scipy.io.wavfile.write(wavname,44100,out)
+    os.system("oggenc "+wavname)
+    os.system("rm "+wavname)
     th.save(location+base_name+".png")
     Sim(created_date = timezone.now(),
         base_name = base_name,

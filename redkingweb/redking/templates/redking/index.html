@@ -22,12 +22,22 @@
   <div class="col-xs-6">
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
-      <p>Created: {{ sim.created_date }}</p>
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
       <audio controls>
         <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.ogg" type="audio/ogg">
           your browser does not support audio...
       </audio>
+      <p>Completed: {{ sim.created_date }}</p>
+      <details>
+        <summary>Details...</summary>
+        <div class="row">
+          <p class="col-xs-2">length:</p>
+          <p class="col-xs-10">{{ sim.length }} secs</p>
+          <p class="col-xs-2">params:</p>
+          <p class="col-xs-10">{{ sim.params }}</p>
+          <p class="col-xs-2">md5:</p>
+          <p class="col-xs-10">{{ sim.base_name }}</p>
+      </details>
     </div>
     {% endfor %}
   </div>

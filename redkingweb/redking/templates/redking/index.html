@@ -23,10 +23,18 @@
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
+      <p>
       <audio controls>
         <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.ogg" type="audio/ogg">
           your browser does not support audio...
       </audio>
+      <div class="emoimage"><img src="{{MEDIA_URL}}/images/happy.png" height=20></div>
+      <div class="emoimage"><img src="{{MEDIA_URL}}/images/horrible.png" height=20></div>
+      <div class="emoimage"><img src="{{MEDIA_URL}}/images/bored.png" height=20></div>
+      <div class="emoimage"><img src="{{MEDIA_URL}}/images/crazy.png" height=20></div>
+      <div class="emoimage"><img src="{{MEDIA_URL}}/images/cool.png" height=20></div>
+      <div class="emoimage"><img src="{{MEDIA_URL}}/images/shocked.png" height=20></div>
+      </p>
       <p>Completed: {{ sim.created_date }}</p>
       <details>
         <summary>Details...</summary>

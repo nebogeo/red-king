@@ -6,7 +6,7 @@ SRCS :=   	src/model/range_spedup_final.cpp \
 
 CCFLAGS = -g -O3 -ffast-math -march=native -mtune=native -fPIC -Isrc -g -O2
 LDFLAGS = 
-LIBS    = -ljellyfish -lsndfile -lportaudio -lm 
+LIBS    = -lsndfile -lm 
 PYTHON_INCLUDE = -I/usr/include/python2.7/
 
 CC = g++

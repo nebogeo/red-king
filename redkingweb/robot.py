@@ -52,7 +52,7 @@ def render_sim(model,synth,time_length,synth_step):
         th.render(model)
         synth.update(combined_array(model))
         model.step()
-        #time.sleep(0.3)
+        time.sleep(1)
 
     return out,th
 

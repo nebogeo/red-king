@@ -62,6 +62,7 @@ def run(location):
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
     m = redking.model()
+    m.set_model(1)
     m.m_cost_params=cp
     m.init()
     s = synth.synth(m.size())

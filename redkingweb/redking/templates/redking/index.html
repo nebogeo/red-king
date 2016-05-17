@@ -22,7 +22,7 @@
   <div class="col-xs-6">
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
-      <a href="/sim/{{ sim.id }}" style="float:right;">Permalink</a>
+      <a href="/sim/{{ sim.id }}" style="float:right;">Completed: {{ sim.created_date }}</a>
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
       <p>
       <audio controls>
@@ -36,9 +36,8 @@
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/cool.png" height=20></div>
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/shocked.png" height=20></div>
       </p>
-      <p>Completed: {{ sim.created_date }}</p>
 
-      <div class="grow">
+<!--      <div class="grow">
         <p>Simulation details...</p>
         <p class="col-xs-2">MD5:</p>
         <p class="col-xs-10">{{ sim.base_name }}</p>
@@ -47,7 +46,7 @@
         <p class="col-xs-2">Parameters:</p>
         <p class="col-xs-10"><pre>{{ sim.params }}</pre></p>
       </div>
-
+-->
     </div>
     {% endfor %}
   </div>

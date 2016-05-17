@@ -53,7 +53,7 @@ def render_sim(model,synth,time_length,synth_step):
         th.render(model)
         synth.update(combined_array(model))
         model.step()
-        time.sleep(1)
+        #time.sleep(1)
 
     return out,th
 
@@ -64,15 +64,15 @@ def render_blipsim(model,blip,time_length):
     steps = sim_length/blip.bar_length/2
     skip = 20
     th = thumb.thumb(steps*skip,model.size(),10)
-    pre_run = 200
+    pre_run = 100
     for i in range(0,pre_run):
         model.step()
         time.sleep(0.3)
 
-    blip.update(parasite_state_array(model))
-    if len(blip.blips)<2: return False,False
-    #blip.update(host_state_array(model))
+    #blip.update(parasite_state_array(model))
     #if len(blip.blips)<2: return False,False
+    blip.update(host_state_array(model))
+    if len(blip.blips)<2: return False,False
 
     for i in range(0,steps):
         blip.update(parasite_state_array(model))
@@ -82,17 +82,28 @@ def render_blipsim(model,blip,time_length):
         for i in range(0,skip):
             th.render(model)
             model.step()
-        #time.sleep(0.3)
+        time.sleep(0.3)
 
     return out,th
 
 def run(location):
     length = 20
     cp = random_cp()
+
+    # cp.amin = 5.2926940918
+    # cp.amax = 7.14304304123
+    # cp.a_p = 4.15711736679
+    # cp.betmin = 4.14748334885
+    # cp.bemaxtime = 4.37798070908
+    # cp.beta_p = 3.67618966103
+    # cp.g = -3.1736767292
+    # cp.h = 0.39003816246
+
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
     m = redking.model()
     m.set_model(1)
+
     m.m_cost_params=cp
     m.init()
     #s = synth.synth(m.size())

@@ -26,6 +26,7 @@ import random
 from sim.simulation import *
 from sim import thumb
 from sim import synth
+from sim import blip
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "redkingweb.settings")
 
@@ -56,8 +57,37 @@ def render_sim(model,synth,time_length,synth_step):
 
     return out,th
 
+# time in seconds, step in samples
+def render_blipsim(model,blip,time_length):
+    sim_length = int(time_length*44100)
+    out = np.zeros(sim_length,dtype=np.float32)
+    steps = sim_length/blip.bar_length/2
+    skip = 20
+    th = thumb.thumb(steps*skip,model.size(),10)
+    pre_run = 200
+    for i in range(0,pre_run):
+        model.step()
+        #time.sleep(0.3)
+
+    #blip.update(parasite_state_array(model))
+    #if len(blip.blips)<2: return False,False
+    blip.update(host_state_array(model))
+    if len(blip.blips)<2: return False,False
+
+    for i in range(0,steps):
+        blip.update(parasite_state_array(model))
+        blip.render(out)
+        blip.update(host_state_array(model))
+        blip.render(out)
+        for i in range(0,skip):
+            th.render(model)
+            model.step()
+            #time.sleep(0.3)
+
+    return out,th
+
 def run(location):
-    length = 10
+    length = 20
     cp = random_cp()
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
@@ -65,17 +95,23 @@ def run(location):
     m.set_model(1)
     m.m_cost_params=cp
     m.init()
-    s = synth.synth(m.size())
-    out,th = render_sim(m,s,length,100)
-    wavname = location+base_name+".wav"
-    scipy.io.wavfile.write(wavname,44100,out)
-    os.system("oggenc "+wavname)
-    os.system("rm "+wavname)
-    th.save(location+base_name+".png")
-    Sim(created_date = timezone.now(),
-        base_name = base_name,
-        length = length,
-        params = params_str).save()
+    #s = synth.synth(m.size())
+    s = blip.blip(m.size(),0.25)
+    #out,th = render_sim(m,s,length,1000)
+    out,th = render_blipsim(m,s,length)
+    if th!=False:
+        wavname = location+base_name+".wav"
+        imgname = location+base_name+".png"
+        scipy.io.wavfile.write(wavname,44100,out)
+        os.system("oggenc "+wavname)
+        #os.system("aplay "+wavname)
+        os.system("rm "+wavname)
+        th.save(imgname)
+        os.system("mogrify -resize 300% -filter Point "+imgname)
+        Sim(created_date = timezone.now(),
+            base_name = base_name,
+            length = length,
+            params = params_str).save()
 
-while 1:
-    run("media/sim/")
+#while(True):
+run("media/sim/")

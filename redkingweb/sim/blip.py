@@ -43,11 +43,16 @@ class blip:
             print(self.blips)
             for i,b in enumerate(self.blips):
                 events.append({'pos':i*step,'freq':b,'vol':self.loudness_curve[b]})
-
+            env = 200
             for i in range(0,self.bar_length):
                 if self.pos<len(out):
                     for e in events:
-                        if i>e['pos']:
+                        if i>e['pos'] and i<=e['pos']+env:
+                            env_lev = 1-(e['pos']+env-i)/float(env)
+                            print env_lev
+                            f = (e['freq']*0.03)+0.01
+                            out[self.pos] += 0.01*math.sin(self.pos*f)*e['vol']*env_lev
+                        if i>e['pos']+env:
                             f = (e['freq']*0.03)+0.01
                             out[self.pos] += 0.01*math.sin(self.pos*f)*e['vol']
                             e['vol']*=0.9995

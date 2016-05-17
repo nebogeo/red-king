@@ -1,6 +1,14 @@
 body {
-    color: white;
+    color: #ffe400;
     background: black;
+}
+
+a:link {
+    color: #fe647e;
+}
+
+a:visited {
+    color: #fe647e;
 }
 
 .sim {
@@ -8,6 +16,10 @@ body {
     padding: 1em;
     border-radius: 1em;
     background: black;
+}
+
+audio {
+    width: 100%;
 }
 
 .emoimage {
@@ -32,6 +44,7 @@ pre {
     -webkit-transition: height 0.5s;
     overflow: hidden;
 }
+
 .grow:hover {
     height: 20em;
 }

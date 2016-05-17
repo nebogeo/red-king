@@ -129,7 +129,7 @@ void model::update_cost_functions() {
   init_cost_functions(m_cost_params);
   init_matrix(m_cost_params);
 
-  m_cost_params.print();
+  //m_cost_params.print();
 }
 
 void model::init_trait_values(model_cost_params &cp) {

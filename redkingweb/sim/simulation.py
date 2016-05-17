@@ -49,24 +49,24 @@ def blend_cp(a,b,t):
     return cp
 
 def print_cp(cp):
-    print("amin:"+str(cp.amin))
-    print("amax:"+str(cp.amax))
-    print("a_p:"+str(cp.a_p))
-    print("betmin:"+str(cp.betmin))
-    print("betmax:"+str(cp.bemaxtime))
-    print("beta_p:"+str(cp.beta_p))
-    print("g:"+str(cp.g))
-    print("h:"+str(cp.h))
+    print("cp.amin = "+str(cp.amin)+"\n")
+    print("cp.amax = "+str(cp.amax)+"\n")
+    print("cp.a_p = "+str(cp.a_p)+"\n")
+    print("cp.betmin = "+str(cp.betmin)+"\n")
+    print("cp.bemaxtime = "+str(cp.bemaxtime)+"\n")
+    print("cp.beta_p = "+str(cp.beta_p)+"\n")
+    print("cp.g = "+str(cp.g)+"\n")
+    print("cp.h = "+str(cp.h)+"\n")
 
 def cp_to_str(cp):
-    return("amin:"+str(cp.amin)+", "+
-           "amax:"+str(cp.amax)+", "+
-           "a_p:"+str(cp.a_p)+", "+
-           "betmin:"+str(cp.betmin)+", "+
-           "betmax:"+str(cp.bemaxtime)+", "+
-           "beta_p:"+str(cp.beta_p)+", "+
-           "g:"+str(cp.g)+", "+
-           "h:"+str(cp.h))
+    return("cp.amin = "+str(cp.amin)+"\n"+
+           "cp.amax = "+str(cp.amax)+"\n"+
+           "cp.a_p = "+str(cp.a_p)+"\n"+
+           "cp.betmin = "+str(cp.betmin)+"\n"+
+           "cp.bemaxtime = "+str(cp.bemaxtime)+"\n"+
+           "cp.beta_p = "+str(cp.beta_p)+"\n"+
+           "cp.g = "+str(cp.g)+"\n"+
+           "cp.h = "+str(cp.h)+"\n")
 
 def parasite_state_array(model):
     return [redking.rk_real_getitem(model.get_parasites(),i)

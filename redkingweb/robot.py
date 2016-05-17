@@ -67,12 +67,12 @@ def render_blipsim(model,blip,time_length):
     pre_run = 200
     for i in range(0,pre_run):
         model.step()
-        #time.sleep(0.3)
+        time.sleep(0.3)
 
-    #blip.update(parasite_state_array(model))
-    #if len(blip.blips)<2: return False,False
-    blip.update(host_state_array(model))
+    blip.update(parasite_state_array(model))
     if len(blip.blips)<2: return False,False
+    #blip.update(host_state_array(model))
+    #if len(blip.blips)<2: return False,False
 
     for i in range(0,steps):
         blip.update(parasite_state_array(model))
@@ -82,7 +82,7 @@ def render_blipsim(model,blip,time_length):
         for i in range(0,skip):
             th.render(model)
             model.step()
-            #time.sleep(0.3)
+        #time.sleep(0.3)
 
     return out,th
 
@@ -113,5 +113,5 @@ def run(location):
             length = length,
             params = params_str).save()
 
-#while(True):
-run("media/sim/")
+while(True):
+    run("media/sim/")

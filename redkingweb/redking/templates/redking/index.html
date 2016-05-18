@@ -1,8 +1,30 @@
 {% extends "base.html" %}
 
 {% block stuff %}
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <h2>What's this about?</h2>
 
-{% if is_paginated %}
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+    <h2>A beginners guide to co-evolutionary dynamics</h2>
+
+    <h3>Monomorphic</h3>
+    ...
+    <h3>Dimorphic</h3>
+    ...
+    <h3>Polymorphic</h3>
+    ...
+    <h3>Cyclic</h3>
+    ...
+    <h3>Other</h3>
+
+  </div>
+
+  <div class="col-xs-12 col-md-6">
+    <h2>Latest live simulations</h2>
+
+    {% if is_paginated %}
 <div class="pagination">
   <span class="page-links">
     {% if page_obj.has_previous %}
@@ -18,11 +40,10 @@
 </div>
 {% endif %}
 
-<div class="row">
-  <div class="col-xs-6">
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
-      <a href="/sim/{{ sim.id }}" style="float:right;">Completed: {{ sim.created_date }}</a>
+      Completed: {{ sim.created_date }}
+      <a href="/sim/{{ sim.id }}" style="float:right;">More info</a>
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
       <p>
       <audio controls>

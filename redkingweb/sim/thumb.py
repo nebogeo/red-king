@@ -13,17 +13,29 @@ class thumb:
         im = Image.new("RGB", (self.width+1,self.height), "black")
         self.pixels=np.array(im)
         self.pos = 0
+        self.parasite_col = [255/255.0,132/255.0,0/255.0]
+        self.host_col = [111/255.0,179/255.0,200/255.0]
+
 
     def render(self,model):
         for i in range(0,model.size()):
             p = simulation.safelog(redking.rk_real_getitem(model.get_parasites(),i))
             h = simulation.safelog(redking.rk_real_getitem(model.get_hosts(),i))
             c = self.pixels[(model.size()-i)-1,int(self.pos)]
-            p=abs(p)*0.1
-            h=abs(h)*0.1
-            c[0] += (h*254 + p*111)
-            c[1] += (h*100 + p*179)
-            c[2] += (h*126 + p*200)
+
+            # squash the log10
+            p=min(1,abs(p))
+            h=min(1,abs(h))
+
+            # screen blend mode
+            col = [(1-self.parasite_col[0]*p)*(1-self.host_col[0]*h),
+                   (1-self.parasite_col[1]*p)*(1-self.host_col[1]*h),
+                   (1-self.parasite_col[2]*p)*(1-self.host_col[2]*h)]
+
+            # convert to 8 bit
+            c[0] = (1-col[0])*255
+            c[1] = (1-col[1])*255
+            c[2] = (1-col[2])*255
 
             if c[0]>255: c[0]=255
             if c[1]>255: c[1]=255

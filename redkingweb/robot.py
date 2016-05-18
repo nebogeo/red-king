@@ -67,7 +67,7 @@ def render_blipsim(model,blip,time_length):
     pre_run = 100
     for i in range(0,pre_run):
         model.step()
-        time.sleep(0.3)
+        #time.sleep(0.3)
 
     #blip.update(parasite_state_array(model))
     #if len(blip.blips)<2: return False,False
@@ -82,7 +82,7 @@ def render_blipsim(model,blip,time_length):
         for i in range(0,skip):
             th.render(model)
             model.step()
-        time.sleep(0.3)
+        #time.sleep(0.3)
 
     return out,th
 

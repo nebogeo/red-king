@@ -12,12 +12,24 @@
         <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.ogg" type="audio/ogg">
           your browser does not support audio...
       </audio>
+
+      <p>
+      Tag me:
+      <a href="#">mono</a>
+      <a href="#">di</a> |
+      <a href="#">poly</a> |
+      <a href="#">cyclic</a> |
+      <a href="#">other</a>
+      </p>
+
+<!--
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/happy.png" height=20></div>
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/horrible.png" height=20></div>
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/bored.png" height=20></div>
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/crazy.png" height=20></div>
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/cool.png" height=20></div>
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/shocked.png" height=20></div>
+-->
       </p>
       <p>Completed: {{ sim.created_date }}</p>
 
@@ -29,6 +41,14 @@
         <p class="col-xs-2">Parameters:</p>
         <p class="col-xs-10"><pre>{{ sim.params }}</pre></p>
 
+      <p>
+        My tag counts:</br>
+        mono: 0 </br>
+        di: 1 </br>
+        poly: 2 </br>
+        cyclic: 3 </br>
+        other: 4</a>
+      </p>
 
     </div>
 

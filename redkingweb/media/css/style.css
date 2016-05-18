@@ -11,6 +11,11 @@ a:visited {
     color: #ff8400;
 }
 
+pre {
+    color: #fe647e;
+    background: black;
+}
+
 .sim {
     margin: 1em;
     padding: 1em;

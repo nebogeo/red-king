@@ -3,7 +3,7 @@
 {% block stuff %}
 
 <div class="row">
-  <div class="col-xs-6">
+  <div class="col-xs-12 col-md-6">
 
     <div class="sim" style="color:{{ sim.colour }};">
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
@@ -42,12 +42,17 @@
         <p class="col-xs-10"><pre>{{ sim.params }}</pre></p>
 
       <p>
-        My tag counts:</br>
-        mono: 0 </br>
-        di: 1 </br>
-        poly: 2 </br>
-        cyclic: 3 </br>
-        other: 4</a>
+        <p>Tag counts for this simulation run:</p>
+        <p class="col-xs-2">mono:</p>
+        <p class="col-xs-10">0</p>
+        <p class="col-xs-2">di:</p>
+        <p class="col-xs-10">1</p>
+        <p class="col-xs-2">poly:</p>
+        <p class="col-xs-10">2</p>
+        <p class="col-xs-2">cyclic:</p>
+        <p class="col-xs-10">3</p>
+        <p class="col-xs-2">other:</p>
+        <p class="col-xs-10">4</p>
       </p>
 
     </div>

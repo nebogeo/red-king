@@ -36,22 +36,22 @@ class blip:
         if len(self.blips)>0:
             step = self.bar_length/len(self.blips)
             for i,b in enumerate(self.blips):
-                p = pitch(b+69)
+                p = pitch(b+69)*4
                 self.events.append({'pos':i*step,
                                     'freq':p,
-                                    'vol':iso226.iso226(1,p)})
-            env = 100
+                                    'vol':iso226.iso226(90,p)})
+            env = 50
             print(self.blips)
             for i in range(0,self.bar_length):
                 if self.pos<len(out):
                     for e in self.events:
-                        s = 0.02*math.sin(self.pos/44100.0*e['freq'])*e['vol']
+                        s = 0.008*math.sin(self.pos/44100.0*e['freq'])*e['vol']
                         if i>e['pos'] and i<=e['pos']+env:
                             env_lev = 1-(e['pos']+env-i)/float(env)
                             out[self.pos] += s*env_lev
                         if i>e['pos']+env:
                             out[self.pos] += s
-                            e['vol']*=0.9993
+                            e['vol']*=0.999
                     self.pos+=1
 
             new_events=[]

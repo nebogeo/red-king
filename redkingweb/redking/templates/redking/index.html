@@ -72,15 +72,19 @@ We can classify possible situations into rough groupings.
 
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
-      <p>{{ sim.created_date }}</p>
-      Tag me:
+      {{ sim.created_date }}
+<!--      Tag me:
       <a href="#">mono</a> |
       <a href="#">di</a> |
       <a href="#">poly</a> |
       <a href="#">cyclic</a> |
-      <a href="#">other</a>
-      <a href="/sim/{{ sim.id }}" style="float:right;">More info</a>
-      <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
+      <a href="#">other</a> -->
+      <a href="/sim/{{ sim.id }}" style="float:right;">More info</a> 
+      <p>
+<!--	<a href="/sim/{{ sim.id }}" style="float:right;"> -->
+	  <img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/>
+<!--	</a> -->
+      </p>
       <p>
       <audio controls>
         <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.ogg" type="audio/ogg">

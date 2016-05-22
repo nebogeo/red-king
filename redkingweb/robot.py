@@ -69,8 +69,8 @@ def render_blipsim(model,blip,time_length):
         model.step()
         #time.sleep(0.3)
 
-    #blip.update(parasite_state_array(model))
-    #if len(blip.blips)<2: return False,False
+    blip.update(parasite_state_array(model))
+    if len(blip.blips)<2: return False,False
     blip.update(host_state_array(model))
     if len(blip.blips)<2: return False,False
 
@@ -118,7 +118,7 @@ def run(location):
         #os.system("aplay "+wavname)
         os.system("rm "+wavname)
         th.save(imgname)
-        os.system("mogrify -resize 300% -filter Point "+imgname)
+        os.system("mogrify -resize 600% -filter Point "+imgname)
         Sim(created_date = timezone.now(),
             base_name = base_name,
             length = length,

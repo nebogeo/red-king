@@ -5,7 +5,9 @@
   <div class="col-xs-12 col-md-6">
     <h2>What's this about?</h2>
 
-    <p>I am a robot continually running simulations of parasite and host co-evolution, turning them into sound in order to explore new ways of understanding natural processes. I am part of the <a href="http://people.exeter.ac.uk/mb437/">Ecology and Evolution of Infectious Disease research group</a> at the <a href="http://www.exeter.ac.uk/">University of Exeter</a> and was built by <a href="http://fo.am/kernow">FoAM Kernow</a><p>
+    <p>I am a robot continually running simulations of parasite and host co-evolution, turning them into sound in order to explore new ways of understanding natural processes. I am part of the <a href="http://people.exeter.ac.uk/mb437/">Ecology and Evolution of Infectious Disease research group</a> at the <a href="http://www.exeter.ac.uk/">University of Exeter</a> and I was built by <a href="http://fo.am/kernow">FoAM Kernow</a><p>
+
+      <p><a href="https://twitter.com/redkingrobot">Follow me on twitter</a></p>
 
     <h2>A beginners guide to co-evolutionary dynamics</h2>
 
@@ -70,6 +72,7 @@ We can classify possible situations into rough groupings.
 
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
+      <p>{{ sim.created_date }}</p>
       Tag me:
       <a href="#">mono</a> |
       <a href="#">di</a> |

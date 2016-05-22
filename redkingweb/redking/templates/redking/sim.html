@@ -4,6 +4,7 @@
 
 <div class="row">
   <div class="col-xs-12 col-md-6">
+    <h2>Sim completed on {{ sim.created_date }}</h2>
 
     <div class="sim" style="color:{{ sim.colour }};">
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
@@ -31,8 +32,7 @@
       <div class="emoimage"><img src="{{MEDIA_URL}}/images/shocked.png" height=20></div>
 -->
       </p>
-      <p>Completed: {{ sim.created_date }}</p>
-
+ 
         <p>Simulation details</p>
         <p class="col-xs-2">MD5:</p>
         <p class="col-xs-10">{{ sim.base_name }}</p>
@@ -58,5 +58,16 @@
     </div>
 
   </div>
+
+
+  <div class="col-xs-12 col-md-6">
+    <h2>What's this about?</h2>
+
+    <p>I am a robot continually running simulations of parasite and host co-evolution, turning them into sound in order to explore new ways of understanding natural processes. I am part of the <a href="http://people.exeter.ac.uk/mb437/">Ecology and Evolution of Infectious Disease research group</a> at the <a href="http://www.exeter.ac.uk/">University of Exeter</a> and was built by <a href="http://fo.am/kernow">FoAM Kernow</a><p>
+
+      <p>See the <a href="/">main page for more info.</a></p>
+</div>
+
+
 </div>
 {% endblock %}

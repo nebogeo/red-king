@@ -29,11 +29,12 @@ def tweet_api(secrets):
     auth.set_access_token(secrets["tweetauth2"],secrets["tweetauth3"])
     return tweepy.API(auth)
 
-def tweet(msg,api):
-        try:
-            api.update_status(msg)
-        except tweepy.error.TweepError:
-            print("oops")
+def tweet(msg,filename,api):
+    try:
+        #api.update_status(msg)
+        api.update_with_media(filename, msg)
+    except tweepy.error.TweepError:
+        print("oops")
 
 def load_secrets():
     secrets = {}
@@ -47,4 +48,4 @@ def load_secrets():
 secrets = load_secrets()
 api = tweet_api(secrets)
 
-tweet("hello",api)
+#tweet("hello",api)

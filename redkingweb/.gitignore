@@ -3,3 +3,4 @@ db.sqlite3
 redkingweb/migrations/*
 redkingweb/settings.py
 media/sim/*
+topsecret

@@ -27,6 +27,7 @@ from sim.simulation import *
 from sim import thumb
 from sim import synth
 from sim import blip
+import sim.twitter
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "redkingweb.settings")
 
@@ -64,10 +65,10 @@ def render_blipsim(model,blip,time_length):
     steps = sim_length/blip.bar_length/2
     skip = 20
     th = thumb.thumb(steps*skip,model.size(),10)
-    pre_run = 200
+    pre_run = 50
     for i in range(0,pre_run):
         model.step()
-        #time.sleep(0.3)
+        time.sleep(0.3)
 
     blip.update(parasite_state_array(model))
     if len(blip.blips)<2: return False,False
@@ -82,7 +83,7 @@ def render_blipsim(model,blip,time_length):
         for i in range(0,skip):
             th.render(model)
             model.step()
-        #time.sleep(0.3)
+        time.sleep(0.3)
 
     return out,th
 
@@ -119,10 +120,12 @@ def run(location):
         os.system("rm "+wavname)
         th.save(imgname)
         os.system("mogrify -resize 600% -filter Point "+imgname)
-        Sim(created_date = timezone.now(),
+        d=Sim(created_date = timezone.now(),
             base_name = base_name,
             length = length,
-            params = params_str).save()
+            params = params_str)
+        d.save()
+        sim.twitter.tweet("I just generated a new #redking simulation: http://redking.borrowed-scenery.net/sim/"+str(d.id),imgname,sim.twitter.api)
 
 while(True):
     run("media/sim/")

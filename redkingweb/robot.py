@@ -65,13 +65,13 @@ def render_blipsim(model,blip,time_length):
     steps = sim_length/blip.bar_length/2
     skip = 20
     th = thumb.thumb(steps*skip,model.size(),10)
-    pre_run = 50
+    pre_run = 100
     for i in range(0,pre_run):
         model.step()
         time.sleep(0.3)
 
-    blip.update(parasite_state_array(model))
-    if len(blip.blips)<2: return False,False
+    #blip.update(parasite_state_array(model))
+    #if len(blip.blips)<2: return False,False
     blip.update(host_state_array(model))
     if len(blip.blips)<2: return False,False
 
@@ -103,7 +103,10 @@ def run(location):
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
     m = redking.model()
+
     m.set_model(1)
+    m.m_pstart = cp.pstart;
+    m.m_hstart = cp.hstart;
 
     m.m_cost_params=cp
     m.init()
@@ -125,7 +128,7 @@ def run(location):
             length = length,
             params = params_str)
         d.save()
-        sim.twitter.tweet("I just generated a new #redking simulation: http://redking.borrowed-scenery.net/sim/"+str(d.id),imgname,sim.twitter.api)
+        sim.twitter.tweet("I just generated a new host/parasite evolution sim: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
 
 while(True):
     run("media/sim/")

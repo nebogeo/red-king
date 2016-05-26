@@ -31,6 +31,9 @@ def random_cp():
     cp.beta_p = random.uniform(0,5)
     cp.g = random.uniform(-10,10)
     cp.h = random.uniform(-10,10)
+    # additional..
+    cp.pstart = int(math.floor(random.uniform(0,25)))
+    cp.hstart = int(math.floor(random.uniform(0,25)))
     return cp
 
 def lerp(a,b,t):
@@ -66,7 +69,9 @@ def cp_to_str(cp):
            "cp.bemaxtime = "+str(cp.bemaxtime)+"\n"+
            "cp.beta_p = "+str(cp.beta_p)+"\n"+
            "cp.g = "+str(cp.g)+"\n"+
-           "cp.h = "+str(cp.h)+"\n")
+           "cp.h = "+str(cp.h)+"\n"+
+           "cp.pstart = "+str(cp.pstart)+"\n"+
+           "cp.hstart = "+str(cp.hstart))
 
 def parasite_state_array(model):
     return [redking.rk_real_getitem(model.get_parasites(),i)

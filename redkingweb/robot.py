@@ -68,7 +68,7 @@ def render_blipsim(model,blip,time_length):
     pre_run = 100
     for i in range(0,pre_run):
         model.step()
-        time.sleep(0.3)
+        #time.sleep(0.3)
 
     #blip.update(parasite_state_array(model))
     #if len(blip.blips)<2: return False,False
@@ -83,7 +83,7 @@ def render_blipsim(model,blip,time_length):
         for i in range(0,skip):
             th.render(model)
             model.step()
-        time.sleep(0.3)
+        #time.sleep(0.3)
 
     return out,th
 
@@ -99,6 +99,18 @@ def run(location):
     # cp.beta_p = 3.67618966103
     # cp.g = -3.1736767292
     # cp.h = 0.39003816246
+
+    cp.amin = 3.60798478127
+    cp.amax = 8.86914253235
+    cp.a_p = 1.68106067181
+    cp.betmin = 2.89232182503
+    cp.bemaxtime = 4.01387262344
+    cp.beta_p = 2.05862593651
+    cp.g = -4.445104599
+    cp.h = 0.428534090519
+    cp.pstart = 6
+    cp.hstart = 6
+
 
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
@@ -128,7 +140,7 @@ def run(location):
             length = length,
             params = params_str)
         d.save()
-        sim.twitter.tweet("I just generated a new host/parasite evolution sim: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
+        #sim.twitter.tweet("I just generated a new host/parasite evolution sim: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
 
-while(True):
-    run("media/sim/")
+#while(True):
+run("media/sim/")

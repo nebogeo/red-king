@@ -34,6 +34,7 @@ def random_cp():
     # additional..
     cp.pstart = int(math.floor(random.uniform(0,25)))
     cp.hstart = int(math.floor(random.uniform(0,25)))
+    cp.model_type =int(math.floor(random.uniform(0,2))) 
     return cp
 
 def lerp(a,b,t):
@@ -62,7 +63,8 @@ def print_cp(cp):
     print("cp.h = "+str(cp.h)+"\n")
 
 def cp_to_str(cp):
-    return("cp.amin = "+str(cp.amin)+"\n"+
+    return("cp.model_type = "+str(cp.model_type)+"\n"+
+           "cp.amin = "+str(cp.amin)+"\n"+
            "cp.amax = "+str(cp.amax)+"\n"+
            "cp.a_p = "+str(cp.a_p)+"\n"+
            "cp.betmin = "+str(cp.betmin)+"\n"+

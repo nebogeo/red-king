@@ -116,7 +116,7 @@ def run(location):
     base_name = hashlib.md5(params_str).hexdigest()
     m = redking.model()
 
-    m.set_model(1)
+    m.set_model(cp.model_type)
     m.m_pstart = cp.pstart;
     m.m_hstart = cp.hstart;
 

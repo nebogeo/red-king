@@ -2,6 +2,7 @@ import math
 import numpy as np
 import iso226
 import copy
+import techno
 
 def pitch(note):
     return math.pow(2,(note-69)/12.0)*440
@@ -13,6 +14,7 @@ class blip:
         self.events = []
         self.bar_length = int(bar_length*44100)
         self.pos = 0
+        self.mode = "TECHNO"
 
     def update(self,level):
         self.blips=[]
@@ -36,16 +38,25 @@ class blip:
         if len(self.blips)>0:
             step = self.bar_length/len(self.blips)
             for i,b in enumerate(self.blips):
-                p = pitch(b+69)*4
+                if self.mode=="TECHNO":
+                    p = pitch(b+29)*4
+                else:
+                    p = pitch(b+69)*4
+
                 self.events.append({'pos':i*step,
                                     'freq':p,
+                                    'tec':techno.techno(0.3+b/25.0,0.4),
                                     'vol':iso226.iso226(90,p)})
             env = 50
             print(self.blips)
             for i in range(0,self.bar_length):
                 if self.pos<len(out):
                     for e in self.events:
-                        s = 0.008*math.sin(self.pos/44100.0*e['freq'])*e['vol']
+                        if self.mode=="TECHNO":
+                            s = 0.008*e['tec'].generate(self.pos/44100.0*e['freq'])*e['vol']
+                        else:
+                            s = 0.008*math.sin(self.pos/44100.0*e['freq'])*e['vol']
+
                         if i>e['pos'] and i<=e['pos']+env:
                             env_lev = 1-(e['pos']+env-i)/float(env)
                             out[self.pos] += s*env_lev

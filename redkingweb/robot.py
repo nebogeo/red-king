@@ -83,12 +83,14 @@ def render_blipsim(model,blip,time_length):
         for i in range(0,skip):
             th.render(model)
             model.step()
+        if model.is_extinct():
+            return False,False
         time.sleep(0.3)
 
     return out,th
 
 def run(location):
-    length = 20
+    length = 40
     cp = random_cp()
 
     # cp.amin = 5.2926940918
@@ -128,7 +130,7 @@ def run(location):
             length = length,
             params = params_str)
         d.save()
-        sim.twitter.tweet("I just generated a new host/parasite evolution sim: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
+        sim.twitter.tweet("I just generated new host/parasite evolution music: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
 
 while(True):
     run("media/sim/")

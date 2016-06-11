@@ -57,6 +57,7 @@ rk_real diff(rk_real *a, rk_real *b, size_t len) {
 model::model() {
   m_range = new range();
   m_model = 0;
+  m_extinct = false;
 
   u = new rk_real[N];
   v = new rk_real[N];
@@ -96,6 +97,7 @@ model::model() {
 
 void model::init() {
   srand(0);
+  m_extinct = false;
 
   clear(u);
   clear(v);
@@ -227,14 +229,16 @@ void model::check_phenotypes(int &nh, int& np) {
       x0[i]=0;
       y[i]=0;
     }
-    printf("Breaking - hosts driven extinct\n");
+    //printf("Breaking - hosts driven extinct\n");
+    m_extinct = true;
     return;
   }
   if(np==0){
     for (int i=0; i<N; i++) {
       y[i]=0;
     }
-    printf("Breaking - parasites driven extinct\n");
+    //printf("Breaking - parasites driven extinct\n");
+    m_extinct = true;
     return;
   }
 }

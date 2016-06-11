@@ -60,6 +60,7 @@ class model {
     rk_real *get_parasite_cost() { return beta; }
     rk_real **get_matrix() { return E; }
     rk_real *get_matrix_row(int row) { return E[row]; }
+    bool is_extinct() { return m_extinct; }
 
     unsigned int size() { return N; }
 
@@ -91,6 +92,8 @@ class model {
     int m_model;
 
     rk_real *last_x0, *last_y;
+
+    bool m_extinct;
 
 };
 

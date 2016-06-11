@@ -140,6 +140,7 @@ class model(_object):
     def get_parasite_cost(self): return _redking.model_get_parasite_cost(self)
     def get_matrix(self): return _redking.model_get_matrix(self)
     def get_matrix_row(self, *args): return _redking.model_get_matrix_row(self, *args)
+    def is_extinct(self): return _redking.model_is_extinct(self)
     def size(self): return _redking.model_size(self)
     __swig_setmethods__["m_cost_params"] = _redking.model_m_cost_params_set
     __swig_getmethods__["m_cost_params"] = _redking.model_m_cost_params_get

@@ -80,6 +80,7 @@ def render_blipsim(model,blip,time_length):
         blip.render(out)
         blip.update(host_state_array(model))
         blip.render(out)
+
         for i in range(0,skip):
             th.render(model)
             model.step()
@@ -88,18 +89,10 @@ def render_blipsim(model,blip,time_length):
     return out,th
 
 def run(location):
-    length = 20
+    length = 5
     cp = random_cp()
 
-    # cp.amin = 5.2926940918
-    # cp.amax = 7.14304304123
-    # cp.a_p = 4.15711736679
-    # cp.betmin = 4.14748334885
-    # cp.bemaxtime = 4.37798070908
-    # cp.beta_p = 3.67618966103
-    # cp.g = -3.1736767292
-    # cp.h = 0.39003816246
-
+    cp.model_type = 1
     cp.amin = 3.60798478127
     cp.amax = 8.86914253235
     cp.a_p = 1.68106067181
@@ -110,7 +103,6 @@ def run(location):
     cp.h = 0.428534090519
     cp.pstart = 6
     cp.hstart = 6
-
 
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
@@ -131,7 +123,7 @@ def run(location):
         imgname = location+base_name+".png"
         scipy.io.wavfile.write(wavname,44100,out)
         os.system("oggenc "+wavname)
-        #os.system("aplay "+wavname)
+        os.system("aplay "+wavname)
         os.system("rm "+wavname)
         th.save(imgname)
         os.system("mogrify -resize 600% -filter Point "+imgname)

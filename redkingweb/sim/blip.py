@@ -19,19 +19,21 @@ class blip:
     def update(self,level):
         self.blips=[]
         av = 0
+        mx = 0
         for i in range(0,len(level)):
             av+=level[i]
+            if level[i]>mx: mx=level[i]
         av/=len(level)
         av/=10
         last = 0
+        if mx==0: mx=1
         for i in range(0,len(level)):
             if level[i]>av:
                 if last==0:
-                    self.blips.append(i)
+                    self.blips.append([i,level[i]/mx])
                 last=1
             else:
                 last=0
-
 
 
     def render(self,out):
@@ -39,13 +41,13 @@ class blip:
             step = self.bar_length/len(self.blips)
             for i,b in enumerate(self.blips):
                 if self.mode=="TECHNO":
-                    p = pitch(b+29)*4
+                    p = pitch(b[0]+39)*4
                 else:
-                    p = pitch(b+69)*4
+                    p = pitch(b[0]+69)*4
 
                 self.events.append({'pos':i*step,
                                     'freq':p,
-                                    'tec':techno.techno(0.3+b/25.0,0.4),
+                                    'tec':techno.techno(0.3+b[1]*0.8,0.3),
                                     'vol':iso226.iso226(90,p)})
             env = 50
             print(self.blips)

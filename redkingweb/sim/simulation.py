@@ -34,7 +34,7 @@ def random_cp():
     # additional..
     cp.pstart = int(math.floor(random.uniform(0,25)))
     cp.hstart = int(math.floor(random.uniform(0,25)))
-    cp.model_type =int(math.floor(random.uniform(0,2))) 
+    cp.model_type = 0 #int(math.floor(random.uniform(0,2)))
     return cp
 
 def lerp(a,b,t):

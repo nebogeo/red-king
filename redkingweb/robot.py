@@ -112,8 +112,8 @@ def run(location):
         wavname = location+base_name+".wav"
         imgname = location+base_name+".png"
         scipy.io.wavfile.write(wavname,44100,out)
-        os.system("oggenc "+wavname)
-        os.system("aplay "+wavname)
+        os.system("lame "+wavname)
+        #os.system("aplay "+wavname)
         os.system("rm "+wavname)
         th.save(imgname)
         os.system("mogrify -resize 600% -filter Point "+imgname)

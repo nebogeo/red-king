@@ -14,7 +14,6 @@ class blip:
         self.events = []
         self.bar_length = int(bar_length*44100)
         self.pos = 0
-        self.mode = "TECHNO"
 
     def update(self,level):
         self.blips=[]
@@ -36,26 +35,27 @@ class blip:
                 last=0
 
 
-    def render(self,out):
+    def render(self,out,mode):
         if len(self.blips)>0:
             step = self.bar_length/len(self.blips)
             for i,b in enumerate(self.blips):
-                if self.mode=="TECHNO":
-                    p = pitch(b[0]+39)*4
+                if mode=="TECHNO":
+                    p = pitch(b[0]+69)*4
                 else:
                     p = pitch(b[0]+69)*4
 
                 self.events.append({'pos':i*step,
                                     'freq':p,
-                                    'tec':techno.techno(0.3+b[1]*0.8,0.3),
+                                    'tec':techno.techno(0.3+b[1]*0.5,0.4),
                                     'vol':iso226.iso226(90,p)})
-            env = 50
+            if mode=="TECHNO": env = 150
+            else: env = 50
             print(self.blips)
             for i in range(0,self.bar_length):
                 if self.pos<len(out):
                     for e in self.events:
-                        if self.mode=="TECHNO":
-                            s = 0.008*e['tec'].generate(self.pos/44100.0*e['freq'])*e['vol']
+                        if mode=="TECHNO":
+                            s = 0.016*e['tec'].generate(self.pos/44100.0*e['freq'])*e['vol']
                         else:
                             s = 0.008*math.sin(self.pos/44100.0*e['freq'])*e['vol']
 
@@ -64,7 +64,7 @@ class blip:
                             out[self.pos] += s*env_lev
                         if i>e['pos']+env:
                             out[self.pos] += s
-                            e['vol']*=0.999
+                            e['vol']*=0.9995
                     self.pos+=1
 
             new_events=[]
@@ -72,4 +72,4 @@ class blip:
                 if e['vol']>0.001:
                     new_events.append(e)
             self.events = new_events
-            #print(str(len(self.events))+" events...")
+            print(str(len(self.events))+" events...")

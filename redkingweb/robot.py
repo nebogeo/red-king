@@ -77,9 +77,9 @@ def render_blipsim(model,blip,time_length):
 
     for i in range(0,steps):
         blip.update(parasite_state_array(model))
-        blip.render(out)
+        blip.render(out,"TECHNO")
         blip.update(host_state_array(model))
-        blip.render(out)
+        blip.render(out,"PING")
 
         for i in range(0,skip):
             th.render(model)
@@ -91,20 +91,8 @@ def render_blipsim(model,blip,time_length):
     return out,th
 
 def run(location):
-    length = 5
+    length = 40
     cp = random_cp()
-
-    cp.model_type = 1
-    cp.amin = 3.60798478127
-    cp.amax = 8.86914253235
-    cp.a_p = 1.68106067181
-    cp.betmin = 2.89232182503
-    cp.bemaxtime = 4.01387262344
-    cp.beta_p = 2.05862593651
-    cp.g = -4.445104599
-    cp.h = 0.428534090519
-    cp.pstart = 6
-    cp.hstart = 6
 
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()

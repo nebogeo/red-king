@@ -105,9 +105,9 @@ read more about our research into sonfication here</a>.
               your browser does not support audio...
           </audio>
           <div class="col-xs-3">
-            <button class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
+            <button class="upvote" onclick='$.post("/up/", { id: {{ sim.id }}, csrfmiddlewaretoken: csrftoken }, function(response) { upvote(response,{{ sim.id }}); });'></button>
             <div id="score-{{ sim.id }}" class="score">{{ sim.score }}</div>
-            <button class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
+            <button class="downvote" onclick='$.post("/down/", { id: {{ sim.id }}, csrfmiddlewaretoken: csrftoken }, function(response) { downvote(response,{{ sim.id }}); });'></button>
           </div>
         </div>
       </p>

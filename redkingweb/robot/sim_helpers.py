@@ -38,7 +38,7 @@ def random_cp():
     return cp
 
 def mutate_cp(cp):
-    c = random.uniform(0,11)
+    c = int(random.uniform(0,11))
     if c==0: cp.amin = random.uniform(0,10)
     if c==1: cp.amax = random.uniform(cp.amin,10)
     if c==2: cp.a_p = random.uniform(0,5)+0.1
@@ -107,7 +107,22 @@ def str_to_cp(s):
         # additional..
         cp.pstart = int(lines[9].split(' ')[2])
         cp.hstart = int(lines[10].split(' ')[2])
-    else: cp = random_cp()
+    elif lines[0].split(' ')[0]=='cp.amin':
+        cp.model_type = 1
+        cp.amin = float(lines[0].split(' ')[2])
+        cp.amax = float(lines[1].split(' ')[2])
+        cp.a_p = float(lines[2].split(' ')[2])
+        cp.betmin = float(lines[3].split(' ')[2])
+        cp.bemaxtime = float(lines[4].split(' ')[2])
+        cp.beta_p = float(lines[5].split(' ')[2])
+        cp.g = float(lines[6].split(' ')[2])
+        cp.h = float(lines[7].split(' ')[2])
+        # additional..
+        cp.pstart = int(lines[8].split(' ')[2])
+        cp.hstart = int(lines[9].split(' ')[2])
+    else:
+        print(s)
+        return False
     return cp
 
 def parasite_state_array(model):

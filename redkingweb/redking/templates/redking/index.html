@@ -72,7 +72,6 @@ read more about our research into sonfication here</a>.
 
   <div class="col-xs-12 col-md-6">
     <h2>Latest live simulations</h2>
-
     {% if is_paginated %}
 <div class="pagination">
   <span class="page-links">
@@ -88,6 +87,8 @@ read more about our research into sonfication here</a>.
   </span>
 </div>
 {% endif %}
+
+| <a href="/">View lastest</a> | <a href="/favorites">View favorites</a>
 
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
@@ -106,9 +107,9 @@ read more about our research into sonfication here</a>.
           </audio>
           <div class="col-xs-3">
             <!-- {{ csrf_token }} -->
-            <button class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
+            <button id="upvote-{{ sim.id }}" class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
             <div id="score-{{ sim.id }}" class="score">{{ sim.score }}</div>
-            <button class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
+            <button id="downvote-{{ sim.id }}" class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
           </div>
         </div>
       </p>

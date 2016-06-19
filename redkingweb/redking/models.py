@@ -29,6 +29,7 @@ class Sim(models.Model):
     twitter_likes = models.IntegerField(default=0)
     twitter_retweets = models.IntegerField(default=0)
     fitness = models.FloatField(default=0)
+    parent = models.ForeignKey("self", null=True, blank=True, default = None)
 
     def __unicode__(self):
         return str(self.base_name+"-"+str(self.created_date));

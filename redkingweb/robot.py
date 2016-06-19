@@ -117,7 +117,7 @@ def cp_from_db(s):
 def get_new_cp():
     update_fitness()
     # new random one
-    #if random.random()<0.5: return random_cp()
+    if random.random()<0.2: return False,random_cp()
 
     # pick an existing one
     q = Sim.objects.order_by('-fitness')
@@ -125,11 +125,16 @@ def get_new_cp():
         # higher up = more likely
         if random.random()<0.1:
             print("picked: "+str(s.base_name)+" ("+str(i)+")")
-            return mutate_cp(str_to_cp(s.params))
+            cp = str_to_cp(s.params)
+            if cp==False:
+                print("old params...")
+                return False,random_cp()
+            else:
+                return s,mutate_cp(cp)
 
 def run(location):
     length = 40
-    cp = get_new_cp()
+    parent,cp = get_new_cp()
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
     m = redking.model()
@@ -155,7 +160,9 @@ def run(location):
         d=Sim(created_date = timezone.now(),
               base_name = base_name,
               length = length,
-              params=params_str)
+              params = params_str)
+        if parent!=False:
+            d.parent = parent
         d.save()
         #robot.twitter.tweet("I just generated new host/parasite evolution music: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
 

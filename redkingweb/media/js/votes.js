@@ -16,10 +16,10 @@
 
 function upvote(response,id) {
     $('#score-'+id).html(response);
-//    $('.upvote').prop("onclick", null);
+    $('#upvote-'+id).prop("onclick", null);
 };
 
 function downvote(response,id) {
     $('#score-'+id).html(response);
-//    $('.downvote').prop("onclick", null);
+    $('#downvote-'+id).prop("onclick", null);
 };

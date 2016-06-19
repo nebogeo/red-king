@@ -43,6 +43,7 @@ class SimView(generic.DetailView):
         return context
 
 
+@ensure_csrf_cookie
 def upvote(request):
     sim = get_object_or_404(Sim, pk=int(request.POST.get('id')))
     sim.upvotes+=1
@@ -50,6 +51,7 @@ def upvote(request):
     num_votes=sim.upvotes-sim.downvotes
     return HttpResponse(num_votes)
 
+@ensure_csrf_cookie
 def downvote(request):
     sim = get_object_or_404(Sim, pk=int(request.POST.get('id')))
     sim.downvotes+=1

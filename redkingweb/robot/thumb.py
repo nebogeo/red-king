@@ -3,7 +3,7 @@ from PIL import ImageDraw
 import numpy as np
 from matplotlib import pyplot as plt
 import redking
-import simulation
+import sim_helpers
 
 class thumb:
     def __init__(self,width,height,compress):
@@ -19,8 +19,8 @@ class thumb:
 
     def render(self,model):
         for i in range(0,model.size()):
-            p = simulation.safelog(redking.rk_real_getitem(model.get_parasites(),i))
-            h = simulation.safelog(redking.rk_real_getitem(model.get_hosts(),i))
+            p = sim_helpers.safelog(redking.rk_real_getitem(model.get_parasites(),i))
+            h = sim_helpers.safelog(redking.rk_real_getitem(model.get_hosts(),i))
             c = self.pixels[(model.size()-i)-1,int(self.pos)]
 
             # squash the log10

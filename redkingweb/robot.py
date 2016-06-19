@@ -77,7 +77,7 @@ def render_blipsim(model,blip,time_length):
 
     for i in range(0,steps):
         blip.update(parasite_state_array(model))
-        blip.render(out,"TECHNO")
+        blip.render(out,"PING")
         blip.update(host_state_array(model))
         blip.render(out,"PING")
 
@@ -87,7 +87,7 @@ def render_blipsim(model,blip,time_length):
         if model.is_extinct():
             print("extinct...")
             return False,False
-        #time.sleep(0.3)
+        time.sleep(0.3)
 
     return out,th
 

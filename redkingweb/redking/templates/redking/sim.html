@@ -14,43 +14,33 @@
           </audio>
           <div class="col-xs-3">
             <!-- {{ csrf_token }} -->
-            <button class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
+            <button id="upvote-{{ sim.id }}" class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
             <div id="score-{{ sim.id }}" class="score">{{ score }}</div>
-            <button class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
+            <button id="downvote-{{ sim.id }}" class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
           </div>
         </div>
       </p>
 
         <p>Simulation details</p>
-        <p class="col-xs-3">MD5:</p>
+        <p class="col-xs-3">MD5 ID:</p>
         <p class="col-xs-9">{{ sim.base_name }}</p>
+        {% if sim.parent %}
+        <p class="col-xs-3">Parent ID:</p>
+        <p class="col-xs-9"><a href="/sim/{{ sim.parent.id }}">{{ sim.parent.base_name }}</a></p>
+        {% endif %}
         <p class="col-xs-3">Length:</p>
         <p class="col-xs-9">{{ sim.length }} secs</p>
-        <p class="col-xs-3">Parameters:</p>
-        <p class="col-xs-9"><pre>{{ sim.params }}</pre></p>
         <p class="col-xs-3">Upvotes:</p>
         <p class="col-xs-9">{{ sim.upvotes }}</p>
         <p class="col-xs-3">Downvotes:</p>
         <p class="col-xs-9">{{ sim.downvotes }}</p>
-        <p class="col-xs-3">Likes:</p>
+        <p class="col-xs-3">Parameters:</p>
+        <p class="col-xs-9"><pre>{{ sim.params }}</pre></p>
+<!--        <p class="col-xs-3">Likes:</p>
         <p class="col-xs-9">{{ sim.twitter_likes }}</p>
         <p class="col-xs-3">RTs:</p>
-        <p class="col-xs-9">{{ sim.twitter_retweets }}</p>
+        <p class="col-xs-9">{{ sim.twitter_retweets }}</p> -->
 
-<!--      <p>
-        <p>Tag counts for this simulation run:</p>
-        <p class="col-xs-2">mono:</p>
-        <p class="col-xs-10">0</p>
-        <p class="col-xs-2">di:</p>
-        <p class="col-xs-10">1</p>
-        <p class="col-xs-2">poly:</p>
-        <p class="col-xs-10">2</p>
-        <p class="col-xs-2">cyclic:</p>
-        <p class="col-xs-10">3</p>
-        <p class="col-xs-2">other:</p>
-        <p class="col-xs-10">4</p>
-      </p>
--->
     </div>
 
   </div>

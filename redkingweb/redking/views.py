@@ -33,6 +33,16 @@ class SimListView(generic.ListView):
             s.score = s.upvotes-s.downvotes
         return context
 
+class SimBestView(generic.ListView):
+    queryset = Sim.objects.order_by('-fitness')
+    template_name = 'redking/index.html'
+    paginate_by = 10
+    def get_context_data(self, **kwargs):
+        context = super(SimBestView, self).get_context_data(**kwargs)
+        for s in context['object_list']:
+            s.score = s.upvotes-s.downvotes
+        return context
+
 class SimView(generic.DetailView):
     model = Sim
     template_name = 'redking/sim.html'

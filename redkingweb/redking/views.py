@@ -18,13 +18,11 @@ from django.shortcuts import *
 from django.views import generic
 from models import *
 import random
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 def random_colour():
     l = ["#ffe400","#ff8400","#fe647e","#6fb3c8"]
     return l[random.randrange(0,len(l))]
 
-@ensure_csrf_cookie
 class SimListView(generic.ListView):
     queryset = Sim.objects.order_by('-created_date')
     template_name = 'redking/index.html'
@@ -35,7 +33,6 @@ class SimListView(generic.ListView):
             s.score = s.upvotes-s.downvotes
         return context
 
-@ensure_csrf_cookie
 class SimView(generic.DetailView):
     model = Sim
     template_name = 'redking/sim.html'
@@ -45,8 +42,6 @@ class SimView(generic.DetailView):
         context['score']=s.upvotes-s.downvotes
         return context
 
-
-@ensure_csrf_cookie
 def upvote(request):
     sim = get_object_or_404(Sim, pk=int(request.POST.get('id')))
     sim.upvotes+=1
@@ -54,7 +49,6 @@ def upvote(request):
     num_votes=sim.upvotes-sim.downvotes
     return HttpResponse(num_votes)
 
-@ensure_csrf_cookie
 def downvote(request):
     sim = get_object_or_404(Sim, pk=int(request.POST.get('id')))
     sim.downvotes+=1

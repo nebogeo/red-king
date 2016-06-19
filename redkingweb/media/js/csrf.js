@@ -17,6 +17,7 @@
 // security stuff for async to prevent csrf
 function getCookie(name) {
     var cookieValue = null;
+    console.log(document.cookie);
     if (document.cookie && document.cookie != '') {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {

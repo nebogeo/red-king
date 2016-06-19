@@ -18,6 +18,7 @@ from django.shortcuts import *
 from django.views import generic
 from models import *
 import random
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 def random_colour():
     l = ["#ffe400","#ff8400","#fe647e","#6fb3c8"]

@@ -1,8 +1,26 @@
+#!/usr/bin/env python
+# Red King Simulation Sonification
+# Copyright (C) 2016 Foam Kernow
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import math
 import numpy as np
 import iso226
 import copy
 import techno
+import strain
 
 def pitch(note):
     return math.pow(2,(note-69)/12.0)*440
@@ -16,34 +34,15 @@ class blip:
         self.pos = 0
 
     def update(self,level):
-        self.blips=[]
-        av = 0
-        mx = 0
-        for i in range(0,len(level)):
-            av+=level[i]
-            if level[i]>mx: mx=level[i]
-        av/=len(level)
-        av/=10
-        last = 0
-        if mx==0: mx=1
-        for i in range(0,len(level)):
-            if level[i]>av:
-                if last==0:
-                    self.blips.append([i,level[i]/mx])
-                last=1
-            else:
-                last=0
-
+        self.blips=strain.find_centres(level)
 
     def render(self,out,mode):
         if len(self.blips)>0:
             step = self.bar_length/len(self.blips)
             for i,b in enumerate(self.blips):
-                if mode=="TECHNO":
-                    p = pitch(b[0]+69)*4
-                else:
-                    p = pitch(b[0]+69)*4
-
+                # midi note to frequency
+                p = pitch(b[0]+69)*4
+                # make an event for this note
                 self.events.append({'pos':i*step,
                                     'freq':p,
                                     'tec':techno.techno(0.3+b[1]*0.5,0.4),
@@ -67,9 +66,10 @@ class blip:
                             e['vol']*=0.9995
                     self.pos+=1
 
+            # remove old events
             new_events=[]
             for e in self.events:
                 if e['vol']>0.001:
                     new_events.append(e)
             self.events = new_events
-            print(str(len(self.events))+" events...")
+            #print(str(len(self.events))+" events...")

@@ -28,7 +28,7 @@ pre {
 }
 
 audio {
-    width: 100%;
+
 }
 
 .emoimage {
@@ -62,3 +62,32 @@ audio {
 #ff8400
 #fe647e
 #6fb3c8 */
+
+.upvote {
+    border: none;
+    background: none;
+    background-image: url(/media/images/up.png);
+    background-size: 100%;
+    width: 20px;
+    height: 20px;
+}
+
+.downvote {
+    border: none;
+    background: none;
+    background-image: url(/media/images/down.png);
+    background-size: 100%;
+    width: 20px;
+    height: 20px;
+}
+
+.score {
+    margin: 0;
+    padding-left: 5px;
+    background: none;
+    border: 2px solid #ff8400;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}

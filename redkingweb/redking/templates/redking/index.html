@@ -93,41 +93,25 @@ read more about our research into sonfication here</a>.
     {% for sim in object_list %}
     <div class="sim" style="color:{{ sim.colour }};">
       {{ sim.created_date }}
-<!--      Tag me:
-      <a href="#">mono</a> |
-      <a href="#">di</a> |
-      <a href="#">poly</a> |
-      <a href="#">cyclic</a> |
-      <a href="#">other</a> -->
       <a href="/sim/{{ sim.id }}" style="float:right;">More info</a>
       <p>
-<!--	<a href="/sim/{{ sim.id }}" style="float:right;"> -->
-	  <img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/>
-<!--	</a> -->
+	    <a href="/sim/{{ sim.id }}" style="float:right;">
+	      <img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/>
+        </a>
       </p>
       <p>
-      <audio controls>
-        <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.mp3" type="audio/mp3">
-          your browser does not support audio...
-      </audio>
-<!--      <div class="emoimage"><img src="{{MEDIA_URL}}/images/happy.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/horrible.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/bored.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/crazy.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/cool.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/shocked.png" height=20></div>
-      </p> -->
-
-<!--      <div class="grow">
-        <p>Simulation details...</p>
-        <p class="col-xs-2">MD5:</p>
-        <p class="col-xs-10">{{ sim.base_name }}</p>
-        <p class="col-xs-2">Length:</p>
-        <p class="col-xs-10">{{ sim.length }} secs</p>
-        <p class="col-xs-2">Parameters:</p>
-        <p class="col-xs-10"><pre>{{ sim.params }}</pre></p>
-      </div>
--->
+        <div class="row">
+          <audio class="col-xs-9" controls>
+            <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.mp3" type="audio/mp3">
+              your browser does not support audio...
+          </audio>
+          <div class="col-xs-3">
+            <button class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
+            <div id="score-{{ sim.id }}" class="score">{{ sim.score }}</div>
+            <button class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
+          </div>
+        </div>
+      </p>
     </div>
     {% endfor %}
   </div>

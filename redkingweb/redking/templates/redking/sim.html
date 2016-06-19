@@ -1,45 +1,40 @@
 {% extends "base.html" %}
 
 {% block stuff %}
-
 <div class="row">
   <div class="col-xs-12 col-md-6">
     <h2>Sim completed on {{ sim.created_date }}</h2>
-
     <div class="sim" style="color:{{ sim.colour }};">
       <p><img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/></p>
       <p>
-      <audio controls>
-        <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.mp3" type="audio/mp3">
-          your browser does not support audio...
-      </audio>
-
-<!--      <p>
-      Tag me:
-      <a href="#">mono</a>
-      <a href="#">di</a> |
-      <a href="#">poly</a> |
-      <a href="#">cyclic</a> |
-      <a href="#">other</a>
-      </p> -->
-
-<!--
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/happy.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/horrible.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/bored.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/crazy.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/cool.png" height=20></div>
-      <div class="emoimage"><img src="{{MEDIA_URL}}/images/shocked.png" height=20></div>
--->
+        <div class="row">
+          <audio class="col-xs-9" controls>
+            <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.mp3" type="audio/mp3">
+              your browser does not support audio...
+          </audio>
+          <div class="col-xs-3">
+            <button class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
+            <div id="score-{{ sim.id }}" class="score">{{ score }}</div>
+            <button class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
+          </div>
+        </div>
       </p>
- 
+
         <p>Simulation details</p>
-        <p class="col-xs-2">MD5:</p>
-        <p class="col-xs-10">{{ sim.base_name }}</p>
-        <p class="col-xs-2">Length:</p>
-        <p class="col-xs-10">{{ sim.length }} secs</p>
-        <p class="col-xs-2">Parameters:</p>
-        <p class="col-xs-10"><pre>{{ sim.params }}</pre></p>
+        <p class="col-xs-3">MD5:</p>
+        <p class="col-xs-9">{{ sim.base_name }}</p>
+        <p class="col-xs-3">Length:</p>
+        <p class="col-xs-9">{{ sim.length }} secs</p>
+        <p class="col-xs-3">Parameters:</p>
+        <p class="col-xs-9"><pre>{{ sim.params }}</pre></p>
+        <p class="col-xs-3">Upvotes:</p>
+        <p class="col-xs-9">{{ sim.upvotes }}</p>
+        <p class="col-xs-3">Downvotes:</p>
+        <p class="col-xs-9">{{ sim.downvotes }}</p>
+        <p class="col-xs-3">Likes:</p>
+        <p class="col-xs-9">{{ sim.twitter_likes }}</p>
+        <p class="col-xs-3">RTs:</p>
+        <p class="col-xs-9">{{ sim.twitter_retweets }}</p>
 
 <!--      <p>
         <p>Tag counts for this simulation run:</p>

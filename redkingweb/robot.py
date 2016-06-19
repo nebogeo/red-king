@@ -21,13 +21,13 @@ import time
 import hashlib
 import numpy as np
 import scipy.io.wavfile
-import sim.redking
+import robot.redking
 import random
-from sim.simulation import *
-from sim import thumb
-from sim import synth
-from sim import blip
-import sim.twitter
+from robot.sim_helpers import *
+from robot import thumb
+from robot import synth
+from robot import blip
+import robot.twitter
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "redkingweb.settings")
 
@@ -66,14 +66,14 @@ def render_blipsim(model,blip,time_length):
     skip = 20
     th = thumb.thumb(steps*skip,model.size(),10)
     pre_run = 100
-    for i in range(0,pre_run):
-        model.step()
-        time.sleep(0.3)
+    #for i in range(0,pre_run):
+    #    model.step()
+        #time.sleep(0.3)
 
     #blip.update(parasite_state_array(model))
     #if len(blip.blips)<2: return False,False
-    blip.update(host_state_array(model))
-    if len(blip.blips)<2: return False,False
+    #blip.update(host_state_array(model))
+    #if len(blip.blips)<2: return False,False
 
     for i in range(0,steps):
         blip.update(parasite_state_array(model))
@@ -85,24 +85,59 @@ def render_blipsim(model,blip,time_length):
             th.render(model)
             model.step()
         if model.is_extinct():
+            print("extinct...")
             return False,False
-        time.sleep(0.3)
+        #time.sleep(0.3)
 
     return out,th
 
+def update_fitness():
+    for s in Sim.objects.all():
+        fit = s.upvotes - s.downvotes
+        if fit!=s.fitness:
+            s.fitness = fit
+            s.save()
+
+def cp_from_db(s):
+    cp = redking.model_cost_params()
+    cp.amin = s.param_amin
+    cp.amax = s.param_amax
+    cp.a_p = s.param_a_p
+    cp.betmin = s.param_bmin
+    cp.bemaxtime = s.param_bmax
+    cp.beta_p = s.param_beta_p
+    cp.g = s.param_g
+    cp.h = s.param_h
+    # additional..
+    cp.pstart = s.param_pstart
+    cp.hstart = s.param_hstart
+    cp.model_type = s.param_model_type
+
+
+def get_new_cp():
+    update_fitness()
+    # new random one
+    #if random.random()<0.5: return random_cp()
+
+    # pick an existing one
+    q = Sim.objects.order_by('-fitness')
+    for i,s in enumerate(q):
+        # higher up = more likely
+        if random.random()<0.1:
+            print("picked: "+str(s.base_name)+" ("+str(i)+")")
+            return mutate_cp(str_to_cp(s.params))
+
 def run(location):
     length = 40
-    cp = random_cp()
-
+    cp = get_new_cp()
     params_str = cp_to_str(cp)
     base_name = hashlib.md5(params_str).hexdigest()
     m = redking.model()
-
     m.set_model(cp.model_type)
     m.m_pstart = cp.pstart;
     m.m_hstart = cp.hstart;
-
     m.m_cost_params=cp
+
     m.init()
     #s = synth.synth(m.size())
     s = blip.blip(m.size(),0.25)
@@ -118,11 +153,11 @@ def run(location):
         th.save(imgname)
         os.system("mogrify -resize 600% -filter Point "+imgname)
         d=Sim(created_date = timezone.now(),
-            base_name = base_name,
-            length = length,
-            params = params_str)
+              base_name = base_name,
+              length = length,
+              params=params_str)
         d.save()
-        sim.twitter.tweet("I just generated new host/parasite evolution music: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
+        #robot.twitter.tweet("I just generated new host/parasite evolution music: http://redking.fo.am/sim/"+str(d.id),imgname,sim.twitter.api)
 
 while(True):
     run("media/sim/")

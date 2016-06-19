@@ -87,7 +87,7 @@ def render_blipsim(model,blip,time_length):
         if model.is_extinct():
             print("extinct...")
             return False,False
-        time.sleep(0.3)
+        time.sleep(0.5)
 
     return out,th
 

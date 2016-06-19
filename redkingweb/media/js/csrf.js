@@ -39,6 +39,8 @@ function csrfSafeMethod(method) {
 
 var csrftoken = getCookie('csrftoken');
 
+console.log(csrftoken);
+
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

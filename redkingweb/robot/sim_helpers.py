@@ -117,9 +117,13 @@ def str_to_cp(s):
         cp.beta_p = float(lines[5].split(' ')[2])
         cp.g = float(lines[6].split(' ')[2])
         cp.h = float(lines[7].split(' ')[2])
-        # additional..
-        cp.pstart = int(lines[8].split(' ')[2])
-        cp.hstart = int(lines[9].split(' ')[2])
+        if len(lines)>9:
+            # additional..
+            cp.pstart = int(lines[8].split(' ')[2])
+            cp.hstart = int(lines[9].split(' ')[2])
+        else:
+            cp.pstart = 12
+            cp.hstart = 10
     else:
         print(s)
         return False

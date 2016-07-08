@@ -65,15 +65,23 @@ def render_blipsim(model,blip,time_length):
     steps = sim_length/blip.bar_length/2
     skip = 20
     th = thumb.thumb(steps*skip,model.size(),10)
-    pre_run = 100
-    #for i in range(0,pre_run):
-    #    model.step()
-        #time.sleep(0.3)
 
-    #blip.update(parasite_state_array(model))
-    #if len(blip.blips)<2: return False,False
+    # check by pre-running for a bit
+    pre_run = 100
+    for i in range(0,pre_run):
+        model.step()
+        time.sleep(0.3)
+
+    blip.update(parasite_state_array(model))
+    if len(blip.blips)<2: 
+        print("only one parasite strain, rejecting")
+        return False,False
     #blip.update(host_state_array(model))
     #if len(blip.blips)<2: return False,False
+    
+    # restart everything
+    model.init()
+    blip.init()
 
     for i in range(0,steps):
         blip.update(parasite_state_array(model))
@@ -85,7 +93,7 @@ def render_blipsim(model,blip,time_length):
             th.render(model)
             model.step()
             if model.is_extinct():
-                print("extinct...")
+                print("extinct, rejecting")
                 return False,False
             time.sleep(0.3)
 
@@ -117,7 +125,9 @@ def cp_from_db(s):
 def get_new_cp():
     update_fitness()
     # new random one
-    #if random.random()<0.2: return False,random_cp()
+    if random.random()<0.5: 
+        print("new random params")
+        return False,random_cp()
 
     # pick an existing one
     q = Sim.objects.order_by('-fitness')

@@ -39,10 +39,10 @@ def random_cp():
 
 def mutate_cp(cp):
     c = int(random.uniform(0,11))
-    if c==0: cp.amin = random.uniform(0,10)
+    if c==0: cp.amin = random.uniform(0,cp.amax)
     if c==1: cp.amax = random.uniform(cp.amin,10)
     if c==2: cp.a_p = random.uniform(0,5)+0.1
-    if c==3: cp.betmin = random.uniform(0,10)
+    if c==3: cp.betmin = random.uniform(0,cp.bemaxtime)
     if c==4: cp.bemaxtime = random.uniform(cp.betmin,10)
     if c==5: cp.beta_p = random.uniform(0,5)
     if c==6: cp.g = random.uniform(-10,10)

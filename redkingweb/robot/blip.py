@@ -34,6 +34,11 @@ class blip:
         self.bar_length = int(bar_length*44100)
         self.pos = 0
 
+    def init(self):
+        self.blips = []
+        self.events = []
+        self.pos = 0
+
     def update(self,level):
         self.blips=strain.find_centres(level)
 

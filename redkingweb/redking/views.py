@@ -65,3 +65,7 @@ def downvote(request):
     sim.save()
     num_votes=sim.upvotes-sim.downvotes
     return HttpResponse(num_votes)
+
+def live(request):
+    context={}
+    return render(request, 'redking/live.html', context)

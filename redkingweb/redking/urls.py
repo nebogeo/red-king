@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^sim/(?P<pk>\d+)/$', views.SimView.as_view(), name='sim'),
     url(r'^up', views.upvote, name='up'),
     url(r'^down', views.downvote, name='down'),
+    url(r'^live', views.live, name='live'),
 )

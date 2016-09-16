@@ -39,10 +39,10 @@ def random_cp():
 
 def mutate_cp(cp):
     c = int(random.uniform(0,11))
-    if c==0: cp.amin = random.uniform(0,10)
+    if c==0: cp.amin = random.uniform(0,cp.amax)
     if c==1: cp.amax = random.uniform(cp.amin,10)
     if c==2: cp.a_p = random.uniform(0,5)+0.1
-    if c==3: cp.betmin = random.uniform(0,10)
+    if c==3: cp.betmin = random.uniform(0,cp.bemaxtime)
     if c==4: cp.bemaxtime = random.uniform(cp.betmin,10)
     if c==5: cp.beta_p = random.uniform(0,5)
     if c==6: cp.g = random.uniform(-10,10)
@@ -117,9 +117,13 @@ def str_to_cp(s):
         cp.beta_p = float(lines[5].split(' ')[2])
         cp.g = float(lines[6].split(' ')[2])
         cp.h = float(lines[7].split(' ')[2])
-        # additional..
-        cp.pstart = int(lines[8].split(' ')[2])
-        cp.hstart = int(lines[9].split(' ')[2])
+        if len(lines)>9:
+            # additional..
+            cp.pstart = int(lines[8].split(' ')[2])
+            cp.hstart = int(lines[9].split(' ')[2])
+        else:
+            cp.pstart = 12
+            cp.hstart = 10
     else:
         print(s)
         return False

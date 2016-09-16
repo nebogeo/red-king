@@ -21,6 +21,7 @@ import iso226
 import copy
 import techno
 import strain
+import time
 
 def pitch(note):
     return math.pow(2,(note-69)/12.0)*440
@@ -31,6 +32,11 @@ class blip:
         self.blips = []
         self.events = []
         self.bar_length = int(bar_length*44100)
+        self.pos = 0
+
+    def init(self):
+        self.blips = []
+        self.events = []
         self.pos = 0
 
     def update(self,level):
@@ -65,6 +71,7 @@ class blip:
                             out[self.pos] += s
                             e['vol']*=0.9995
                     self.pos+=1
+                if i%50==0: time.sleep(0.3)
 
             # remove old events
             new_events=[]

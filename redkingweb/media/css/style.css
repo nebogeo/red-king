@@ -2,8 +2,8 @@ body {
     font-family: 'Dosis', sans-serif;
     font-size: 200%;
 /*    color: #ffe400; */
-    color: #fff477;
-    background: black;
+    color: #777244;
+    background: white;
 }
 
 a:link {
@@ -16,7 +16,6 @@ a:visited {
 
 pre {
     color: #fe647e;
-    background: black;
     margin-left: 12em;
 }
 
@@ -24,7 +23,6 @@ pre {
     margin: 1em;
     padding: 1em;
     border-radius: 1em;
-    background: black;
 }
 
 audio {
@@ -90,4 +88,12 @@ audio {
     width: 30px;
     height: 30px;
     display: inline-block;
+}
+
+/* live section */
+
+.live-graph {
+    border: 2px dashed black; 
+    margin: 2em;
+    background: "white";
 }

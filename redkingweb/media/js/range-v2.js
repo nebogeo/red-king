@@ -56,81 +56,60 @@ var c4=125.0/594.0
 var c6=512.0/1771.0
 var dc5=-277.00/14336
 
-function OneDArray(x) {
-    var ret = []
-    for (var i=0; i<x; i++) {
-	ret.push(0)
-    }
-    return ret
-}
-
-function TwoDArray(x,y) {
-    var ret = []
-    for (var i=0; i<x; i++) {
-	ret.push(OneDArray(y))
-    }
-    return ret
-}
-
 /***************************************
  * Main program
  ***************************************/
-function main () {
-    
-    var u = OneDArray(N)
-    var v = OneDArray(N)
-    var a = OneDArray(N)
-    var CP = OneDArray(N)
-    var E = TwoDArray(N,N) 
-    var xout = []
-    var temp = 0
-    var i=0
-    var j=0
-    
-        
+
+var _u = OneDArray(N)
+var _v = OneDArray(N)
+var _a = OneDArray(N)
+var _E = TwoDArray(N,N) 
+
+function init() {            
     /* Initialise discretised trait values */
-	for (i=0; i<N; i++) {
-		u[i]=i/(N-1); /* Host */
-		v[i]=u[i]; /* Parasite */
-	}
-    
-    /**********************************************************************
-     * This section is where the trade-offs and host-parasite interactions 
-     * are defined
-     *********************************************************************/
-    
+    for (var i=0; i<N; i++) {
+	_u[i]=i/(N-1); /* Host */
+	_v[i]=_u[i]; /* Parasite */
+    }
+}
+
+function recalc_cost_functions() { 
+    var CP = OneDArray(N)
+    console.log(CH1);
     /* Cost functions */
-    for (i=0; i<N; i++) {
+    for (var i=0; i<N; i++) {
         if(CH2==0){ // Linear costs
-            a[i] = A*FMAX(0,1-CH1*u[i]);
+	    _a[i] = A*FMAX(0,1-CH1*_u[i]);
         }
         else{ // Non-linear costs  
-            a[i] = A*FMAX(0,1-CH1*(1-Math.exp(CH2*u[i]))/(1-Math.exp(CH2)));
+	    _a[i] = A*FMAX(0,1-CH1*(1-Math.exp(CH2*_u[i]))/(1-Math.exp(CH2)));
         }
         
         if(CP2==0){ // Linear costs
-            CP[i] = FMAX(0,1-CP1*v[i]);
+	    CP[i] = FMAX(0,1-CP1*_v[i]);
         }
         else{ // Non-linear costs
-            CP[i] = FMAX(0,1-CP1*(1-Math.exp(CP2*v[i]))/(1-Math.exp(CP2)));
+	    CP[i] = FMAX(0,1-CP1*(1-Math.exp(CP2*_v[i]))/(1-Math.exp(CP2)));
         }
     }
+
+    plot_tradoff(_a,"host_tradeoff_canvas",0,1,0);
+    plot_tradoff(CP,"parasite_tradeoff_canvas",0,1,0);
     
     /* Define host-parasite interaction matrix */
-    for (i=0; i<N; i++){
-        for (j=0; j<N; j++){
-            E[i][j] = CP[j]*BETA/(1+Math.exp(G*(u[i]-v[j])));
-        }
-    }
-    
-    /**********************************************************************
-     * End of user-defined section
-     *********************************************************************/
-    
-    /* Call adaptive dynamics routine (main solver) */
-    xout = TwoDArray(2*N,NEVOL);
+    for (var i=0; i<N; i++){
+     	for (var j=0; j<N; j++){
+     	    _E[i][j] = CP[j]*BETA/(1+Math.exp(G*(_u[i]-_v[j])));
+     	}
+    }   
+}
 
-    var r = new range(xout,u,v,E,a);
+function main () {    
+    init(); 
+    recalc_cost_functions();
+    var xout = TwoDArray(2*N,NEVOL);
+    /* Call adaptive dynamics routine (main solver) */
+    var r = new range(xout,_u,_v,_E,_a);
     r.run()
 }
 
@@ -153,8 +132,6 @@ function range(xout, u, v, E, a) {
     var par_ind = OneDArray(N)
     var mflag = 0
     var i, j, evol_count=0, nh, np, mutator, pop_choice, HSTART0, PSTART0, Hflag, Pflag;
-    
-    console.log(x0)
     
     Hflag=0;
     Pflag=0;
@@ -185,12 +162,10 @@ function range(xout, u, v, E, a) {
     host_ind[0] = HSTART0;
     par_ind[0] = PSTART0;
 
-    console.log(x0)
-
     this.run = function() {        
         /* Display progress */
         //if(evol_count%100==0){
-        console.log("Timer="+evol_count+". Hosts:"+nh+". Parasites:"+np)
+        //console.log("Timer="+evol_count+". Hosts:"+nh+". Parasites:"+np)
 	//}
         
         /* Call ODE solver */
@@ -352,30 +327,17 @@ function range(xout, u, v, E, a) {
                 }
             }
 	}
-	var xcanvas = document.getElementById("xcanvas");
-	var xctx = xcanvas.getContext("2d");
-	var ycanvas = document.getElementById("ycanvas");
-	var yctx = ycanvas.getContext("2d");
 
-	for (i=0; i<N; i++) {
-	    r = safelog10(x0[i])
-	    g = 0
-	    xctx.fillStyle = "rgba("+Math.floor(r*255)+","+Math.floor(g*255)+","+0+","+1.0+")";
-	    xctx.fillRect( evol_count%500, i, 1, 1 );
-	}
-
-	for (i=0; i<N; i++) {
-	    r = 0
-	    g = safelog10(y[i])
-	    yctx.fillStyle = "rgba("+Math.floor(r*255)+","+Math.floor(g*255)+","+0+","+1.0+")";
-	    yctx.fillRect( evol_count%500, i, 1, 1 );
-	}
-
+	plot_sim(x0,"xcanvas",evol_count%500);
+	plot_sim(y,"ycanvas",evol_count%500);
 
 	evol_count += 1
-	that = this
-	requestAnimFrame(function() { that.run() },xctx);
+	//requestAnimFrame(function() { that.run() },xctx);
+	//setInterval(function() { that.run(); }, 1000);
     }
+    
+    that = this
+    setInterval(function() { that.run(); }, 1000/5);
 }
 
 

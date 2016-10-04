@@ -55,6 +55,36 @@ function plot_tradoff(arr,canvas_id) {
     }
 }
 
+function plot_matrix(arr,canvas_id) {
+    var canvas = document.getElementById(canvas_id);
+    var ctx = canvas.getContext("2d");
+    
+    ctx.fillStyle = "rgba(255,255,255,1.0)";
+    ctx.fillRect(0,0,100,100);
+    
+    ctx.fillStyle = "rgba(0,0,0,1.0)";
+    
+    var min = 9999;
+    var max = -9999;
+    for (var i=0; i<arr.length; i++) {
+	for (var j=0; j<arr.length; j++) {
+    	    if (arr[i][j]<min) min=arr[i][j];
+    	    if (arr[i][j]>max) max=arr[i][j];
+	}
+    }
+    
+    var sc = max-min;
+    
+    for (var j=0; j<arr.length; j+=10) {
+	for (var i=0; i<arr.length; i++) {
+    	    // normalise to fill graph
+     	    var v = ((arr[i][j]-min)/sc)
+     	    ctx.fillRect( i, 100-v*100, 1, 1 );
+	}
+    }
+}
+
+
 function connect_slider(id,fn) { 
     var _=function() {
 	fn($(id).val()/100.0);
@@ -65,5 +95,17 @@ function connect_slider(id,fn) {
     $(id).on('change', _); // IE10
 }
 
+function connect_checkbox(id,fn) { 
+    var _=function() {
+	fn($(id).prop("checked"));
+	recalc_cost_functions();
+    }
+    // connect up stuff
+    $(id).on('change', _); // IE10
+}
+
 connect_slider("#host-curve", function(v) { CH2 = v*15-7.5; });
 connect_slider("#parasite-curve", function(v) { CP2 = v*15-7.5; });
+
+// todo: change CP2 range
+connect_checkbox("#parasite-transmission", function(v) { parasite_transmission=v; });

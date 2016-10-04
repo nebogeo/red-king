@@ -93,8 +93,8 @@ function recalc_cost_functions() {
         }
     }
 
-    plot_tradoff(_a,"host_tradeoff_canvas",0,1,0);
-    plot_tradoff(CP,"parasite_tradeoff_canvas",0,1,0);
+    plot_tradoff(_a,"host_tradeoff_canvas");
+    plot_tradoff(CP,"parasite_tradeoff_canvas");
     
     /* Define host-parasite interaction matrix */
     for (var i=0; i<N; i++){
@@ -102,6 +102,9 @@ function recalc_cost_functions() {
      	    _E[i][j] = CP[j]*BETA/(1+Math.exp(G*(_u[i]-_v[j])));
      	}
     }   
+
+    plot_matrix(_E,"matrix_canvas");
+
 }
 
 function main () {    
@@ -111,6 +114,8 @@ function main () {
     /* Call adaptive dynamics routine (main solver) */
     var r = new range(xout,_u,_v,_E,_a);
     r.run()
+
+    //setInterval(function() { r.run(); }, 1000/10);
 }
 
 function safelog10(n) {
@@ -332,12 +337,13 @@ function range(xout, u, v, E, a) {
 	plot_sim(y,"ycanvas",evol_count%500);
 
 	evol_count += 1
-	//requestAnimFrame(function() { that.run() },xctx);
-	//setInterval(function() { that.run(); }, 1000);
-    }
-    
-    that = this
-    setInterval(function() { that.run(); }, 1000/5);
+
+	var canvas = document.getElementById("xcanvas");
+	var ctx = canvas.getContext("2d");
+	var that = this;
+	requestAnimFrame(function() { that.run() },ctx);
+	
+    }    
 }
 
 

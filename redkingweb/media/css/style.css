@@ -25,6 +25,10 @@ pre {
     border-radius: 1em;
 }
 
+h2 {
+    margin-top: 0.1em;
+}
+
 audio {
 
 }
@@ -94,6 +98,25 @@ audio {
 
 .live-graph {
     border: 2px dashed black; 
-    margin: 2em;
+    margin: 0.5em;
     background: "white";
+}
+
+.gutter {
+    border: 1px dashed black; 
+    border-radius: 25px;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-bottom: 1em;
+    display: block;
+    overflow: hidden;
+}
+
+input[type=radio] {
+    margin-left: 1em;
+    margin-right: 0.5em;
+}
+
+.params {
+    padding-top: 1em;
 }

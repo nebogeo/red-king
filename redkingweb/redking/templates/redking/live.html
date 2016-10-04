@@ -1,22 +1,118 @@
 {% extends "base.html" %}
 {% block stuff %}
 
-<p>
-Host</br>
-<canvas id="xcanvas" class="live-graph" width=500 height=100></canvas>
-</p>
-<p>
-Parasite</br>
-<canvas id="ycanvas" class="live-graph" width=500 height=100></canvas>
-</p>
+<div class="row">
+  <div class="col-sm-12 col-md-4">
+    <div class="gutter">
+      <h2>Host Options</h2>
 
-<input id="host-curve" type="range" style="width:200px;"/>
-<input id="parasite-curve" type="range" style="width:200px;"/>
+      <div class="row">
+	<div class="col-sm-6">
+	  Immunity
+	</div>
+	<div class="col-sm-6">
+	  <form action="" class="radio-sel">
+	    <input type="radio" name="gender" value="male">None
+	    <input type="radio" name="gender" value="female">Some
+	  </form>
+	</div>
+      </div>
 
-<canvas id="host_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
-<canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
+      <div class="col-sm-6 col-md-6">
+	<div class="row params">
+	  <div class="col-sm-6">Carriers</div>
+	  <div class="col-sm-6"><input id="carrier" type="range"/></div>
+	</div>
+	<div class="row params">
+	  <div class="col-sm-6">Costs</div>
+	  <div class="col-sm-6"><input id="host-curve" type="range"/></div>
+	</div>
+      </div>
+      <div class="col-sm-6 col-md-6">
+	<canvas id="host_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
+      </div>  
+    </div>
+  </div>
 
+  <div class="col-sm-12 col-md-4">
+    <div class="gutter">
+      <h2>Transmission function</h2>
+      <div class="col-sm-6">
+	<form action="" class="radio-sel">
+	  <input type="radio" name="gender" value="male">Universal</br>
+	  <input type="radio" name="gender" value="female">Range</br>
+	  <input type="radio" name="gender" value="female">Matching</br>
+	</form>
+      </div>
+      <div class="col-sm-6">
+	<canvas id="matrix_canvas" class="live-graph" width=100 height=100></canvas>
+      </div>
+    </div>
+    <div class="gutter">
+      <div class="col-sm-6">
+	Run 
+      </div>
+      <div class="col-sm-6">
+	Restart
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-sm-12 col-md-4">
+    <div class="gutter">
+      <h2>Parasite Options</h2>
+      
+      <div class="row">
+	<div class="col-sm-6">
+	  Transmission
+	</div>
+	<div class="col-sm-6">
+	  <form action="" class="radio-sel">
+	    <input type="radio" name="gender" value="male">Direct
+	    <input type="radio" name="gender" value="female">Free-living
+	  </form>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-sm-6 col-md-6">
+	  <div class="row params">
+	    <div class="col-sm-6">Costs</div>
+	    <div class="col-sm-6"><input id="parasite-curve" type="range"/></div>
+	  </div>
+	  
+	  <form action="" class="radio-sel">
+	    <input type="radio" name="gender" value="male">Transmission</br>
+	    <input type="radio" name="gender" value="female">Virulence
+	  </form>
+	
+	</div>
+	
+	<div class="col-sm-6 col-md-6">
+	  <canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+<div class="col-sm-12">
+  <div class="gutter">
+    <div class="col-sm-12 col-md-6">
+      <div class="row">
+	<canvas id="xcanvas" class="live-graph" width=500 height=100></canvas>
+      </div>
+      <div class="row">      
+	<canvas id="ycanvas" class="live-graph" width=500 height=100></canvas>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      Number of hosts...
+    </div>
+  </div>
+</div>
 <script src="{{MEDIA_URL}}js/live.js"></script>
-<script src="{{MEDIA_URL}}js/range-v2.js"></script>
+<script src="{{MEDIA_URL}}js/range-v2.js"></script> 
 
 {% endblock %}

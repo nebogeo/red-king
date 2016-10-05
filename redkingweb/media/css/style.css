@@ -3,7 +3,7 @@ body {
     font-size: 200%;
 /*    color: #ffe400; */
     color: #777244;
-    background: white;
+    background: url('../images/bg.png');
 }
 
 a:link {
@@ -110,6 +110,7 @@ audio {
     margin-bottom: 1em;
     display: block;
     overflow: hidden;
+    background: white;
 }
 
 input[type=radio] {

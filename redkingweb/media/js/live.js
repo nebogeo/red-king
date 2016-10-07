@@ -1,17 +1,39 @@
-function OneDArray(x) {
-    var ret = []
-    for (var i=0; i<x; i++) {
-	ret.push(0)
-    }
-    return ret
-}
+function sim_handler() {
+    this.running = true;
 
-function TwoDArray(x,y) {
-    var ret = []
-    for (var i=0; i<x; i++) {
-	ret.push(OneDArray(y))
+    this.sound = new sound_handler();
+
+    this.set_running = function(s) { 
+	this.running=s 
+	if (s) this.update();
+    };
+
+    this.init = function() {
+	range_init(); 
+	recalc_cost_functions();
+	var xout = TwoDArray(2*N,NEVOL);
+	/* Call adaptive dynamics routine (main solver) */
+	this.model = new range(xout,_u,_v,_E,_a);
+	this.sound.init();
+	this.update();
     }
-    return ret
+
+    this.update = function() {
+	if (this.running) {
+	    this.model.run();
+
+	    plot_sim(this.model.get_host(),"xcanvas");
+	    plot_sim(this.model.get_parasite(),"ycanvas");
+
+	    this.sound.update(this.model.get_host(),
+			      this.model.get_parasite());
+	    
+	    var canvas = document.getElementById("xcanvas");
+	    var ctx = canvas.getContext("2d");
+	    var that = this;
+	    requestAnimFrame(function() { that.update() },ctx);
+	}
+    }
 }
 
 function plot_sim(arr,canvas_id,pos) {
@@ -104,8 +126,64 @@ function connect_checkbox(id,fn) {
     $(id).on('change', _); // IE10
 }
 
+///////////////////////////////////////////////////////////
+// sim callbacks - tweak the globals!
+
 connect_slider("#host-curve", function(v) { CH2 = v*15-7.5; });
 connect_slider("#parasite-curve", function(v) { CP2 = v*15-7.5; });
 
 // todo: change CP2 range
 connect_checkbox("#parasite-transmission", function(v) { parasite_transmission=v; });
+
+//////////////////////////////////////////////////////////
+
+sim = new sim_handler();
+sim.init();
+
+sound = new sound_handler();
+sound.init();
+
+////////////////////////////////////////////////////////
+// event callbacks here...
+
+var text_col = "#777244";
+
+function button_on(id,text) {
+    $(id).html(text);
+    $(id).css('background','black');
+    $(id).css('color','white');
+}
+
+function button_off(id,text) {
+    $(id).html(text);
+    $(id).css('background','white');
+    $(id).css('color',text_col);
+}
+
+function button_sim_toggle() {
+    if (sim.running) {
+	button_off('#sim-button','Sim: off');
+	sim.set_running(false);
+    } else {
+	button_on('#sim-button','Sim: on');
+	sim.set_running(true);
+    }
+}
+
+function button_sound_toggle() {
+    if (sim.sound.running) {
+	button_off('#sound-button','Sound: off');
+	sim.sound.set_running(false);
+    } else {
+	button_on('#sound-button','Sound: on');
+	sim.sound.set_running(true);
+    }
+}
+
+function button_sim_reset() {
+    sim.init();
+}
+
+button_on('#sim-button','Sim: on');
+button_on('#sound-button','Sound: on');
+

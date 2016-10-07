@@ -65,7 +65,7 @@ var _v = OneDArray(N)
 var _a = OneDArray(N)
 var _E = TwoDArray(N,N) 
 
-function init() {            
+function range_init() {            
     /* Initialise discretised trait values */
     for (var i=0; i<N; i++) {
 	_u[i]=i/(N-1); /* Host */
@@ -107,17 +107,6 @@ function recalc_cost_functions() {
 
 }
 
-function main () {    
-    init(); 
-    recalc_cost_functions();
-    var xout = TwoDArray(2*N,NEVOL);
-    /* Call adaptive dynamics routine (main solver) */
-    var r = new range(xout,_u,_v,_E,_a);
-    r.run()
-
-    //setInterval(function() { r.run(); }, 1000/10);
-}
-
 function safelog10(n) {
     if (n==0) return 0
     else return FMIN(1,Math.abs(Math.log10(0)))
@@ -138,6 +127,9 @@ function range(xout, u, v, E, a) {
     var mflag = 0
     var i, j, evol_count=0, nh, np, mutator, pop_choice, HSTART0, PSTART0, Hflag, Pflag;
     
+    this.get_host = function() { return x0; }
+    this.get_parasite = function() { return y; }
+
     Hflag=0;
     Pflag=0;
     HSTART0=0;
@@ -333,16 +325,7 @@ function range(xout, u, v, E, a) {
             }
 	}
 
-	plot_sim(x0,"xcanvas",evol_count%500);
-	plot_sim(y,"ycanvas",evol_count%500);
-
-	evol_count += 1
-
-	var canvas = document.getElementById("xcanvas");
-	var ctx = canvas.getContext("2d");
-	var that = this;
-	requestAnimFrame(function() { that.run() },ctx);
-	
+	evol_count += 1	
     }    
 }
 
@@ -588,15 +571,3 @@ function FMIN(l, r)
 }
 
 
-
- var requestAnimFrame = (function() {
-    return window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    function(/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-    window.setTimeout(callback, 1000/60);    };
-    })();
-
-main();

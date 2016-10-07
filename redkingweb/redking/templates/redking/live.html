@@ -49,12 +49,9 @@
       </div>
     </div>
     <div class="gutter">
-      <div class="col-sm-6">
-	Run 
-      </div>
-      <div class="col-sm-6">
-	Restart
-      </div>
+	<button id='sim-button' onclick='button_sim_toggle();'>Sim: on</button> 
+	<button id='reset-button' onclick='button_sim_reset();'>Restart</button>
+	<button id='sound-button' onclick='button_sound_toggle();'>Sound: on</button>
     </div>
   </div>
   
@@ -112,7 +109,11 @@
     </div>
   </div>
 </div>
-<script src="{{MEDIA_URL}}js/live.js"></script>
+<script src="{{MEDIA_URL}}js/buffer_loader.js"></script>
+<script src="{{MEDIA_URL}}js/strain.js"></script>
+<script src="{{MEDIA_URL}}js/music.js"></script>
+<script src="{{MEDIA_URL}}js/utils.js"></script> 
 <script src="{{MEDIA_URL}}js/range-v2.js"></script> 
+<script src="{{MEDIA_URL}}js/live.js"></script>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 body {
     font-family: 'Maven+Pro', sans-serif;
-    font-size: 200%;
+    font-size: 150%;
 /*    color: #ffe400; */
     color: #777244;
     background: white;
@@ -27,6 +27,10 @@ pre {
 
 h2 {
     margin-top: 0.1em;
+}
+
+h3 {
+    margin-top: 0.2em;
 }
 
 .title {
@@ -117,8 +121,7 @@ h2 {
 /* live section */
 
 .live-graph {
-    border: 2px dashed black; 
-    margin: 0.5em;
+    border: 1px solid black;     
     background: "white";
 }
 
@@ -131,6 +134,7 @@ h2 {
     display: block;
     overflow: hidden;
     background: white;
+    text-align: center;
 }
 
 input[type=radio] {
@@ -139,7 +143,8 @@ input[type=radio] {
 }
 
 .params {
-    padding-top: 1em;
+    text-align: center;
+    margin-bottom: 1em;
 }
 
 button {
@@ -157,6 +162,131 @@ button:focus {
 }
 
 button:hover {
-    background: black;
+    background: gray;
     color: white;
+}
+
+/* ----------------------------------------------- */
+/* clear range styles */
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
+/* ----------------------------------------------- */
+/* actual style */
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000000;
+  height: 1em;
+  width: 1em;
+  border-radius: 0.5em;
+  background: black;
+  cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+  border: 1px solid #000000;
+  height: 1em;
+  width: 1em;
+  border-radius: 0.5em;
+  background: black;
+  cursor: pointer;
+}
+
+/* track */
+
+input[type=range] {
+  width: 100%;
+  height: 0.5em;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 1em;
+  border: 1px solid black;
+  margin: 0.2em;
+}
+
+/* checkboxes/radio buttons */
+
+.radio_section {
+    margin-left:3em;
+    text-align: left;
+}
+
+.radio_container {
+}
+
+.radio_section input[type="radio"],
+.radio_section input[type="checkbox"]{
+  display: none;
+}
+
+.checkbox, .radio {
+    margin: 0em;
+}
+
+.radio_container label {
+  position: relative;
+  font-weight: normal;
+  padding: 0em;
+}
+
+
+
+.radio_container span::before,
+.radio_container span::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.radio_container span.radio:hover {
+  cursor: pointer;
+}
+
+.radio_container span.radio::before {
+  left: -3.2em;
+  width: 2.5em;
+  height: 1.5em;
+  background-color: white;
+  border-radius: 50px;
+  border: 1px solid black;
+}
+
+.radio_container span.radio::after {
+  left: -3em;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background-color: white;
+  transition: left .25s, background-color .25s;
+  border: 1px solid black;
+}
+
+input[type="radio"]:checked + label span.radio::after {
+  left: -2em;
+  background-color: black;
 }

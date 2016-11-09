@@ -4,29 +4,22 @@
 <div class="row">
   <div class="col-sm-12 col-md-4">
     <div class="gutter">
-      <h2>Host Options</h2>
+      <h3>Host Options</h3>
 
-      <div class="row">
-	<div class="col-sm-6">
-	  Immunity
-	</div>
-	<div class="col-sm-6">
-	  <form action="" class="radio-sel">
-	    <input type="radio" name="gender" value="male">None</br>
-	    <input type="radio" name="gender" value="female">Some
-	  </form>
-	</div>
-      </div>
-
-      <div class="col-sm-6 col-md-6">
-	<div class="row params">
-	  <div class="col-sm-6">Carriers</div>
-	  <div class="col-sm-6"><input id="carrier" type="range"/></div>
-	</div>
-	<div class="row params">
-	  <div class="col-sm-6">Costs</div>
-	  <div class="col-sm-6"><input id="host-curve" type="range"/></div>
-	</div>
+      <div class="col-sm-6 col-md-6 params">
+	Immunity
+	<section class="radio_section">
+	  <div class="radio_container">
+	    <input type="radio" name="immunity" id="immunity-none">
+	    <label for="immunity-none"><span class="radio">None</span></label>
+	  </div>
+	  <div class="radio_container">
+	    <input type="radio" name="immunity" id="immunity-some">
+	    <label for="immunity-some"><span class="radio">Some</span></label>
+	  </div>
+	</section>
+	Carriers<input id="carrier" type="range"/>
+	Cost curve<input id="host-curve" type="range"/>
       </div>
       <div class="col-sm-6 col-md-6">
 	<canvas id="host_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
@@ -36,13 +29,24 @@
 
   <div class="col-sm-12 col-md-4">
     <div class="gutter">
-      <h2>Transmission function</h2>
-      <div class="col-sm-6">
-	<form action="" class="radio-sel">
-	  <input type="radio" name="gender" value="male">Universal</br>
-	  <input type="radio" name="gender" value="female">Range</br>
-	  <input type="radio" name="gender" value="female">Matching</br>
-	</form>
+      <h3>Transmission Function</h3>
+      <div class="col-sm-6 params">
+
+	<section class="radio_section">
+	  <div class="radio_container">
+	    <input type="radio" name="function-type" id="function-type-universal">
+	    <label for="function-type-universal"><span class="radio">Universal</span></label>
+	  </div>
+	  <div class="radio_container">
+	    <input type="radio" name="function-type" id="function-type-range">
+	    <label for="function-type-range"><span class="radio">Range</span></label>
+	  </div>
+	  <div class="radio_container">
+	    <input type="radio" name="function-type" id="function-type-matching">
+	    <label for="function-type-matching"><span class="radio">Matching</span></label>
+	  </div>
+	</section>
+      
       </div>
       <div class="col-sm-6">
 	<canvas id="matrix_canvas" class="live-graph" width=100 height=100></canvas>
@@ -57,38 +61,39 @@
   
   <div class="col-sm-12 col-md-4">
     <div class="gutter">
-      <h2>Parasite Options</h2>
+      <h3>Parasite Options</h3>
       
-      <div class="row">
-	<div class="col-sm-6">
-	  Transmission
-	</div>
-	<div class="col-sm-6">
-	  <form action="" class="radio-sel">
-	    <input type="radio" name="gender" value="male">Direct</br>
-	    <input type="radio" name="gender" value="female">Free-living
-	  </form>
-	</div>
+      <div class="col-sm-7 col-md-7">
+	Transmission
+
+	<section class="radio_section">
+	  <div class="radio_container">
+	    <input type="radio" name="transmission" id="transmission-direct">
+	    <label for="transmission-direct"><span class="radio">Direct</span></label>
+	  </div>
+	  <div class="radio_container">
+	    <input type="radio" name="transmission" id="transmission-free">
+	    <label for="transmission-free"><span class="radio">Free</span></label>
+	  </div>
+	</section>
+	Cost curve<input id="parasite-curve" type="range"/>
+      </div>
+      
+      <div class="col-sm-5 col-md-5 params">
+	<canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
       </div>
 
-      <div class="row">
-	<div class="col-sm-6 col-md-6">
-	  <div class="row params">
-	    <div class="col-sm-6">Costs</div>
-	    <div class="col-sm-6"><input id="parasite-curve" type="range"/></div>
-	  </div>
-	  
-	  <form action="" class="radio-sel">
-	    <input type="radio" name="gender" value="male">Transmission</br>
-	    <input type="radio" name="gender" value="female">Virulence
-	  </form>
-	
+      <section class="radio_section">
+	<div class="radio_container">
+	  <input type="radio" name="parasite-type" id="parasite-type-trans">
+	  <label for="parasite-type-trans"><span class="radio">Transmission</span></label>
 	</div>
-	
-	<div class="col-sm-6 col-md-6">
-	  <canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
+	<div class="radio_container">
+	  <input type="radio" name="parasite-type" id="parasite-type-vir">
+	  <label for="parasite-type-vir"><span class="radio">Virulence</span></label>
 	</div>
-      </div>
+      </section>
+      
     </div>
   </div>
 </div>

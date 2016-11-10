@@ -54,6 +54,13 @@ class SimView(generic.DetailView):
         context['score']=s.upvotes-s.downvotes
         return context
 
+class LiveSimView(generic.DetailView):
+    model = LiveSim
+    template_name = 'redking/live.html'
+    def get_context_data(self, **kwargs):
+        context = super(LiveSimView, self).get_context_data(**kwargs)
+        return context
+
 def upvote(request):
     sim = get_object_or_404(Sim, pk=int(request.POST.get('id')))
     sim.upvotes+=1
@@ -95,3 +102,4 @@ def save_livesim(request):
         else:
             print("invalid form")
     return HttpResponse('request is invalid: '+str(form))
+

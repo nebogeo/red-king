@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block stuff %}
+{% load jsonify %}
 
+{% block stuff %}
 <div class="row">
   <div class="col-sm-12 col-md-4 host">
     <h3>Host Options</h3>
@@ -169,5 +170,36 @@
 <script src="{{MEDIA_URL}}js/utils.js"></script> 
 <script src="{{MEDIA_URL}}js/range-v2.js"></script> 
 <script src="{{MEDIA_URL}}js/live.js"></script>
+
+<script>
+$( document ).ready(function() {
+
+///////////////////////////////////////////////////////////
+// sim callbacks - tweak the globals!
+
+connect_slider("#host-curve", function(v) { CH2 = v*15-7.5; });
+connect_slider("#parasite-curve", function(v) { CP2 = v*15-7.5; });
+
+// todo: change CP2 range
+connect_checkbox("#parasite-transmission", function(v) { parasite_transmission=v; });
+
+button_on('#sim-button','Sim: on');
+button_on('#sound-button','Sound: on');
+
+//////////////////////////////////////////////////////////
+
+var sim_data = {"param_host_cost":{{livesim.param_host_cost}},
+       "param_parasite_cost":{{livesim.param_parasite_cost}},
+       "cat_host_cycling":{{livesim.cat_host_cycling}},
+       "cat_host_single":{{livesim.cat_host_single}},
+       "cat_host_many":{{livesim.cat_host_many}},
+       "cat_host_strange":{{livesim.cat_host_strange}},
+       "cat_parasite_cycling":{{livesim.cat_parasite_cycling}},
+       "cat_parasite_single":{{livesim.cat_parasite_single}},
+       "cat_parasite_many":{{livesim.cat_parasite_many}},
+       "cat_parasite_strange":{{livesim.cat_parasite_strange}}};
+load_sim(sim_data);
+});
+</script>
 
 {% endblock %}

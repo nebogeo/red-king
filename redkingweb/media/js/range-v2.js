@@ -35,7 +35,7 @@ var WHO=0.5 /* Controls relative mutation rates */
 /***********************************
  * Runge-Kutta parameters
  ***********************************/
-var MAXSTEPS=100 //1e4 /* Maximum number of steps for ODE solver */
+var MAXSTEPS=1e4 //1e4 /* Maximum number of steps for ODE solver */
 var EPS=1e-2 /* ODE solver tolerance */
 var TINY=1e-6 /* Constant value for solver */
 var b21=0.2

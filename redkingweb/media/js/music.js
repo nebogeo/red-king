@@ -36,10 +36,10 @@ function sound_handler() {
 
     this.sample_list = []
     for (var i=1; i<7; i++) {
-	this.sample_list.push("media/sound/dx7-o-"+i+".wav");
+	this.sample_list.push("/media/sound/dx7-o-"+i+".wav");
     }
     for (var i=1; i<7; i++) {
-	this.sample_list.push("media/sound/dx7-"+i+".wav");
+	this.sample_list.push("/media/sound/dx7-"+i+".wav");
     }
     
     this.buffer_loader = new BufferLoader(

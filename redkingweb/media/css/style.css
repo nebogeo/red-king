@@ -45,6 +45,8 @@ h3 {
     margin-bottom: 0.5em;
 }
 
+.parasites { color: #ff8400; }
+.hosts { color: #6fb3c8; }
 .parasite div { background: #ffe460; }
 .host div { background: #cfffff; }
 .output div { 

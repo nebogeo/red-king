@@ -42,6 +42,17 @@ class LiveSim(models.Model):
     # parameters
     param_host_cost = models.FloatField(default=0)
     param_parasite_cost = models.FloatField(default=0)
-    
+
+    # categories
+    cat_host_cycling = models.IntegerField(default=0)
+    cat_host_single = models.IntegerField(default=0)
+    cat_host_many = models.IntegerField(default=0)
+    cat_host_strange = models.IntegerField(default=0)
+
+    cat_parasite_cycling = models.IntegerField(default=0)
+    cat_parasite_single = models.IntegerField(default=0)
+    cat_parasite_many = models.IntegerField(default=0)
+    cat_parasite_strange = models.IntegerField(default=0)
+
     def __unicode__(self):
         return str(self.base_name+"-"+str(self.created_date));

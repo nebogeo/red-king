@@ -37,13 +37,18 @@ function sim_handler() {
 	clear_sim("ycanvas","parasite");
     }
 
+    frame = 0;
+
     this.update = function() {
 	if (this.running) {
 	    this.model.run();
 
-	    plot_sim(this.model.get_host(),"xcanvas","host");
-	    plot_sim(this.model.get_parasite(),"ycanvas","parasite");
-
+	    if (frame%3==0) {
+		plot_sim(this.model.get_host(),"xcanvas","host");
+		plot_sim(this.model.get_parasite(),"ycanvas","parasite");
+	    }
+	    frame++;
+	    
 	    this.sound.update(this.model.get_host(),
 			      this.model.get_parasite());
 	    
@@ -108,8 +113,7 @@ function plot_tradoff(arr,canvas_id,col) {
     
     var sc = max-min;
 
-    
-
+   
     for (var i=0; i<arr.length; i++) {
     	// normalise to fill graph
      	var v = ((arr[i]-min)/sc)
@@ -166,22 +170,28 @@ function connect_checkbox(id,fn) {
     $(id).on('change', _); // IE10
 }
 
-///////////////////////////////////////////////////////////
-// sim callbacks - tweak the globals!
+function get_int_value(id) {
+    if ($(id).prop("checked")) return 1;
+    return 0;
+}
 
-connect_slider("#host-curve", function(v) { CH2 = v*15-7.5; });
-connect_slider("#parasite-curve", function(v) { CP2 = v*15-7.5; });
+function set_int_value(id,v) {
+    if (v==0) {
+	$(id).prop('checked', false);
+    } else {
+	$(id).prop('checked', true);
+    }
+    $(id).change();
+}
 
-// todo: change CP2 range
-connect_checkbox("#parasite-transmission", function(v) { parasite_transmission=v; });
+function get_float_value(id) {
+    return $(id).val()/100.0;
+}
 
-//////////////////////////////////////////////////////////
-
-sim = new sim_handler();
-sim.init();
-
-sound = new sound_handler();
-sound.init();
+function set_float_value(id,v) {
+    $(id).val(v*100);
+    $(id).change();
+}
 
 ////////////////////////////////////////////////////////
 // event callbacks here...
@@ -224,6 +234,7 @@ function button_sim_reset() {
     sim.init();
 }
 
+// out
 function button_save() {
     var currentdate = new Date(); 
     var datetime = currentdate.getFullYear()+"-"+
@@ -245,11 +256,36 @@ function button_save() {
 	base_name: "test",
 	host_img_data: xdata,
 	parasite_img_data: ydata,
-	param_host_cost: 999,
-	param_parasite_cost: 888
+	param_host_cost: get_float_value("#host-curve"),
+	param_parasite_cost: get_float_value("#parasite-curve"),
+	cat_host_cycling: get_int_value("#cat-h-cycling"),
+	cat_host_single: get_int_value("#cat-h-single"),
+	cat_host_many: get_int_value("#cat-h-many"),
+	cat_host_strange: get_int_value("#cat-h-strange"),
+	cat_parasite_cycling: get_int_value("#cat-p-cycling"),
+	cat_parasite_single: get_int_value("#cat-p-single"),
+	cat_parasite_many: get_int_value("#cat-p-many"),
+	cat_parasite_strange: get_int_value("#cat-p-strange"),
     });
 }
 
-button_on('#sim-button','Sim: on');
-button_on('#sound-button','Sound: on');
+// and back in...
+function load_sim(data) {
+    set_float_value("#host-curve",data.param_host_cost);    
+    set_float_value("#parasite-curve",data.param_parasite_cost);    
+    set_int_value("#cat-h-cycling",data.cat_host_cycling);
+    set_int_value("#cat-h-single",data.cat_host_single);
+    set_int_value("#cat-h-many",data.cat_host_many);
+    set_int_value("#cat-h-strange",data.cat_host_strange);
+    set_int_value("#cat-p-cycling",data.cat_parasite_cycling);
+    set_int_value("#cat-p-single",data.cat_parasite_single);
+    set_int_value("#cat-p-many",data.cat_parasite_many);
+    set_int_value("#cat-p-strange",data.cat_parasite_strange);
+}
+
+sim = new sim_handler();
+sim.init();
+
+sound = new sound_handler();
+sound.init();
 

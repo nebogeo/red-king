@@ -37,8 +37,18 @@ h3 {
     text-align: center;
 }
 
+.title .strap {
+    font-size: 75%;
+}
+
 .title-row {
     margin-bottom: 0.5em;
+}
+
+.parasite div { background: #ffe460; }
+.host div { background: #cfffff; }
+.output div { 
+    background: #f4f4f4; 
 }
 
 .title-text {
@@ -61,6 +71,15 @@ h3 {
     display:inline-block;
 }
 
+#result {
+    left: -3.2em;
+    width: 2.5em;
+    height: 1.5em;
+    background-color: white;
+    border-radius: 50px;
+    display:inline-block;
+}
+
 .emoimage:hover img {
     -webkit-transform:scale(1.25); /* Safari and Chrome */
     -moz-transform:scale(1.25); /* Firefox */
@@ -80,9 +99,6 @@ h3 {
 .grow:hover {
     height: 20em;
 }
-
-.hosts { color: #6fb3c8; }
-.parasites { color: #ff8400; }
 
 /*#ffe400
 #ff8400
@@ -121,21 +137,31 @@ h3 {
 /* live section */
 
 .live-graph {
-    border: 1px solid black;     
-    background: "white";
+    border-radius: 12px;
 }
 
 .gutter {
-    border: 1px solid black; 
     border-radius: 25px;
-    padding-left: 1em;
-    padding-right: 1em;
-    margin-bottom: 1em;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin-bottom: 0.5em;
     display: block;
     overflow: hidden;
     background: white;
     text-align: center;
 }
+
+.button-box {
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-bottom: 1em;
+    display: block;
+    overflow: hidden;
+    background: none; 
+    text-align: center;
+}
+
 
 input[type=radio] {
     margin-left: 0.2em;
@@ -148,7 +174,6 @@ input[type=radio] {
 }
 
 button {
-    font-size: 75%;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     border: 1px solid black; 
@@ -164,6 +189,23 @@ button:focus {
 button:hover {
     background: gray;
     color: white;
+}
+
+.contribute button {
+    color: white;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 15px;
+    overflow: hidden;
+    background: green;
+    font-size: 200%;
+    border: 0px solid black; 
+}
+
+.contribute button:hover {
+    background: white;
+    color: green;
+    border: 2px solid green; 
 }
 
 /* ----------------------------------------------- */
@@ -198,7 +240,6 @@ input[type=range]::-ms-track {
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  border: 1px solid #000000;
   height: 1em;
   width: 1em;
   border-radius: 0.5em;
@@ -207,13 +248,19 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 input[type=range]::-moz-range-thumb {
-  border: 1px solid #000000;
   height: 1em;
   width: 1em;
   border-radius: 0.5em;
-  background: black;
+  background: white;
   cursor: pointer;
 }
+
+.host input[type=range]::-moz-range-thumb {  background: #6fb3c8; }
+.host input[type=range]::-webkit-slider-thumb { background: #6fb3c8; }
+/*.host input[type=range] { background: #6fb3c8; }*/
+.parasite input[type=range]::-moz-range-thumb { background: #ff8400; }
+.parasite input[type=range]::-webkit-slider-thumb { background: #ff8400; }
+/*.parasite input[type=range] { background: #ff8400; }*/
 
 /* track */
 
@@ -223,7 +270,6 @@ input[type=range] {
   cursor: pointer;
   background: #fff;
   border-radius: 1em;
-  border: 1px solid black;
   margin: 0.2em;
 }
 
@@ -252,8 +298,6 @@ input[type=range] {
   padding: 0em;
 }
 
-
-
 .radio_container span::before,
 .radio_container span::after {
   content: '';
@@ -273,7 +317,6 @@ input[type=range] {
   height: 1.5em;
   background-color: white;
   border-radius: 50px;
-  border: 1px solid black;
 }
 
 .radio_container span.radio::after {
@@ -281,12 +324,43 @@ input[type=range] {
   width: 1em;
   height: 1em;
   border-radius: 0.5em;
-  background-color: white;
+  background-color: black;
   transition: left .25s, background-color .25s;
-  border: 1px solid black;
 }
 
 input[type="radio"]:checked + label span.radio::after {
   left: -2em;
   background-color: black;
+}
+
+.host input[type="radio"]:checked + label span.radio::after {  background: #6fb3c8; }
+.parasite input[type="radio"]:checked + label span.radio::after { background: #ff8400; }
+
+/* checkboxes */
+.radio_container span.checkbox::before {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 0.75em;
+  background-color: #fff;
+  left: -35px;
+  box-sizing: border-box;
+  border: 3px solid transparent;
+  transition: border-color .2s;
+}
+
+.radio_container span.checkbox:hover::before {
+  border: 3px solid green;
+}
+
+.radio_container span.checkbox::after {
+  content: '\f00c';
+  font-family: 'FontAwesome';
+  left: -31px;
+  top: 0px;
+  color: transparent;
+  transition: color .2s;
+}
+
+input[type="checkbox"]:checked + label span.checkbox::after {
+  color: green;
 }

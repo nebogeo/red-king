@@ -33,3 +33,14 @@ class Sim(models.Model):
 
     def __unicode__(self):
         return str(self.base_name+"-"+str(self.created_date));
+
+class LiveSim(models.Model):
+    created_date = models.DateTimeField('date created')
+    base_name = models.CharField(max_length=4096)
+
+    # parameters
+    param_host_cost = models.FloatField(default=0)
+    param_parasite_cost = models.FloatField(default=0)
+    
+    def __unicode__(self):
+        return str(self.base_name+"-"+str(self.created_date));

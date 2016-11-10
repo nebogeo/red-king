@@ -18,6 +18,9 @@ var CP1=0.97 /* Parasite cost parameter 1 */
 var CH2=3.0 /* Host cost parameter 2 (>0:accelerating, =0:linear, <0:decelerating) */
 var CP2=-1.0 /* Parasite cost parameter 2 (>0:accelerating, =0:linear, <0:decelerating) */
 
+var parasite_colour = "#ff8400";
+var host_colour = "#6fb3c8";
+
 /******************************************
  * Parameters for solver
  ******************************************/
@@ -93,8 +96,8 @@ function recalc_cost_functions() {
         }
     }
 
-    plot_tradoff(_a,"host_tradeoff_canvas");
-    plot_tradoff(CP,"parasite_tradeoff_canvas");
+    plot_tradoff(_a,"host_tradeoff_canvas",host_colour);
+    plot_tradoff(CP,"parasite_tradeoff_canvas",parasite_colour);
     
     /* Define host-parasite interaction matrix */
     for (var i=0; i<N; i++){
@@ -103,7 +106,7 @@ function recalc_cost_functions() {
      	}
     }   
 
-    plot_matrix(_E,"matrix_canvas");
+    plot_matrix(_E,"matrix_canvas",parasite_colour);
 
 }
 

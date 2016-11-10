@@ -32,14 +32,17 @@ function sim_handler() {
 	this.model = new range(xout,_u,_v,_E,_a);
 	this.sound.init();
 	this.update();
+	console.log("hello");
+	clear_sim("xcanvas","host");
+	clear_sim("ycanvas","parasite");
     }
 
     this.update = function() {
 	if (this.running) {
 	    this.model.run();
 
-	    plot_sim(this.model.get_host(),"xcanvas");
-	    plot_sim(this.model.get_parasite(),"ycanvas");
+	    plot_sim(this.model.get_host(),"xcanvas","host");
+	    plot_sim(this.model.get_parasite(),"ycanvas","parasite");
 
 	    this.sound.update(this.model.get_host(),
 			      this.model.get_parasite());
@@ -52,28 +55,49 @@ function sim_handler() {
     }
 }
 
-function plot_sim(arr,canvas_id,pos) {
+function clear_sim(canvas_id,type) {
+    var canvas = document.getElementById(canvas_id);
+    var ctx = canvas.getContext("2d");
+    var bgcol = [0xff,0xe4,0x60];
+    if (type=="host") {
+	bgcol = [0xcf,0xff,0xff];
+    }
+    ctx.fillStyle = bgcol;
+    ctx.fillRect(0,0,500,100);
+}
+
+function plot_sim(arr,canvas_id,type) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
 
     ctx.drawImage(canvas, -1, 0);
     
+    // select the right colour
+    var col = [0xff,0x84,0];
+    var bgcol = [0xff,0xe4,0x60];
+    if (type=="host") {
+	col = [0x6f,0xb3,0xc8];
+	bgcol = [0xcf,0xff,0xff];
+    }
+
     for (i=0; i<arr.length; i++) {
 	v = safelog10(arr[i])
-	c = Math.floor((1-v)*255);
-	ctx.fillStyle = "rgba("+c+","+c+","+c+","+1.0+")";
+	//c = Math.floor((1-v)*255);
+	ctx.fillStyle = "rgba("+(bgcol[0]*(1-v)+v*col[0])+","+
+	                        (bgcol[1]*(1-v)+v*col[1])+","+
+	                        (bgcol[2]*(1-v)+v*col[2])+","+1.0+")";
 	ctx.fillRect(499,100-i,1,1);
     }
 }
 
-function plot_tradoff(arr,canvas_id) {
+function plot_tradoff(arr,canvas_id,col) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
 
     ctx.fillStyle = "rgba(255,255,255,1.0)";
     ctx.fillRect(0,0,100,100);
     
-    ctx.fillStyle = "rgba(0,0,0,1.0)";
+    ctx.fillStyle = col;
 
     var min = 9999;
     var max = -9999;
@@ -89,18 +113,18 @@ function plot_tradoff(arr,canvas_id) {
     for (var i=0; i<arr.length; i++) {
     	// normalise to fill graph
      	var v = ((arr[i]-min)/sc)
-     	ctx.fillRect( i, 100-v*100, 1, 1 );
+     	ctx.fillRect( i, 100-v*100, 2, 2 );
     }
 }
 
-function plot_matrix(arr,canvas_id) {
+function plot_matrix(arr,canvas_id,col) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
     
     ctx.fillStyle = "rgba(255,255,255,1.0)";
     ctx.fillRect(0,0,100,100);
     
-    ctx.fillStyle = "rgba(0,0,0,1.0)";
+    ctx.fillStyle = col;
     
     var min = 9999;
     var max = -9999;
@@ -117,7 +141,7 @@ function plot_matrix(arr,canvas_id) {
 	for (var i=0; i<arr.length; i++) {
     	    // normalise to fill graph
      	    var v = ((arr[i][j]-min)/sc)
-     	    ctx.fillRect( i, 100-v*100, 1, 1 );
+     	    ctx.fillRect( i, 100-v*100, 2, 2 );
 	}
     }
 }
@@ -198,6 +222,25 @@ function button_sound_toggle() {
 
 function button_sim_reset() {
     sim.init();
+}
+
+function button_save() {
+    var currentdate = new Date(); 
+    var datetime = currentdate.getFullYear()+"-"+
+	(currentdate.getMonth()+1)+"-"+
+	currentdate.getDate()+" "+
+        currentdate.getHours()+":"+
+	currentdate.getMinutes()+":"+
+	currentdate.getSeconds();
+
+    // 2016-11-10 11:43:49+00:00
+
+    $.post("/save_livesim/", {
+        created_date: datetime,
+	base_name: "test",
+	param_host_cost: 999,
+	param_parasite_cost: 888
+    });
 }
 
 button_on('#sim-button','Sim: on');

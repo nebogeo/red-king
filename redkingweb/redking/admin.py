@@ -3,3 +3,4 @@ from redking.models import *
 
 # Register your models here.
 admin.site.register(Sim)
+admin.site.register(LiveSim)

@@ -16,6 +16,8 @@
 
 from django.shortcuts import *
 from django.views import generic
+from django import forms
+from django.forms import ModelForm
 from models import *
 import random
 
@@ -69,3 +71,29 @@ def downvote(request):
 def live(request):
     context={}
     return render(request, 'redking/live.html', context)
+
+class LiveSimListView(generic.ListView):
+    queryset = LiveSim.objects.order_by('-created_date')
+    template_name = 'redking/live_index.html'
+    paginate_by = 10
+    def get_context_data(self, **kwargs):
+        context = super(LiveSimListView, self).get_context_data(**kwargs)
+        return context
+
+class LiveSimForm(ModelForm):
+     class Meta:
+         model = LiveSim
+         fields = "__all__"
+
+## incoming from javascript...
+def save_livesim(request):
+    print("saving")
+    if request.method == 'POST':
+        form = LiveSimForm(request.POST)
+        print form
+        if form.is_valid():
+            form.save()
+            return HttpResponse('')
+        else:
+            print("invalid form")
+    return HttpResponse('request is invalid: '+str(form))

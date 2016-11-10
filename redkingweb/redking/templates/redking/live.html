@@ -2,15 +2,14 @@
 {% block stuff %}
 
 <div class="row">
-  <div class="col-sm-12 col-md-4">
+  <div class="col-sm-12 col-md-4 host">
+    <h3>Host Options</h3>
     <div class="gutter">
-      <h3>Host Options</h3>
-
       <div class="col-sm-6 col-md-6 params">
 	Immunity
 	<section class="radio_section">
 	  <div class="radio_container">
-	    <input type="radio" name="immunity" id="immunity-none">
+	    <input type="radio" name="immunity" id="immunity-none" checked="true">
 	    <label for="immunity-none"><span class="radio">None</span></label>
 	  </div>
 	  <div class="radio_container">
@@ -27,9 +26,9 @@
     </div>
   </div>
 
-  <div class="col-sm-12 col-md-4">
+  <div class="col-sm-12 col-md-4 parasite">
+    <h3>Transmission Function</h3>
     <div class="gutter">
-      <h3>Transmission Function</h3>
       <div class="col-sm-6 params">
 
 	<section class="radio_section">
@@ -38,7 +37,7 @@
 	    <label for="function-type-universal"><span class="radio">Universal</span></label>
 	  </div>
 	  <div class="radio_container">
-	    <input type="radio" name="function-type" id="function-type-range">
+	    <input type="radio" name="function-type" id="function-type-range" checked="true">
 	    <label for="function-type-range"><span class="radio">Range</span></label>
 	  </div>
 	  <div class="radio_container">
@@ -52,23 +51,22 @@
 	<canvas id="matrix_canvas" class="live-graph" width=100 height=100></canvas>
       </div>
     </div>
-    <div class="gutter">
+    <div class="button-box" style="background: none;">
 	<button id='sim-button' onclick='button_sim_toggle();'>Sim: on</button> 
 	<button id='reset-button' onclick='button_sim_reset();'>Restart</button>
 	<button id='sound-button' onclick='button_sound_toggle();'>Sound: on</button>
     </div>
   </div>
   
-  <div class="col-sm-12 col-md-4">
+  <div class="col-sm-12 col-md-4 parasite">
+    <h3>Parasite Options</h3>
     <div class="gutter">
-      <h3>Parasite Options</h3>
-      
       <div class="col-sm-7 col-md-7">
 	Transmission
-
+	
 	<section class="radio_section">
 	  <div class="radio_container">
-	    <input type="radio" name="transmission" id="transmission-direct">
+	    <input type="radio" name="transmission" id="transmission-direct" checked="true">
 	    <label for="transmission-direct"><span class="radio">Direct</span></label>
 	  </div>
 	  <div class="radio_container">
@@ -77,15 +75,10 @@
 	  </div>
 	</section>
 	Cost curve<input id="parasite-curve" type="range"/>
-      </div>
-      
-      <div class="col-sm-5 col-md-5 params">
-	<canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
-      </div>
 
       <section class="radio_section">
 	<div class="radio_container">
-	  <input type="radio" name="parasite-type" id="parasite-type-trans">
+	  <input type="radio" name="parasite-type" id="parasite-type-trans" checked="true">
 	  <label for="parasite-type-trans"><span class="radio">Transmission</span></label>
 	</div>
 	<div class="radio_container">
@@ -93,27 +86,83 @@
 	  <label for="parasite-type-vir"><span class="radio">Virulence</span></label>
 	</div>
       </section>
+
+      </div>
+      
+      <div class="col-sm-5 col-md-5 params">
+	<canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
+      </div>
       
     </div>
   </div>
 </div>
 
 <div class="row">
-<div class="col-sm-12">
-  <div class="gutter">
-    <div class="col-sm-12 col-md-6">
-      <div class="row">
-	<canvas id="xcanvas" class="live-graph" width=500 height=100></canvas>
+  <div class="col-sm-12 col-md-7">
+    <h3>Parasites</h3>
+    <canvas id="ycanvas" class="live-graph" width=500 height=100></canvas>
+    <h3>Hosts</h3>
+    <canvas id="xcanvas" class="live-graph" width=500 height=100></canvas>
+  </div>
+  <div class="col-sm-12 col-md-5">
+    <h3>Categorise me</h3>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 host">
+	<div class="gutter">
+	  <h3>Host</h3>
+	  <section class="radio_section">
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-h-cycling">
+	      <label for="cat-h-cycling"><span class="checkbox">Cycling</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-h-single">
+	      <label for="cat-h-single"><span class="checkbox">Single host</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-h-many">
+	      <label for="cat-h-many"><span class="checkbox">Many hosts</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-h-strange">
+	      <label for="cat-h-strange"><span class="checkbox">Strange</span></label>
+	    </div>
+	  </section>
+	</div>
       </div>
-      <div class="row">      
-	<canvas id="ycanvas" class="live-graph" width=500 height=100></canvas>
+
+      <div class="col-sm-12 col-md-6 parasite">
+	<div class="gutter">
+	  <h3>Parasite</h3>
+	  <section class="radio_section">
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-p-cycling">
+	      <label for="cat-p-cycling"><span class="checkbox">Cycling</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-p-single">
+	      <label for="cat-p-single"><span class="checkbox">Single parasite</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-p-many">
+	      <label for="cat-p-many"><span class="checkbox">Many parasites</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="checkbox" name="cat" id="cat-p-strange">
+	      <label for="cat-p-strange"><span class="checkbox">Strange</span></label>
+	    </div>
+	  </section>
+	</div>
       </div>
-    </div>
-    <div class="col-sm-12 col-md-6">
-      Number of hosts...
+      
+      <div class="gutter contribute">
+	<button onclick='button_save();'>Contribute</button>
+      </div>
+
     </div>
   </div>
 </div>
+
 <script src="{{MEDIA_URL}}js/buffer_loader.js"></script>
 <script src="{{MEDIA_URL}}js/strain.js"></script>
 <script src="{{MEDIA_URL}}js/music.js"></script>

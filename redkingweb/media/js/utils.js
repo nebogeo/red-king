@@ -41,3 +41,12 @@ function TwoDArray(x,y) {
     window.setTimeout(callback, 1000/60);    };
     })();
 
+function load_canvas(id,dataURL) {
+    var canvas = document.getElementById(id);
+    var context = canvas.getContext('2d');
+    var image = new Image();
+    image.onload = function() {
+        context.drawImage(this, 0, 0);
+    };    
+    image.src = dataURL;
+}

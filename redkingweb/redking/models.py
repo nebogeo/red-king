@@ -37,7 +37,8 @@ class Sim(models.Model):
 class LiveSim(models.Model):
     created_date = models.DateTimeField('date created')
     base_name = models.CharField(max_length=4096)
-
+    host_img_data = models.TextField(default="")
+    parasite_img_data = models.TextField(default="")
     # parameters
     param_host_cost = models.FloatField(default=0)
     param_parasite_cost = models.FloatField(default=0)

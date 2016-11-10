@@ -87,10 +87,8 @@ class LiveSimForm(ModelForm):
 
 ## incoming from javascript...
 def save_livesim(request):
-    print("saving")
     if request.method == 'POST':
-        form = LiveSimForm(request.POST)
-        print form
+        form = LiveSimForm(request.POST)    
         if form.is_valid():
             form.save()
             return HttpResponse('')

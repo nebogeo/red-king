@@ -235,9 +235,16 @@ function button_save() {
 
     // 2016-11-10 11:43:49+00:00
 
+    var xcanvas = document.getElementById("xcanvas");
+    var xdata = xcanvas.toDataURL('image/png');
+    var ycanvas = document.getElementById("ycanvas");
+    var ydata = ycanvas.toDataURL('image/png');
+
     $.post("/save_livesim/", {
         created_date: datetime,
 	base_name: "test",
+	host_img_data: xdata,
+	parasite_img_data: ydata,
 	param_host_cost: 999,
 	param_parasite_cost: 888
     });

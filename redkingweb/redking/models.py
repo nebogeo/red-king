@@ -39,9 +39,20 @@ class LiveSim(models.Model):
     base_name = models.CharField(max_length=4096)
     host_img_data = models.TextField(default="")
     parasite_img_data = models.TextField(default="")
+
     # parameters
     param_host_cost = models.FloatField(default=0)
+    param_host_recovery = models.FloatField(default=0)
+    param_host_curve = models.FloatField(default=0)
+    param_transmission_type = models.IntegerField(default=0)
+    param_transmission_shape1 = models.FloatField(default=0)
+    param_transmission_shape2 = models.FloatField(default=0)
     param_parasite_cost = models.FloatField(default=0)
+    param_parasite_curve = models.FloatField(default=0)
+    param_parasite_mortality = models.FloatField(default=0)
+    param_parasite_transmission = models.FloatField(default=0)
+    param_parasite_sterility = models.FloatField(default=0)
+    param_parasite_type = models.IntegerField(default=0)
 
     # categories
     cat_host_cycling = models.IntegerField(default=0)

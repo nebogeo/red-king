@@ -9,7 +9,7 @@
       <div class="col-sm-6 col-md-6">
 	Cost strength: <div id="host-cost-num" class="slider-num">10</div>
 	<input id="host-cost" type="range"/>
-	Costs curve: <div id="host-curve-num" class="slider-num">10</div>
+	Cost curve: <div id="host-curve-num" class="slider-num">10</div>
 	<input id="host-curve" type="range"/>
 	Recovery rate: <div id="host-recovery-num" class="slider-num">10</div>
 	<input id="host-recovery" type="range"/>
@@ -40,10 +40,10 @@
 	  </div>
 	</section>
 
-	Shape 1:<div id="transmission-shape-1-num" class="slider-num">10</div>
-	<input id="transmission-shape-1" type="range"/>
-	Shape 2:<div id="transmission-shape-2-num" class="slider-num">10</div>
-	<input id="transmission-shape-2" type="range"/>
+	Shape 1:<div id="transmission-shape1-num" class="slider-num">10</div>
+	<input id="transmission-shape1" type="range"/>
+	Shape 2:<div id="transmission-shape2-num" class="slider-num">10</div>
+	<input id="transmission-shape2" type="range"/>
       
       </div>
       <div class="col-sm-6">
@@ -62,16 +62,16 @@
     <h3>Parasite Options</h3>
     <div class="gutter">
       <div class="col-sm-7 col-md-7">
+	Cost strength:<div id="parasite-cost-num" class="slider-num">10</div>
+	<input id="parasite-cost" type="range"/>
+	Cost curve:<div id="parasite-curve-num" class="slider-num">10</div>
+	<input id="parasite-curve" type="range"/>
 	Mortality rate:<div id="parasite-mortality-num" class="slider-num">10</div>
 	<input id="parasite-mortality" type="range"/>
 	Transmission rate:<div id="parasite-transmission-num" class="slider-num">10</div>
 	<input id="parasite-transmission" type="range"/>
 	Sterility:<div id="parasite-sterility-num" class="slider-num">10</div>
 	<input id="parasite-sterility" type="range"/>
-	Cost strength:<div id="parasite-cost-num" class="slider-num">10</div>
-	<input id="parasite-cost" type="range"/>
-	Cost curve:<div id="parasite-cost-num" class="slider-num">10</div>
-	<input id="parasite-curve" type="range"/>
 	Parasite type
 	<section class="radio_section">
 	  <div class="radio_container">
@@ -185,15 +185,16 @@ connect_slider("#host-curve", function(v) {
   return CH2;
 });
 
-connect_slider("#transmission-shape-1", function(v) { 
+connect_slider("#transmission-shape1", function(v) { 
   v*=10; v=v*v+0.1;
-  if (transmission_function=="range") K0=v;
-  if (transmission_function=="matching") K1=v;
-  if (transmission_function=="universal") K3=v;
+  // we can set these all as they are independant
+  K0=v;
+  K1=v;
+  K3=v;
   return v;
 });
 
-connect_slider("#transmission-shape-2", function(v) { 
+connect_slider("#transmission-shape2", function(v) { 
   v*=10; v=v*v+0.1;
   K2=v;
   return K2;
@@ -227,16 +228,26 @@ connect_slider("#parasite-curve", function(v) {
 //////////////////////////////////////////////////////////
 
 var sim_data = {"param_host_cost":{{livesim.param_host_cost}},
-       "param_parasite_cost":{{livesim.param_parasite_cost}},
-       "cat_host_cycling":{{livesim.cat_host_cycling}},
-       "cat_host_single":{{livesim.cat_host_single}},
-       "cat_host_many":{{livesim.cat_host_many}},
-       "cat_host_strange":{{livesim.cat_host_strange}},
-       "cat_parasite_cycling":{{livesim.cat_parasite_cycling}},
-       "cat_parasite_single":{{livesim.cat_parasite_single}},
-       "cat_parasite_many":{{livesim.cat_parasite_many}},
-       "cat_parasite_strange":{{livesim.cat_parasite_strange}}};
-load_sim(sim_data);
+	   "param_host_recovery":{{livesim.param_host_recovery}},
+	   "param_host_curve":{{livesim.param_host_curve}},
+	   "param_transmission_type":{{livesim.param_transmission_type}},
+	   "param_transmission_shape1":{{livesim.param_transmission_shape1}},
+	   "param_transmission_shape2":{{livesim.param_transmission_shape2}},
+	   "param_parasite_cost":{{livesim.param_parasite_cost}},
+	   "param_parasite_curve":{{livesim.param_parasite_curve}},
+	   "param_parasite_mortality":{{livesim.param_parasite_mortality}},
+	   "param_parasite_transmission":{{livesim.param_parasite_transmission}},
+	   "param_parasite_sterility":{{livesim.param_parasite_sterility}},
+	   "param_parasite_type":{{livesim.param_parasite_type}},	   
+	   "cat_host_cycling":{{livesim.cat_host_cycling}},
+	   "cat_host_single":{{livesim.cat_host_single}},
+	   "cat_host_many":{{livesim.cat_host_many}},
+	   "cat_host_strange":{{livesim.cat_host_strange}},
+	   "cat_parasite_cycling":{{livesim.cat_parasite_cycling}},
+	   "cat_parasite_single":{{livesim.cat_parasite_single}},
+	   "cat_parasite_many":{{livesim.cat_parasite_many}},
+	   "cat_parasite_strange":{{livesim.cat_parasite_strange}}};
+  load_sim(sim_data);
 });
 </script>
 

@@ -235,6 +235,16 @@ input[type=range]::-ms-track {
   color: transparent;
 }
 
+input[type=range]::-moz-range-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}
+
 /* ----------------------------------------------- */
 /* actual style */
 
@@ -243,16 +253,18 @@ input[type=range]::-webkit-slider-thumb {
   height: 1em;
   width: 1em;
   border-radius: 0.5em;
-  background: black;
+  background: white;
   cursor: pointer;
+  border: 2px solid black;
 }
 
 input[type=range]::-moz-range-thumb {
   height: 1em;
   width: 1em;
-  border-radius: 0.5em;
+  border-radius: 0.75em;
   background: white;
   cursor: pointer;
+  border: 2px solid black;
 }
 
 /*.host input[type=range]::-moz-range-thumb {  background: #6fb3c8; }
@@ -337,17 +349,16 @@ input[type=range] {
   width: 1em;
   height: 1em;
   border-radius: 0.5em;
-  background-color: black;
+  background-color: white;
+  border: 2px solid black;
   transition: left .25s, background-color .25s;
 }
 
 input[type="radio"]:checked + label span.radio::after {
   left: -2em;
-  background-color: black;
+  background-color: white;
+  border: 2px solid black;
 }
-
-.host input[type="radio"]:checked + label span.radio::after {  background: black; }
-.parasite input[type="radio"]:checked + label span.radio::after { background: black; }
 
 /* checkboxes */
 .radio_container span.checkbox::before {
@@ -363,7 +374,7 @@ input[type="radio"]:checked + label span.radio::after {
 }
 
 .radio_container span.checkbox:hover::before {
-  border: 3px solid green;
+  border: 3px solid black;
 }
 
 .radio_container span.checkbox::after {
@@ -376,5 +387,5 @@ input[type="radio"]:checked + label span.radio::after {
 }
 
 input[type="checkbox"]:checked + label span.checkbox::after {
-  color: green;
+  color: black;
 }

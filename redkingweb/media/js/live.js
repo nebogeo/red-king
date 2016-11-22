@@ -32,7 +32,6 @@ function sim_handler() {
 	this.model = new range(xout,_u,_v,_E,_a);
 	this.sound.init();
 	this.update();
-	console.log("hello");
 	clear_sim("xcanvas","host");
 	clear_sim("ycanvas","parasite");
     }
@@ -144,8 +143,6 @@ function plot_tradeoff(arr,canvas_id,type,col) {
     	if (arr[i]<min) min=arr[i];
     	if (arr[i]>max) max=arr[i];
     }
-
-    console.log(min+" "+max);
     
     var sc = max-min;
 
@@ -330,13 +327,32 @@ function button_save() {
     var ycanvas = document.getElementById("ycanvas");
     var ydata = ycanvas.toDataURL('image/png');
 
+    var save_transmission_type = 0;
+    if (transmission_type=="virulence") save_transmission_type=1;
+
+    var save_transmission_function = 0;
+    if (transmission_function=="range") save_transmission_function=1;
+    if (transmission_function=="matching") save_transmission_function=2;
+
     $.post("/save_livesim/", {
         created_date: datetime,
 	base_name: "test",
 	host_img_data: xdata,
 	parasite_img_data: ydata,
-	param_host_cost: get_float_value("#host-curve"),
-	param_parasite_cost: get_float_value("#parasite-curve"),
+
+	param_host_cost: get_float_value("#host-cost"),
+	param_host_recovery: get_float_value("#host-recovery"),
+	param_host_curve: get_float_value("#host-curve"),
+	param_transmission_type: save_transmission_function,
+	param_transmission_shape1: get_float_value("#transmission-shape1"),
+	param_transmission_shape2: get_float_value("#transmission-shape2"),
+	param_parasite_cost: get_float_value("#parasite-cost"),
+	param_parasite_curve: get_float_value("#parasite-curve"),
+	param_parasite_mortality: get_float_value("#parasite-mortality"),
+	param_parasite_transmission: get_float_value("#parasite-transmission"),
+	param_parasite_sterility: get_float_value("#parasite-sterility"),
+	param_parasite_type: save_transmission_type,
+
 	cat_host_cycling: get_int_value("#cat-h-cycling"),
 	cat_host_single: get_int_value("#cat-h-single"),
 	cat_host_many: get_int_value("#cat-h-many"),
@@ -350,8 +366,25 @@ function button_save() {
 
 // and back in...
 function load_sim(data) {
+    transmission_type = "transmission";
+    if (data.param_parasite_type==1) transmission_type="virulence";
+
+    transmission_function = "universal";
+    if (data.param_transmission_type==1) transmission_function="range";
+    if (data.param_transmission_type==2) transmission_function="matching";
+
     set_float_value("#host-curve",data.param_host_cost);    
-    set_float_value("#parasite-curve",data.param_parasite_cost);    
+    set_float_value("#host-cost",data.param_host_cost);
+    set_float_value("#host-recovery",data.param_host_recovery);
+    set_float_value("#host-curve",data.param_host_curve);
+    set_float_value("#transmission-shape1",data.param_transmission_shape1);
+    set_float_value("#transmission-shape2",data.param_transmission_shape2);
+    set_float_value("#parasite-cost",data.param_parasite_cost);
+    set_float_value("#parasite-curve",data.param_parasite_curve);
+    set_float_value("#parasite-mortality",data.param_parasite_mortality);
+    set_float_value("#parasite-transmission",data.param_parasite_transmission);
+    set_float_value("#parasite-sterility",data.param_parasite_sterility);
+	   
     set_int_value("#cat-h-cycling",data.cat_host_cycling);
     set_int_value("#cat-h-single",data.cat_host_single);
     set_int_value("#cat-h-many",data.cat_host_many);

@@ -96,8 +96,8 @@ function recalc_cost_functions() {
         }
     }
 
-    plot_tradoff(_a,"host_tradeoff_canvas",host_colour);
-    plot_tradoff(CP,"parasite_tradeoff_canvas",parasite_colour);
+    plot_tradeoff(_a,"host_tradeoff_canvas","host",host_colour);
+    plot_tradeoff(CP,"parasite_tradeoff_canvas","parasite",parasite_colour);
     
     /* Define host-parasite interaction matrix */
     for (var i=0; i<N; i++){

@@ -85,6 +85,9 @@ function plot_sim(arr,canvas_id,type) {
 	bgcol = [0xcf,0xff,0xff];
     }
 
+    var col = [0,0,0];
+    bgcol = [0xff,0xff,0xff];
+
     for (i=0; i<arr.length; i++) {
 	v = safelog10(arr[i])
 	//c = Math.floor((1-v)*255);
@@ -95,14 +98,20 @@ function plot_sim(arr,canvas_id,type) {
     }
 }
 
-function plot_tradoff(arr,canvas_id,col) {
+function plot_tradeoff(arr,canvas_id,type,col) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
 
-    ctx.fillStyle = "rgba(255,255,255,1.0)";
+    var bgcol = "rgba(255,228,96,1.0)";
+    if (type=="host") {
+	bgcol = "rgba(207,255,255,1.0)";
+    }
+    //ctx.fillStyle = bgcol;
+    ctx.fillStyle = "white";
     ctx.fillRect(0,0,100,100);
     
-    ctx.fillStyle = col;
+    //ctx.fillStyle = col;
+    ctx.fillStyle = "black";
 
     var min = 9999;
     var max = -9999;
@@ -125,10 +134,12 @@ function plot_matrix(arr,canvas_id,col) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
     
-    ctx.fillStyle = "rgba(255,255,255,1.0)";
+    var bgcol = "rgba(255,228,96,1.0)";
+    //ctx.fillStyle = bgcol;
+    ctx.fillStyle = "white";
     ctx.fillRect(0,0,100,100);
     
-    ctx.fillStyle = col;
+    ctx.fillStyle = "black";
     
     var min = 9999;
     var max = -9999;

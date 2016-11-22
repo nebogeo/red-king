@@ -137,10 +137,11 @@ h3 {
     display: inline-block;
 }
 
+
 /* live section */
 
 .live-graph {
-    border-radius: 12px;
+    border-radius: 6px;
     border: 1px solid black;
 }
 
@@ -154,7 +155,6 @@ h3 {
     display: block;
     overflow: hidden;
     background: white;
-    text-align: center;
 }
 
 .button-box {
@@ -171,11 +171,6 @@ h3 {
 input[type=radio] {
     margin-left: 0.2em;
     margin-right: 0.5em;
-}
-
-.params {
-    text-align: center;
-    margin-bottom: 1em;
 }
 
 button {
@@ -278,6 +273,17 @@ input[type=range] {
   margin: 0.2em;
   border: 1px solid black;
 }
+
+.slider {
+    border: 1px solid red;
+    width: 100%;
+}
+.slider-num {
+  display: inline-block;
+  font-weight: bold;
+  float: right;
+}
+
 
 /* checkboxes/radio buttons */
 

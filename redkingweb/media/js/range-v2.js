@@ -18,8 +18,16 @@ var CP1=0.97 /* Parasite cost parameter 1 */
 var CH2=3.0 /* Host cost parameter 2 (>0:accelerating, =0:linear, <0:decelerating) */
 var CP2=-1.0 /* Parasite cost parameter 2 (>0:accelerating, =0:linear, <0:decelerating) */
 
+var K0 = 0.1
+var K1 = 0.1
+var K2 = 0.1
+var K3 = 0.1
+
 var parasite_colour = "#ff8400";
 var host_colour = "#6fb3c8";
+
+var transmission_function = "universal";
+var transmission_type = "transmission";
 
 /******************************************
  * Parameters for solver
@@ -66,6 +74,7 @@ var dc5=-277.00/14336
 var _u = OneDArray(N)
 var _v = OneDArray(N)
 var _a = OneDArray(N)
+var _alpha = OneDArray(N)
 var _E = TwoDArray(N,N) 
 
 function range_init() {            
@@ -78,35 +87,89 @@ function range_init() {
 
 function recalc_cost_functions() { 
     var CP = OneDArray(N)
-    console.log(CH1);
+    var CH = OneDArray(N)
+
     /* Cost functions */
-    for (var i=0; i<N; i++) {
-        if(CH2==0){ // Linear costs
-	    _a[i] = A*FMAX(0,1-CH1*_u[i]);
+    for (i=0; i<N; i++) {
+        if(CH2==0){
+            CH2 = 0.001;
         }
-        else{ // Non-linear costs  
-	    _a[i] = A*FMAX(0,1-CH1*(1-Math.exp(CH2*_u[i]))/(1-Math.exp(CH2)));
+        if(CP2==0){
+            CP2 = 0.001;
         }
-        
-        if(CP2==0){ // Linear costs
-	    CP[i] = FMAX(0,1-CP1*_v[i]);
-        }
-        else{ // Non-linear costs
-	    CP[i] = FMAX(0,1-CP1*(1-Math.exp(CP2*_v[i]))/(1-Math.exp(CP2)));
-        }
-    }
+        CH[i] = FMAX(0,1-(CH1-1)*(1-Math.exp(CH2*_u[i]))/(1-Math.exp(CH2)));
+        CP[i] = FMAX(0,1-(CP1-1)*(1-Math.exp(CP2*_v[i]))/(1-Math.exp(CP2)));
+        _a[i] = A*CH[i];
+    }    
 
     plot_tradeoff(_a,"host_tradeoff_canvas","host",host_colour);
     plot_tradeoff(CP,"parasite_tradeoff_canvas","parasite",parasite_colour);
     
     /* Define host-parasite interaction matrix */
-    for (var i=0; i<N; i++){
-     	for (var j=0; j<N; j++){
-     	    _E[i][j] = CP[j]*BETA/(1+Math.exp(G*(_u[i]-_v[j])));
-     	}
-    }   
+    /* User picks one of the following through transmission function and parasite cost options */  
 
+
+    if (transmission_function == "range") {
+	if (transmission_type == "transmission") {  
+	    /* If Range && transmission cost */
+	    for (i=0; i<N; i++){
+		_alpha[i] = ALPHA;
+		for (j=0; j<N; j++){
+		    _E[i][j] = CP[j]*BETA/(1+Math.exp(K0*(_u[i]-_v[j])));
+		}
+	    }
+	} else {
+	    /* If Range && virulence cost*/
+	    for (i=0; i<N; i++){
+		_alpha[i] = ALPHA*(1-CP[i]);
+		for (j=0; j<N; j++){
+		    _E[i][j] = BETA/(1+Math.exp(K0*(_u[i]-_v[j])));
+		}
+	    }
+	}
+    }
+    
+    if (transmission_function == "matching") {
+	if (transmission_type == "transmission") {      
+	    /* If Matching && transmission cost */
+	    for (i=0; i<N; i++){
+		_alpha[i] = ALPHA;
+		for (j=0; j<N; j++){
+		    temp = (_u[i]-_v[j])/(K1*(_v[j]+K2));
+		    _E[i][j] = CP[j]*BETA*(Math.exp(-temp*temp));
+		}
+	    }
+	} else {
+	    /* If Matching && virulence cost */
+	    for (i=0; i<N; i++){
+		_alpha[i] = ALPHA*(1-CP[i]);
+		for (j=0; j<N; j++){
+		    temp = (_u[i]-_v[j])/(K1*_v[j]+K2);
+		    _E[i][j] = BETA*(Math.exp(-temp*temp));
+		}
+	    }
+	}
+    }
+
+    if (transmission_function == "universal") {
+	/* If Universal - virulence cost only */
+	for (i=0; i<N; i++){
+            _alpha[i] = ALPHA*(1-CP[i]);
+            for (j=0; j<N; j++){
+		_E[i][j] = BETA*FMAX(0,(1-K3*_u[i])*_v[j]);
+            }
+	}
+    }
+/*
+    for (var i=0; i<N; i++){
+	_alpha[i] = ALPHA;
+	for (var j=0; j<N; j++){
+            _E[i][j] = CP[j]*BETA/(1+Math.exp(G*(_u[i]-_v[j])));
+	}
+    }   
+*/
     plot_matrix(_E,"matrix_canvas",parasite_colour);
+    plot_heatmap(_E,"heatmap_canvas");
 
 }
 
@@ -548,9 +611,10 @@ function dynamic(x, y, E, a, dxdt, dydt, nh, np, host_ind, par_ind){
     
     /* These are the ODEs to solve */
     for (i=0; i<nh; i++) {
-		dxdt[host_ind[i]] = a[host_ind[i]]*x[host_ind[i]]-Q*(xsum+ysum)*x[host_ind[i]]-B*x[host_ind[i]]-hostsum[host_ind[i]]+gamsum[host_ind[i]];
+	dxdt[host_ind[i]] = a[host_ind[i]]*x[host_ind[i]]-Q*(xsum+ysum)*x[host_ind[i]]-B*x[host_ind[i]]-hostsum[host_ind[i]]+gamsum[host_ind[i]];
         for (j=0; j<np; j++) {
-            dydt[host_ind[i]][par_ind[j]] = parsum[host_ind[i]][par_ind[j]]-(ALPHA+B+GAMMA)*y[host_ind[i]][par_ind[j]];
+            //dydt[host_ind[i]][par_ind[j]] = parsum[host_ind[i]][par_ind[j]]-(ALPHA+B+GAMMA)*y[host_ind[i]][par_ind[j]];
+	    dydt[host_ind[i]][par_ind[j]] = parsum[host_ind[i]][par_ind[j]]-(_alpha[par_ind[j]]+B+GAMMA)*y[host_ind[i]][par_ind[j]];
         }
     }
 }

@@ -6,20 +6,13 @@
   <div class="col-sm-12 col-md-4 host">
     <h3>Host Options</h3>
     <div class="gutter">
-      <div class="col-sm-6 col-md-6 params">
-	Immunity
-	<section class="radio_section">
-	  <div class="radio_container">
-	    <input type="radio" name="immunity" id="immunity-none" checked="true">
-	    <label for="immunity-none"><span class="radio">None</span></label>
-	  </div>
-	  <div class="radio_container">
-	    <input type="radio" name="immunity" id="immunity-some">
-	    <label for="immunity-some"><span class="radio">Some</span></label>
-	  </div>
-	</section>
-	Carriers<input id="carrier" type="range"/>
-	Cost curve<input id="host-curve" type="range"/>
+      <div class="col-sm-6 col-md-6">
+	Cost strength: <div id="host-cost-num" class="slider-num">10</div>
+	<input id="host-cost" type="range"/>
+	Costs curve: <div id="host-curve-num" class="slider-num">10</div>
+	<input id="host-curve" type="range"/>
+	Recovery rate: <div id="host-recovery-num" class="slider-num">10</div>
+	<input id="host-recovery" type="range"/>
       </div>
       <div class="col-sm-6 col-md-6">
 	<canvas id="host_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
@@ -30,7 +23,7 @@
   <div class="col-sm-12 col-md-4 parasite">
     <h3>Transmission Function</h3>
     <div class="gutter">
-      <div class="col-sm-6 params">
+      <div class="col-sm-6">
 
 	<section class="radio_section">
 	  <div class="radio_container">
@@ -46,10 +39,16 @@
 	    <label for="function-type-matching"><span class="radio">Matching</span></label>
 	  </div>
 	</section>
+
+	Shape 1:<div id="transmission-shape-1-num" class="slider-num">10</div>
+	<input id="transmission-shape-1" type="range"/>
+	Shape 2:<div id="transmission-shape-2-num" class="slider-num">10</div>
+	<input id="transmission-shape-2" type="range"/>
       
       </div>
       <div class="col-sm-6">
 	<canvas id="matrix_canvas" class="live-graph" width=100 height=100></canvas>
+	<canvas id="heatmap_canvas" class="live-graph" width=100 height=100></canvas>
       </div>
     </div>
     <div class="button-box" style="background: none;">
@@ -63,34 +62,31 @@
     <h3>Parasite Options</h3>
     <div class="gutter">
       <div class="col-sm-7 col-md-7">
-	Transmission
-	
+	Mortality rate:<div id="parasite-mortality-num" class="slider-num">10</div>
+	<input id="parasite-mortality" type="range"/>
+	Transmission rate:<div id="parasite-transmission-num" class="slider-num">10</div>
+	<input id="parasite-transmission" type="range"/>
+	Sterility:<div id="parasite-sterility-num" class="slider-num">10</div>
+	<input id="parasite-sterility" type="range"/>
+	Cost strength:<div id="parasite-cost-num" class="slider-num">10</div>
+	<input id="parasite-cost" type="range"/>
+	Cost curve:<div id="parasite-cost-num" class="slider-num">10</div>
+	<input id="parasite-curve" type="range"/>
+	Parasite type
 	<section class="radio_section">
 	  <div class="radio_container">
-	    <input type="radio" name="transmission" id="transmission-direct" checked="true">
-	    <label for="transmission-direct"><span class="radio">Direct</span></label>
+	    <input type="radio" name="parasite-type" id="parasite-type-trans" checked="true">
+	    <label for="parasite-type-trans"><span class="radio">Transmission</span></label>
 	  </div>
 	  <div class="radio_container">
-	    <input type="radio" name="transmission" id="transmission-free">
-	    <label for="transmission-free"><span class="radio">Free</span></label>
+	    <input type="radio" name="parasite-type" id="parasite-type-vir">
+	    <label for="parasite-type-vir"><span class="radio">Virulence</span></label>
 	  </div>
 	</section>
-	Cost curve<input id="parasite-curve" type="range"/>
-
-      <section class="radio_section">
-	<div class="radio_container">
-	  <input type="radio" name="parasite-type" id="parasite-type-trans" checked="true">
-	  <label for="parasite-type-trans"><span class="radio">Transmission</span></label>
-	</div>
-	<div class="radio_container">
-	  <input type="radio" name="parasite-type" id="parasite-type-vir">
-	  <label for="parasite-type-vir"><span class="radio">Virulence</span></label>
-	</div>
-      </section>
-
+	
       </div>
       
-      <div class="col-sm-5 col-md-5 params">
+      <div class="col-sm-5 col-md-5">
 	<canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
       </div>
       
@@ -104,6 +100,8 @@
     <canvas id="ycanvas" class="live-graph" width=500 height=100></canvas>
     <h3>Hosts</h3>
     <canvas id="xcanvas" class="live-graph" width=500 height=100></canvas>
+    <h3>Infected</h3>
+    <canvas id="icanvas" class="live-graph" width=500 height=100></canvas>
   </div>
   <div class="col-sm-12 col-md-5">
     <h3>Categorise me</h3>
@@ -177,14 +175,54 @@ $( document ).ready(function() {
 ///////////////////////////////////////////////////////////
 // sim callbacks - tweak the globals!
 
-connect_slider("#host-curve", function(v) { CH2 = v*15-7.5; });
-connect_slider("#parasite-curve", function(v) { CP2 = v*15-7.5; });
+connect_slider("#host-cost", function(v) { CH1 = v*4+1; return CH1; });
+connect_slider("#host-recovery", function(v) { GAMMA = v; return GAMMA; });
+connect_slider("#host-curve", function(v) { 
+  v = (v-0.5)*2; 
+  v = v*10; 
+  CH2 = v*v;
+  if (v<0) CH2=-CH2;
+  return CH2;
+});
+
+connect_slider("#transmission-shape-1", function(v) { 
+  v*=10; v=v*v+0.1;
+  if (transmission_function=="range") K0=v;
+  if (transmission_function=="matching") K1=v;
+  if (transmission_function=="universal") K3=v;
+  return v;
+});
+
+connect_slider("#transmission-shape-2", function(v) { 
+  v*=10; v=v*v+0.1;
+  K2=v;
+  return K2;
+});
 
 // todo: change CP2 range
-connect_checkbox("#parasite-transmission", function(v) { parasite_transmission=v; });
+connect_checkbox("#function-type-universal", function(v) { transmission_function="universal"; });
+connect_checkbox("#function-type-range", function(v) { transmission_function="range"; });
+connect_checkbox("#function-type-matching", function(v) { transmission_function="matching"; });
+
+connect_checkbox("#parasite-type-trans", function(v) { transmission_type="transmission"; });
+connect_checkbox("#parasite-type-vir", function(v) { transmission_type="virulence"; });
 
 button_on('#sim-button','Sim: on');
 button_on('#sound-button','Sound: on');
+
+connect_slider("#parasite-mortality", function(v) { ALPHA = v; update_slider_num("#parasite-mortality",ALPHA); return ALPHA; });
+connect_slider("#parasite-transmission", function(v) { BETA=lerp(ALPHA+GAMMA+B,10*(ALPHA+GAMMA+B),v); return BETA; });
+connect_slider("#parasite-sterility", function(v) { F = v; return F; });
+
+connect_slider("#parasite-cost", function(v) { CP1 = v*4+1; return CP1; });
+
+connect_slider("#parasite-curve", function(v) { 
+  v = (v-0.5)*2; 
+  v = v*10; 
+  CP2 = v*v;
+  if (v<0) CP2=-CP2;
+  return CP2;
+});
 
 //////////////////////////////////////////////////////////
 

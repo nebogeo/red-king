@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block stuff %}
+<script src="{{MEDIA_URL}}js/utils.js"></script> 
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <h2>What's this about?</h2>
+
+    <p>I am a robot continually running simulations of parasite and host
+    co-evolution, turning them into sound in order to explore new ways
+    of understanding natural processes. I am part of
+    the <a href="http://people.exeter.ac.uk/mb437/">Ecology and
+    Evolution of Infectious Disease research group</a> at
+    the <a href="http://www.exeter.ac.uk/">University of Exeter</a> and
+    I was built by <a href="http://fo.am/kernow">FoAM Kernow</a><p>
+
+    <p><a href="https://twitter.com/redkingrobot">Follow me on twitter</a></p>
+
+    <h2>A beginners guide to co-evolutionary dynamics</h2>
+
+    <p>The graphs on the right show the evolution
+    of <span class="parasites">parasites</span> and
+    their <span class="hosts">hosts</span>. The two organisms are
+    reacting to each other as they evolve. Hosts evolve to become more
+    resistant to their parasites, while parasites evolve to become
+    better at infecting their hosts. There is a cost involved in being
+    highly resistant, or highly infectious so the organism tend to
+    inhabit sweet spots, which may change over time.
+    </p>
+
+    <p>This evolution can give rise to 'fixation' where one host and one
+      parasite type settle on a stable strategy, branching where
+      multiple strains of host or pathogen emerge and find stable
+      strategies, or cycles of co-evolution where the host and parasite
+      continue to evolve in an arms race against each other.
+    </p>
+
+<h3>Things we don't understand</h3>
+<ul>
+  <li>All the patterns of co-evolutionay relationship possible.</li>
+  <li>What causes jumps from one pattern to the other.</li>
+  <li>The best ways of understanding all the data we generate.</li>
+</ul>
+
+<h2>Sonification</h2>
+
+<p>Turning information into sound can be a way to experience patterns in
+data differently in order to gain new insights.<p>
+
+<p>Here we are still experimenting with different ways of doing this,
+combining rhythmic and pitch changes to focus on what we are
+interested in.<p>
+
+<p>At the moment, the rhythm corresponds to the number of strains of
+host and parasite – the more strains, the faster the rhythm – and the
+pitch corresponds to how resistant the host is and how infectious the
+parasite is. As evolution between the hosts and parasites progresses,
+snapshots are taken – the host and parasite status at that point in time
+are played as consecutive sounds. We are looking at playing the host and
+parasite simultaneously in stereo.</p>
+
+<p>You can <a href="http://www.ambergriffiths.info/blog/a-first-look-into-data-sonification-apr-2016">
+read more about our research into sonfication here</a>.
+</p>
+
+<h2>My Friends</h2>
+<ul>
+<li><a href="http://fo.am/kayaks/">Sonic Kayaks: experiencing the hidden marine world through sound.</a></li>
+<li><a href="http://quantizer.media.mit.edu/">Quantizer: CERN high energy physics experienced through real-time audio.</a></li>
+<li><a href="https://soundcloud.com/esaops">ESA Operations: audio recordings from low Earth orbit to deep space.</a>
+</ul>
+
+</div>
+
+  <div class="col-xs-12 col-md-6">
+    <h2>Latest live simulations</h2>
+    {% if is_paginated %}
+<div class="pagination">
+  <span class="page-links">
+    {% if page_obj.has_previous %}
+    <a href="/?page={{ page_obj.previous_page_number }}"><<</a>
+    {% endif %}
+    <span class="page-current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+    {% if page_obj.has_next %}
+    <a href="/?page={{ page_obj.next_page_number }}">>></a>
+    {% endif %}
+  </span>
+</div>
+{% endif %}
+
+| <a href="/">View latest</a> | <a href="/favorites">View favorites</a>
+
+    {% for sim in object_list %}
+    <div class="sim" style="color:{{ sim.colour }};">
+      <a href="/live_sim/{{ sim.id }}">{{ sim.created_date }}
+      <canvas id="{{sim.id}}-host-canvas" width="500" height="100" class="live-graph"></canvas>
+      <canvas id="{{sim.id}}-parasite-canvas" width="500" height="100" class="live-graph"></canvas></a>
+      <script>
+      load_canvas("{{sim.id}}-host-canvas","{{sim.host_img_data}}");
+      load_canvas("{{sim.id}}-parasite-canvas","{{sim.parasite_img_data}}");
+      </script>
+      
+      Hosts: [
+      {% if sim.cat_host_cycling %}Cycling {% endif %}
+      {% if sim.cat_host_single %}Single {% endif %}
+      {% if sim.cat_host_many %}Many {% endif %}
+      {% if sim.cat_host_strange %}Strange {% endif %} ]
+      Parasites: [
+      {% if sim.cat_parasite_cycling %}Cycling {% endif %}
+      {% if sim.cat_parasite_single %}Single {% endif %}
+      {% if sim.cat_parasite_many %}Many {% endif %}
+      {% if sim.cat_parasite_strange %}Strange {% endif %} ]
+
+<!--
+      <a href="/sim/{{ sim.id }}" style="float:right;">More info</a>
+      <p>
+	    <a href="/sim/{{ sim.id }}" style="float:right;">
+	      <img src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.png" width="100%"/>
+        </a>
+      </p>
+      <p>
+        <div class="row">
+          <audio class="col-xs-9" controls>
+            <source src="{{MEDIA_URL}}/sim/{{ sim.base_name }}.mp3" type="audio/mp3">
+              your browser does not support audio...
+          </audio>
+          <div class="col-xs-3">
+-->            <!-- {{ csrf_token }} --> <!--
+            <button id="upvote-{{ sim.id }}" class="upvote" onclick='$.post("/up/", { id: {{ sim.id }} }, function(response) { upvote(response,{{ sim.id }}); });'></button>
+            <div id="score-{{ sim.id }}" class="score">{{ sim.score }}</div>
+            <button id="downvote-{{ sim.id }}" class="downvote" onclick='$.post("/down/", { id: {{ sim.id }} }, function(response) { downvote(response,{{ sim.id }}); });'></button>
+          </div>
+        </div>
+      </p>
+-->
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

@@ -102,8 +102,8 @@ function recalc_cost_functions() {
         _a[i] = A*CH[i];
     }    
 
-    plot_tradeoff(_a,"host_tradeoff_canvas","host",host_colour);
-    plot_tradeoff(CP,"parasite_tradeoff_canvas","parasite",parasite_colour);
+    plot_tradeoff(_a,"host_tradeoff_canvas","host",host_colour,"host trait","host cost");
+    plot_tradeoff(CP,"parasite_tradeoff_canvas","parasite",parasite_colour,"parasite trait","parasite cost");
     
     /* Define host-parasite interaction matrix */
     /* User picks one of the following through transmission function and parasite cost options */  

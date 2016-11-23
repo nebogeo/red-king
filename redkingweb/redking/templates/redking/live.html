@@ -3,9 +3,17 @@
 
 {% block stuff %}
 <div class="row">
+  <div class="col-xs-12 button-box">
+    <button id='sim-button' onclick='button_sim_toggle();'>Sim: on</button> 
+    <button id='reset-button' onclick='button_sim_reset();'>Restart</button>
+    <button id='sound-button' onclick='button_sound_toggle();'>Sound: off</button>
+    <button onclick='button_save();'>Save</button>
+  </div>
+
+
   <div class="col-sm-12 col-md-4 host">
-    <h3>Host Options</h3>
     <div class="gutter">
+      <h3>Host Options</h3>
       <div class="col-sm-6 col-md-6">
 	Cost strength: <div id="host-cost-num" class="slider-num">10</div>
 	<input id="host-cost" type="range"/>
@@ -21,8 +29,8 @@
   </div>
 
   <div class="col-sm-12 col-md-4 parasite">
-    <h3>Transmission Function</h3>
     <div class="gutter">
+    <h3>Transmission Function</h3>
       <div class="col-sm-6">
 
 	<section class="radio_section">
@@ -51,16 +59,11 @@
 	<canvas id="heatmap_canvas" class="live-graph" width=100 height=100></canvas>
       </div>
     </div>
-    <div class="button-box" style="background: none;">
-	<button id='sim-button' onclick='button_sim_toggle();'>Sim: on</button> 
-	<button id='reset-button' onclick='button_sim_reset();'>Restart</button>
-	<button id='sound-button' onclick='button_sound_toggle();'>Sound: on</button>
-    </div>
   </div>
   
   <div class="col-sm-12 col-md-4 parasite">
-    <h3>Parasite Options</h3>
     <div class="gutter">
+      <h3>Parasite Options</h3>
       <div class="col-sm-7 col-md-7">
 	Cost strength:<div id="parasite-cost-num" class="slider-num">10</div>
 	<input id="parasite-cost" type="range"/>
@@ -72,7 +75,6 @@
 	<input id="parasite-transmission" type="range"/>
 	Sterility:<div id="parasite-sterility-num" class="slider-num">10</div>
 	<input id="parasite-sterility" type="range"/>
-	Parasite type
 	<section class="radio_section">
 	  <div class="radio_container">
 	    <input type="radio" name="parasite-type" id="parasite-type-trans" checked="true">
@@ -95,19 +97,31 @@
 </div>
 
 <div class="row">
+  <div class="col-sm-12 col-md-7" style="text-align: center;">
+    Evolutionary time ->
+  </div>
   <div class="col-sm-12 col-md-7">
-    <h3>Parasites</h3>
-    <canvas id="ycanvas" class="live-graph" width=500 height=100></canvas>
-    <h3>Hosts</h3>
-    <canvas id="xcanvas" class="live-graph" width=500 height=100></canvas>
-    <h3>Infected</h3>
-    <canvas id="icanvas" class="live-graph" width=500 height=100></canvas>
+    <div class="col-xs-12">
+      <div class="overlay sim-title"><h4>Parasites</h4></div>
+      <div class="rotate overlay sim-text">Parasite trait</div>
+      <canvas id="ycanvas" class="sim-graph" width=500 height=100></canvas>
+    </div>
+    <div class="col-xs-12">
+      <div class="overlay sim-title"><h4>Hosts</h4></div>
+      <div class="rotate-host overlay sim-text">Host trait</div>
+      <canvas id="xcanvas" class="sim-graph" width=500 height=100></canvas>
+    </div>
+    <div class="col-xs-12">
+      <div class="overlay sim-title"><h4>Infection</h4></div>
+      <div class="rotate overlay sim-text">Infection level</div>
+      <canvas id="icanvas" class="sim-graph" width=500 height=100></canvas>
+    </div>
   </div>
   <div class="col-sm-12 col-md-5">
-    <h3>Categorise me</h3>
     <div class="row">
-      <div class="col-sm-12 col-md-6 host">
-	<div class="gutter">
+      <div class="gutter">
+	<h3>Categorise me</h3>
+	<div class="col-sm-12 col-md-6 host">
 	  <h3>Host</h3>
 	  <section class="radio_section">
 	    <div class="radio_container">
@@ -128,10 +142,7 @@
 	    </div>
 	  </section>
 	</div>
-      </div>
-
-      <div class="col-sm-12 col-md-6 parasite">
-	<div class="gutter">
+	<div class="col-sm-12 col-md-6 parasite">
 	  <h3>Parasite</h3>
 	  <section class="radio_section">
 	    <div class="radio_container">
@@ -152,12 +163,7 @@
 	    </div>
 	  </section>
 	</div>
-      </div>
-      
-      <div class="gutter contribute">
-	<button onclick='button_save();'>Contribute</button>
-      </div>
-
+      </div>      
     </div>
   </div>
 </div>
@@ -209,7 +215,7 @@ connect_checkbox("#parasite-type-trans", function(v) { transmission_type="transm
 connect_checkbox("#parasite-type-vir", function(v) { transmission_type="virulence"; });
 
 button_on('#sim-button','Sim: on');
-button_on('#sound-button','Sound: on');
+//button_on('#sound-button','Sound: on');
 
 connect_slider("#parasite-mortality", function(v) { ALPHA = v; update_slider_num("#parasite-mortality",ALPHA); return ALPHA; });
 connect_slider("#parasite-transmission", function(v) { BETA=lerp(ALPHA+GAMMA+B,10*(ALPHA+GAMMA+B),v); return BETA; });
@@ -248,6 +254,8 @@ var sim_data = {"param_host_cost":{{livesim.param_host_cost}},
 	   "cat_parasite_many":{{livesim.cat_parasite_many}},
 	   "cat_parasite_strange":{{livesim.cat_parasite_strange}}};
   load_sim(sim_data);
+  sim.running=true;
+  sim.init();
 });
 </script>
 

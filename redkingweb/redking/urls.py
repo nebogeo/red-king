@@ -4,7 +4,7 @@ from django.conf.urls import include
 from redking import views
 
 urlpatterns = patterns('',
-    url(r'^$', views.SimListView.as_view(), name='index'),
+    url(r'^$', views.LiveSimListView.as_view(), name='index'),
     url(r'^favorites', views.SimBestView.as_view(), name='index'),
     url(r'^sim/(?P<pk>\d+)/$', views.SimView.as_view()),
     url(r'^up', views.upvote, name='up'),

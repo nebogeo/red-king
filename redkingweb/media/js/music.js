@@ -24,7 +24,6 @@ function sound_handler() {
     this.running = false;
 
     this.buffer_load_completed = function(buffer,h) { 
-	h.running=true;
 	h.reset_timing();
     }    
 

@@ -71,12 +71,41 @@ function clear_sim(canvas_id,type) {
     ctx.fillRect(0,0,500,100);
 }
 
+var plot_clock_p=0;
+var plot_clock_h=0;
+
 function plot_sim(arr,canvas_id,type) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
 
+/*    var clock=plot_clock_p;
+    if (type=="host") {
+	clock=plot_clock_h;
+	plot_clock_h++;
+    } else {
+	plot_clock_p++;
+    }
+*/
+//    ctx.fillStyle = "red";
+//    ctx.fillRect(400,0,100,100);
+
+/*
+    ctx.drawImage(canvas, 400, 0, 100, 100, 399, 0, 100, 100);
+    if ((clock%2)==0) {
+	ctx.drawImage(canvas, 300, 0, 100, 100, 299, 0, 100, 100);
+    }
+    if ((clock%4)==0) {
+	ctx.drawImage(canvas, 200, 0, 100, 100, 199, 0, 100, 100);
+    }
+    if ((clock%8)==0) {
+	ctx.drawImage(canvas, 100, 0, 100, 100, 99, 0, 100, 100);
+    }
+    if ((clock%8)==16) {
+	ctx.drawImage(canvas, -1, 0, 100, 100, 0, 0, 100, 100);
+    }
+*/
     ctx.drawImage(canvas, -1, 0);
-    
+  
     // select the right colour
     var col = [0xff,0x84,0];
     var bgcol = [0xff,0xe4,0x60];
@@ -96,12 +125,13 @@ function plot_sim(arr,canvas_id,type) {
 	                        (bgcol[2]*(1-v)+v*col[2])+","+1.0+")";
 	ctx.fillRect(499,100-i,1,1);
     }
+
 }
 
 function plot_infected(arrx,arry,canvas_id) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
-
+    
     ctx.drawImage(canvas, -1, 0);
     
     var sum_x=0
@@ -112,30 +142,22 @@ function plot_infected(arrx,arry,canvas_id) {
     for (var i=0; i<arrx.length; i++) {
 	sum_y+=arry[i];
     }
-
+    
     ctx.fillStyle = "white";
     ctx.fillRect(499,0,1,500);
-
-    v = (sum_x/sum_y)*100;
+    
+    v = 100-((sum_x/sum_y)*100);
     ctx.fillStyle = "rgba(0,0,0,1.0)";
     ctx.fillRect(499,v,2,100-v);
 }
 
 
-function plot_tradeoff(arr,canvas_id,type,col) {
+function plot_tradeoff(arr,canvas_id,type,col,x_label,y_label) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
 
-    var bgcol = "rgba(255,228,96,1.0)";
-    if (type=="host") {
-	bgcol = "rgba(207,255,255,1.0)";
-    }
-    //ctx.fillStyle = bgcol;
     ctx.fillStyle = "white";
     ctx.fillRect(0,0,100,100);
-    
-    //ctx.fillStyle = col;
-    ctx.fillStyle = "black";
 
     var min = 9999;
     var max = -9999;
@@ -146,12 +168,35 @@ function plot_tradeoff(arr,canvas_id,type,col) {
     
     var sc = max-min;
 
-   
-    for (var i=0; i<arr.length; i++) {
+    ctx.fillStyle = "black";
+    ctx.fillText(trunc_for_output(min),5,95);
+    ctx.fillText(trunc_for_output(max),5,12);
+    ctx.fillText(x_label,30,95);
+
+    ctx.save();
+    console.log(-Math.PI/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText(y_label,-75,10);
+    ctx.restore();
+    
+    //ctx.globalCompositeOperation = "xor";
+    
+    ctx.strokeStyle = "black";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(0, 100-((arr[0]-min)/sc)*100);
+    for (var i=1; i<arr.length; i++) {
     	// normalise to fill graph
      	var v = ((arr[i]-min)/sc)
-     	ctx.fillRect( i, 100-v*100, 2, 2 );
+	ctx.lineTo(i, 100-v*100);
+     	//ctx.fillRect( , 2, 2 );
     }
+    ctx.stroke();
+    ctx.lineWidth=1;
+
+    ctx.globalCompositeOperation = "source-over";
+
+
 }
 
 function plot_matrix(arr,canvas_id,col) {
@@ -175,14 +220,20 @@ function plot_matrix(arr,canvas_id,col) {
     }
     
     var sc = max-min;
-    
+
+    ctx.lineWidth=2;
     for (var j=0; j<arr.length; j+=10) {
-	for (var i=0; i<arr.length; i++) {
+	ctx.beginPath();
+	ctx.moveTo(0, 100-((arr[0][j]-min)/sc)*100);
+	for (var i=1; i<arr.length; i++) {
     	    // normalise to fill graph
      	    var v = ((arr[i][j]-min)/sc)
-     	    ctx.fillRect( i, 100-v*100, 2, 2 );
+     	    //ctx.fillRect( i, 100-v*100, 2, 2 );
+	    ctx.lineTo(i, 100-v*100);
 	}
+	ctx.stroke();
     }
+    ctx.lineWidth=1;
 }
 
 function plot_heatmap(arr,canvas_id) {
@@ -263,10 +314,14 @@ function set_float_value(id,v) {
     $(id).change();
 }
 
-function update_slider_num(id,v) {
+function trunc_for_output(v) {
     v=parseInt(v*100);
     v/=100;
-    $(id+"-num").html(v);
+    return v;
+}
+
+function update_slider_num(id,v) {
+    $(id+"-num").html(trunc_for_output(v));
 }
 
 ////////////////////////////////////////////////////////
@@ -276,14 +331,14 @@ var text_col = "#777244";
 
 function button_on(id,text) {
     $(id).html(text);
-    $(id).css('background','black');
-    $(id).css('color','white');
+    //$(id).css('background','black');
+    //$(id).css('color','white');
 }
 
 function button_off(id,text) {
     $(id).html(text);
-    $(id).css('background','white');
-    $(id).css('color',text_col);
+    //$(id).css('background','white');
+    //$(id).css('color',text_col);
 }
 
 function button_sim_toggle() {
@@ -393,6 +448,7 @@ function load_sim(data) {
     set_int_value("#cat-p-single",data.cat_parasite_single);
     set_int_value("#cat-p-many",data.cat_parasite_many);
     set_int_value("#cat-p-strange",data.cat_parasite_strange);
+
 }
 
 sim = new sim_handler();

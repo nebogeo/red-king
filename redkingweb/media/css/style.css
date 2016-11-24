@@ -166,6 +166,10 @@ h3 {
     background: white;
 }
 
+.gutter h3 {
+    margin-left: 0.5em;
+}
+
 .button-box {
     padding-left: 1em;
     padding-right: 1em;

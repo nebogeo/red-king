@@ -218,6 +218,13 @@ button:hover {
     text-align: center;
 }
 
+.sim-extinct {
+    margin-top: 1em;
+    width: 88%;
+    text-align: center;
+    color: red;
+}
+
 .rotate {
      -moz-transform: rotate(-90.0deg);  /* FF3.5+ */
        -o-transform: rotate(-90.0deg);  /* Opera 10.5 */

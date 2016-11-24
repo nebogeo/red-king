@@ -274,7 +274,8 @@ function range(xout, u, v, E, a) {
                     xout[i+N][j]=0;
                 }
             }
-            console.log("Breaking - hosts driven extinct");
+
+	    show_host_extinct();	    
             return;
         }
         if(np==0){
@@ -285,7 +286,8 @@ function range(xout, u, v, E, a) {
                     xout[i+N][j]=0;
                 }
             }            
-            console.log("Breaking - parasites driven extinct");
+
+	    show_parasite_extinct();	    
             return;
         }
         

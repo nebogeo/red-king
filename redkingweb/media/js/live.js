@@ -34,6 +34,8 @@ function sim_handler() {
 	this.update();
 	clear_sim("xcanvas","host");
 	clear_sim("ycanvas","parasite");
+	clear_sim("icanvas","parasite");
+	clear_extinct();
     }
 
     frame = 0;
@@ -63,11 +65,7 @@ function sim_handler() {
 function clear_sim(canvas_id,type) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
-    var bgcol = [0xff,0xe4,0x60];
-    if (type=="host") {
-	bgcol = [0xcf,0xff,0xff];
-    }
-    ctx.fillStyle = bgcol;
+    ctx.fillStyle = "white";
     ctx.fillRect(0,0,500,100);
 }
 
@@ -174,7 +172,6 @@ function plot_tradeoff(arr,canvas_id,type,col,x_label,y_label) {
     ctx.fillText(x_label,30,95);
 
     ctx.save();
-    console.log(-Math.PI/2);
     ctx.rotate(-Math.PI/2);
     ctx.fillText(y_label,-75,10);
     ctx.restore();
@@ -195,8 +192,6 @@ function plot_tradeoff(arr,canvas_id,type,col,x_label,y_label) {
     ctx.lineWidth=1;
 
     ctx.globalCompositeOperation = "source-over";
-
-
 }
 
 function plot_matrix(arr,canvas_id,col) {
@@ -305,12 +300,26 @@ function set_int_value(id,v) {
     $(id).change();
 }
 
+function randomise_int_value(id) {
+    if (Math.random()<0.5) {
+	$(id).prop('checked', false);
+    } else {
+	$(id).prop('checked', true);
+    }
+    $(id).change();    
+}
+
 function get_float_value(id) {
     return $(id).val()/100.0;
 }
 
 function set_float_value(id,v) {
     $(id).val(v*100);
+    $(id).change();
+}
+
+function randomise_float_value(id) {
+    $(id).val(Math.random()*100);
     $(id).change();
 }
 
@@ -363,6 +372,22 @@ function button_sound_toggle() {
 
 function button_sim_reset() {
     sim.init();
+    sim.set_running(true);
+}
+
+function show_host_extinct() {
+    $("#host-extinct").show();
+    sim.set_running(false);
+}
+
+function show_parasite_extinct() {
+    $("#parasite-extinct").show();
+    sim.set_running(false);
+}
+
+function clear_extinct() {
+    $("#parasite-extinct").hide();
+    $("#host-extinct").hide();
 }
 
 // out
@@ -423,11 +448,18 @@ function button_save() {
 function load_sim(data) {
     transmission_type = "transmission";
     if (data.param_parasite_type==1) transmission_type="virulence";
+    set_int_value("#function-type-"+transmission_type,1);
+    if (transmission_type=="transmission") {
+	set_int_value("#parasite-type-trans",1);
+    } else {
+	set_int_value("#parasite-type-vir",1);
+    }
 
     transmission_function = "universal";
     if (data.param_transmission_type==1) transmission_function="range";
     if (data.param_transmission_type==2) transmission_function="matching";
-
+    set_int_value("#function-type-"+transmission_function,1);
+    
     set_float_value("#host-curve",data.param_host_cost);    
     set_float_value("#host-cost",data.param_host_cost);
     set_float_value("#host-recovery",data.param_host_recovery);
@@ -439,7 +471,7 @@ function load_sim(data) {
     set_float_value("#parasite-mortality",data.param_parasite_mortality);
     set_float_value("#parasite-transmission",data.param_parasite_transmission);
     set_float_value("#parasite-sterility",data.param_parasite_sterility);
-	   
+	    
     set_int_value("#cat-h-cycling",data.cat_host_cycling);
     set_int_value("#cat-h-single",data.cat_host_single);
     set_int_value("#cat-h-many",data.cat_host_many);
@@ -449,7 +481,49 @@ function load_sim(data) {
     set_int_value("#cat-p-many",data.cat_parasite_many);
     set_int_value("#cat-p-strange",data.cat_parasite_strange);
 
+    sim.init();
 }
+
+function randomise_sim() {
+    transmission_type = "transmission";
+    if (Math.random()<0.5) transmission_type="virulence";
+    if (transmission_type=="transmission") {
+	set_int_value("#parasite-type-trans",1);
+    } else {
+	set_int_value("#parasite-type-vir",1);
+    }
+    
+    transmission_function = "universal";
+    var t=Math.random();
+    if (t<0.33) transmission_function="range";
+    if (t>0.66) transmission_function="matching";    
+    set_int_value("#function-type-"+transmission_function,1);
+
+    randomise_float_value("#host-curve");
+    randomise_float_value("#host-cost");
+    randomise_float_value("#host-recovery");
+    randomise_float_value("#host-curve");
+    randomise_float_value("#transmission-shape1");
+    randomise_float_value("#transmission-shape2");
+    randomise_float_value("#parasite-cost");
+    randomise_float_value("#parasite-curve");
+    randomise_float_value("#parasite-mortality");
+    randomise_float_value("#parasite-transmission");
+    randomise_float_value("#parasite-sterility");
+    
+    set_int_value("#cat-h-cycling",0);
+    set_int_value("#cat-h-single",0);
+    set_int_value("#cat-h-many",0);
+    set_int_value("#cat-h-strange",0);
+    set_int_value("#cat-p-cycling",0);
+    set_int_value("#cat-p-single",0);
+    set_int_value("#cat-p-many",0);
+    set_int_value("#cat-p-strange",0);
+
+    sim.init();
+    sim.set_running(true);
+}
+
 
 sim = new sim_handler();
 sim.init();

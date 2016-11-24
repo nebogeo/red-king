@@ -7,6 +7,7 @@
     <button id='reset-button' onclick='button_sim_reset();'>Restart</button>
     <button id='sound-button' onclick='button_sound_toggle();'>Sound: off</button>
     <button onclick='button_save();'>Save</button>
+    <button onclick='randomise_sim();'>Randomise</button>
   </div>
 
 
@@ -63,7 +64,7 @@
   <div class="col-sm-12 col-md-4 parasite">
     <div class="gutter">
       <h3>Parasite Options</h3>
-      <div class="col-sm-7 col-md-7">
+      <div class="col-sm-6 col-md-6">
 	Cost strength:<div id="parasite-cost-num" class="slider-num">10</div>
 	<input id="parasite-cost" type="range"/>
 	Cost curve:<div id="parasite-curve-num" class="slider-num">10</div>
@@ -87,7 +88,7 @@
 	
       </div>
       
-      <div class="col-sm-5 col-md-5">
+      <div class="col-sm-6 col-md-6">
 	<canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
       </div>
       
@@ -102,12 +103,14 @@
   <div class="col-sm-12 col-md-7">
     <div class="col-xs-12">
       <div class="overlay sim-title"><h4>Parasites</h4></div>
+      <div id="parasite-extinct" class="overlay sim-extinct"><h1>PARASITES ARE EXTINCT</h1></div>
       <div class="rotate overlay sim-text">Parasite trait</div>
       <canvas id="ycanvas" class="sim-graph" width=500 height=100></canvas>
     </div>
     <div class="col-xs-12">
       <div class="overlay sim-title"><h4>Hosts</h4></div>
       <div class="rotate-host overlay sim-text">Host trait</div>
+      <div id="host-extinct" class="overlay sim-extinct"><h1>HOSTS ARE EXTINCT</h1></div>
       <canvas id="xcanvas" class="sim-graph" width=500 height=100></canvas>
     </div>
     <div class="col-xs-12">
@@ -232,6 +235,7 @@ connect_slider("#parasite-curve", function(v) {
 
 //////////////////////////////////////////////////////////
 
+{% if livesim %}
 var sim_data = {"param_host_cost":{{livesim.param_host_cost}},
 	   "param_host_recovery":{{livesim.param_host_recovery}},
 	   "param_host_curve":{{livesim.param_host_curve}},
@@ -253,8 +257,12 @@ var sim_data = {"param_host_cost":{{livesim.param_host_cost}},
 	   "cat_parasite_many":{{livesim.cat_parasite_many}},
 	   "cat_parasite_strange":{{livesim.cat_parasite_strange}}};
   load_sim(sim_data);
+{% else %}
+  randomise_sim();
+{% endif %}
   sim.running=true;
   sim.init();
+
 });
 </script>
 

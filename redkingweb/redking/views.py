@@ -81,7 +81,7 @@ def live(request):
 
 class LiveSimListView(generic.ListView):
     queryset = LiveSim.objects.order_by('-created_date')
-    template_name = 'redking/live_index.html'
+    template_name = 'redking/index.html'
     paginate_by = 10
     def get_context_data(self, **kwargs):
         context = super(LiveSimListView, self).get_context_data(**kwargs)
@@ -103,3 +103,6 @@ def save_livesim(request):
             print("invalid form")
     return HttpResponse('request is invalid: '+str(form))
 
+def about(request):
+    context={}
+    return render(request, 'redking/about.html', context)

@@ -7,7 +7,7 @@ body {
 }
 
 a:link {
-    color: #ff8400;
+    color: #aa7244;
 }
 
 a:visited {
@@ -35,15 +35,23 @@ h3 {
 
 .title {
     text-align: center;
-    margin-top: 0.75em;
+    margin-top: 1em;
 }
 
 .title a {
     color: #777244;
 }
 
+.title h2 {
+     font-size: 250%;
+}
+
 .title-row {
     margin-bottom: 0.5em;
+}
+
+.centred {
+    text-align: center;
 }
 
 .parasites { color: #ff8400; }
@@ -187,6 +195,7 @@ input[type=radio] {
 }
 
 button {
+    padding: 0.25em;
     font-size: 200%;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -226,7 +235,12 @@ button:hover {
     margin-top: 1em;
     width: 88%;
     text-align: center;
-    color: red;
+    color: black;
+    display: none;
+}
+
+#catbox {
+    display: none;
 }
 
 .rotate {

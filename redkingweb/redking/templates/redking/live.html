@@ -6,7 +6,6 @@
     <button id='sim-button' onclick='button_sim_toggle();'>Sim: on</button> 
     <button id='reset-button' onclick='button_sim_reset();'>Restart</button>
     <button id='sound-button' onclick='button_sound_toggle();'>Sound: off</button>
-    <button onclick='button_save();'>Save</button>
     <button onclick='randomise_sim();'>Randomise</button>
   </div>
 
@@ -121,7 +120,11 @@
   </div>
   <div class="col-sm-12 col-md-5">
     <div class="row">
-      <div class="gutter">
+      <div id="catalt" class="gutter">
+	<h3>Ready to categorise in <span id="cattimer">??</span> seconds</h3>
+      </div>
+
+      <div id="catbox" class="gutter" style="top: 0px; position: absolute;">
 	<h3>Categorise me</h3>
 	<div class="col-sm-12 col-md-6 host">
 	  <h3>Host</h3>
@@ -164,6 +167,9 @@
 	      <label for="cat-p-strange"><span class="checkbox">Strange</span></label>
 	    </div>
 	  </section>
+	</div>
+	<div class="col-xs-2 col-xs-offset-4">
+	  <button onclick='button_save();'>Save</button>
 	</div>
       </div>      
     </div>

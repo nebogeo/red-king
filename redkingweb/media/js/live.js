@@ -18,11 +18,21 @@ function sim_handler() {
     this.running = false;
 
     this.sound = new sound_handler();
+    this.max_cat_timer = 1500;
+    this.cat_timer = 0;
+    this.step_time = 0;
+    this.last_time = 0;
 
     this.set_running = function(s) { 
 	this.running=s 
 	if (s) this.update();
     };
+
+    this.reset_cat_timer = function() {
+	this.cat_timer=0;
+	$("#catbox").fadeOut("slow");
+	$("#catalt").fadeIn("slow");
+    }
 
     this.init = function() {
 	range_init(); 
@@ -36,6 +46,7 @@ function sim_handler() {
 	clear_sim("ycanvas","parasite");
 	clear_sim("icanvas","parasite");
 	clear_extinct();
+	this.reset_cat_timer();
     }
 
     frame = 0;
@@ -58,6 +69,33 @@ function sim_handler() {
 	    var ctx = canvas.getContext("2d");
 	    var that = this;
 	    requestAnimFrame(function() { that.update() },ctx);
+
+	    this.cat_timer++;
+	    
+	    if (this.cat_timer>this.max_cat_timer) {
+		$("#catbox").fadeIn("slow");
+		$("#catalt").fadeOut("slow");
+	    }
+
+	    if (this.cat_timer%5==0) {
+		var time_now = Date.now();
+		if (this.last_time!=0) {
+		    if (this.step_time==0) {
+			this.step_time = (time_now-this.last_time)/1000;
+		    } else {
+			var st = (time_now-this.last_time)/1000;
+			this.step_time = 0.01*st+0.99*this.step_time;
+
+			var steps_left=this.max_cat_timer-this.cat_timer;
+			if (steps_left>0) { 
+			    $("#cattimer").html(parseInt(this.step_time*steps_left/5));
+			}
+		    }
+		}
+
+		this.last_time = time_now;
+	    }
+
 	}
     }
 }
@@ -271,6 +309,7 @@ function connect_slider(id,fn) {
 	v=fn($(id).val()/100.0);
 	update_slider_num(id,v);
 	recalc_cost_functions();
+	sim.reset_cat_timer();
     }
     // connect up stuff
     $(id).on('input', _);
@@ -281,6 +320,7 @@ function connect_checkbox(id,fn) {
     var _=function() {
 	fn($(id).prop("checked"));
 	recalc_cost_functions();
+	sim.reset_cat_timer();
     }
     // connect up stuff
     $(id).on('change', _); // IE10
@@ -376,18 +416,18 @@ function button_sim_reset() {
 }
 
 function show_host_extinct() {
-    $("#host-extinct").show();
+    $("#host-extinct").show("slow");
     sim.set_running(false);
 }
 
 function show_parasite_extinct() {
-    $("#parasite-extinct").show();
+    $("#parasite-extinct").show("slow");
     sim.set_running(false);
 }
 
 function clear_extinct() {
-    $("#parasite-extinct").hide();
-    $("#host-extinct").hide();
+    $("#parasite-extinct").hide("slow");
+    $("#host-extinct").hide("slow");
 }
 
 // out

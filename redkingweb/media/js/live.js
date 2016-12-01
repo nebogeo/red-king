@@ -107,10 +107,10 @@ function clear_sim(canvas_id,type) {
     ctx.fillStyle = "#ffffff";
   
     if (type=="host") {
-	ctx.fillStyle = "#cfffff";
+	ctx.fillStyle = "#9ed9ce";
     }
     if (type=="parasite") {
-	ctx.fillStyle = "#ffbbf1";
+	ctx.fillStyle = "#dcdc00";
     }
 
     ctx.fillRect(0,0,500,100);
@@ -150,13 +150,13 @@ function plot_sim(arr,canvas_id,type) {
     }
 */
     ctx.drawImage(canvas, -1, 0);
-    bgcol = [0xff,0xbb,0xf1];
+    bgcol = [0xdc,0xdc,0x00];
   
     // select the right colour
     var col = [0xda,0x1b,0xa8];
     if (type=="host") {
 	col = [0x4f,0x93,0xa8];
-	bgcol = [0xcf,0xff,0xff];
+	bgcol = [0x9e,0xd9,0xce];
     }
 
     col = [0,0,0];

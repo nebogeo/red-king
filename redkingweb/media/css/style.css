@@ -2,7 +2,8 @@ body {
     font-family: 'Maven+Pro', sans-serif;
     font-size: 150%;
 /*    color: #ffe400; */
-    color: #777244;
+/*    color: #777244; */
+    color: black;
     background: white;
 }
 
@@ -39,7 +40,7 @@ h3 {
 }
 
 .title a {
-    color: #777244;
+    color: black;
 }
 
 .title h2 {
@@ -54,27 +55,20 @@ h3 {
     text-align: center;
 }
 
-.parasites { color: #ff8400; }
-.hosts { color: #6fb3c8; }
-/*.parasite div { background: #ffe460; }
-.host div { background: #cfffff; }
-.output div { 
-    background: #f4f4f4; 
-}
-*/
-
 .title-text {
     size: 400%;
 }
 
 .banner1 {
     background: url('../images/banner1.png');
+    background-repeat: no-repeat;
     background-size: 100%;
     height: 5em;
 }
 
 .banner2 {
     background: url('../images/banner2.png');
+    background-repeat: no-repeat;
     background-size: 100%;
     height: 5em;
 }
@@ -203,7 +197,8 @@ button {
     border-radius: 15px;
     overflow: hidden;
     background: white;
-    color: #777244;
+    color: black;
+/*    color: #777244; */
 }
 
 button:focus {
@@ -211,7 +206,7 @@ button:focus {
 }
 
 button:hover {
-    background: #cfffff;
+    background: #9ed9ce;
 }
 
 .overlay {
@@ -326,10 +321,13 @@ input[type=range]::-moz-range-thumb {
 }
 
 /* #6fb3c8 #fa3b71 */
-.host input[type=range]::-moz-range-thumb {  background: #cfffff; }
-.host input[type=range]::-webkit-slider-thumb { background: #cfffff; } 
-.parasite input[type=range]::-moz-range-thumb { background: #ffbbf1; }
-.parasite input[type=range]::-webkit-slider-thumb { background: #ffbbf1; } 
+/* #cfffff #ffbbf1 */
+/* #fb016c */
+
+.host input[type=range]::-moz-range-thumb {  background: #9ed9ce; }
+.host input[type=range]::-webkit-slider-thumb { background: #9ed9ce; } 
+.parasite input[type=range]::-moz-range-thumb { background: #dcdc00; }
+.parasite input[type=range]::-webkit-slider-thumb { background: #dcdc00; } 
 
 /* track */
 
@@ -417,8 +415,8 @@ input[type="radio"]:checked + label span.radio::after {
   border: 2px solid black;
 }
 
-.host input[type="radio"]+ label span.radio::after {  background: #cfffff; }
-.parasite input[type="radio"]+ label span.radio::after {  background: #ffbbf1; }
+.host input[type="radio"]+ label span.radio::after {  background: #9ed9ce; }
+.parasite input[type="radio"]+ label span.radio::after {  background: #dcdc00; }
 
 
 /* checkboxes */

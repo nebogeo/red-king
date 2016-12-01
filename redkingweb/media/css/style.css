@@ -203,6 +203,7 @@ button {
     border-radius: 15px;
     overflow: hidden;
     background: white;
+    color: #777244;
 }
 
 button:focus {

@@ -45,7 +45,7 @@ function sim_handler() {
 	this.update();
 	clear_sim("xcanvas","host");
 	clear_sim("ycanvas","parasite");
-	clear_sim("icanvas","parasite");
+	clear_sim("icanvas","infection");
 	clear_extinct();
 	this.reset_cat_timer();
     }
@@ -104,7 +104,15 @@ function sim_handler() {
 function clear_sim(canvas_id,type) {
     var canvas = document.getElementById(canvas_id);
     var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#ffffff";
+  
+    if (type=="host") {
+	ctx.fillStyle = "#cfffff";
+    }
+    if (type=="parasite") {
+	ctx.fillStyle = "#ffbbf1";
+    }
+
     ctx.fillRect(0,0,500,100);
 }
 
@@ -142,17 +150,16 @@ function plot_sim(arr,canvas_id,type) {
     }
 */
     ctx.drawImage(canvas, -1, 0);
+    bgcol = [0xff,0xbb,0xf1];
   
     // select the right colour
-    var col = [0xff,0x84,0];
-    var bgcol = [0xff,0xe4,0x60];
+    var col = [0xda,0x1b,0xa8];
     if (type=="host") {
-	col = [0x6f,0xb3,0xc8];
+	col = [0x4f,0x93,0xa8];
 	bgcol = [0xcf,0xff,0xff];
     }
 
-    var col = [0,0,0];
-    bgcol = [0xff,0xff,0xff];
+    col = [0,0,0];
 
     for (i=0; i<arr.length; i++) {
 	v = safelog10(arr[i])
@@ -216,7 +223,7 @@ function plot_tradeoff(arr,canvas_id,type,col,x_label,y_label) {
     ctx.restore();
     
     //ctx.globalCompositeOperation = "xor";
-    
+
     ctx.strokeStyle = "black";
     ctx.lineWidth=2;
     ctx.beginPath();

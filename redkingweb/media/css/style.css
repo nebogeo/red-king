@@ -7,11 +7,11 @@ body {
 }
 
 a:link {
-    color: #aa7244;
+    color: #cf7bb1;
 }
 
 a:visited {
-    color: #ff8400;
+    color: #df9bd1;
 }
 
 pre {
@@ -199,7 +199,7 @@ button {
     font-size: 200%;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-    border: 1px solid black; 
+    border: 2px solid black; 
     border-radius: 15px;
     overflow: hidden;
     background: white;
@@ -210,8 +210,7 @@ button:focus {
 }
 
 button:hover {
-    background: gray;
-    color: white;
+    background: #cfffff;
 }
 
 .overlay {
@@ -235,7 +234,6 @@ button:hover {
     margin-top: 1em;
     width: 88%;
     text-align: center;
-    color: black;
     display: none;
 }
 
@@ -326,12 +324,11 @@ input[type=range]::-moz-range-thumb {
   border: 2px solid black;
 }
 
-/*.host input[type=range]::-moz-range-thumb {  background: #6fb3c8; }
-.host input[type=range]::-webkit-slider-thumb { background: #6fb3c8; } */
-/*.host input[type=range] { background: #6fb3c8; }*/
-/*.parasite input[type=range]::-moz-range-thumb { background: #ff8400; }
-.parasite input[type=range]::-webkit-slider-thumb { background: #ff8400; } */
-/*.parasite input[type=range] { background: #ff8400; }*/
+/* #6fb3c8 #fa3b71 */
+.host input[type=range]::-moz-range-thumb {  background: #cfffff; }
+.host input[type=range]::-webkit-slider-thumb { background: #cfffff; } 
+.parasite input[type=range]::-moz-range-thumb { background: #ffbbf1; }
+.parasite input[type=range]::-webkit-slider-thumb { background: #ffbbf1; } 
 
 /* track */
 
@@ -418,6 +415,10 @@ input[type="radio"]:checked + label span.radio::after {
   background-color: white;
   border: 2px solid black;
 }
+
+.host input[type="radio"]+ label span.radio::after {  background: #cfffff; }
+.parasite input[type="radio"]+ label span.radio::after {  background: #ffbbf1; }
+
 
 /* checkboxes */
 .radio_container span.checkbox::before {

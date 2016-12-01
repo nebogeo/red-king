@@ -8,5 +8,5 @@ urlpatterns = patterns('',
     url(r'^about', views.about, name='about'),
     url(r'^new', views.live, name='live'),
     url(r'^save_livesim/', views.save_livesim, name='save_livesim'),
-    url(r'^livesim/(?P<pk>\d+)/$', views.LiveSimView.as_view())
+    url(r'^live_sim/(?P<pk>\d+)/$', views.LiveSimView.as_view())
 )

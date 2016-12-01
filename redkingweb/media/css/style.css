@@ -243,6 +243,10 @@ button:hover {
     display: none;
 }
 
+#catthank {
+    display: none;
+}
+
 .rotate {
      -moz-transform: rotate(-90.0deg);  /* FF3.5+ */
        -o-transform: rotate(-90.0deg);  /* Opera 10.5 */

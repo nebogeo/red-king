@@ -30,6 +30,7 @@ function sim_handler() {
 
     this.reset_cat_timer = function() {
 	this.cat_timer=0;
+	$("#catthank").fadeOut("slow");
 	$("#catbox").fadeOut("slow");
 	$("#catalt").fadeIn("slow");
     }
@@ -482,6 +483,12 @@ function button_save() {
 	cat_parasite_many: get_int_value("#cat-p-many"),
 	cat_parasite_strange: get_int_value("#cat-p-strange"),
     });
+
+    sim.cat_timer=0;
+    $("#catbox").fadeOut("slow");
+    $("#catthank").fadeIn("slow");
+
+
 }
 
 // and back in...

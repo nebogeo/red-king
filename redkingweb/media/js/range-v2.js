@@ -97,12 +97,15 @@ function recalc_cost_functions() {
         if(CP2==0){
             CP2 = 0.001;
         }
-        CH[i] = FMAX(0,1-(CH1-1)*(1-Math.exp(CH2*_u[i]))/(1-Math.exp(CH2)));
-        CP[i] = FMAX(0,1-(CP1-1)*(1-Math.exp(CP2*_v[i]))/(1-Math.exp(CP2)));
+	CH[i] = FMAX(0,1-CH1*(1-Math.exp(CH2*_u[i]))/(1-Math.exp(CH2)));
+	CP[i] = FMAX(0,1-CP1*(1-Math.exp(CP2*_v[i]))/(1-Math.exp(CP2)));
+
+        //CH[i] = FMAX(0,1-(CH1-1)*(1-Math.exp(CH2*_u[i]))/(1-Math.exp(CH2)));
+        //CP[i] = FMAX(0,1-(CP1-1)*(1-Math.exp(CP2*_v[i]))/(1-Math.exp(CP2)));
         _a[i] = A*CH[i];
     }    
 
-    plot_tradeoff(_a,"host_tradeoff_canvas","host",host_colour,"host trait","host cost");
+    plot_tradeoff(CH,"host_tradeoff_canvas","host",host_colour,"host trait","host cost");
     plot_tradeoff(CP,"parasite_tradeoff_canvas","parasite",parasite_colour,"parasite trait","parasite cost");
     
     /* Define host-parasite interaction matrix */

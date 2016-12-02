@@ -203,12 +203,15 @@ function plot_tradeoff(arr,canvas_id,type,col,x_label,y_label) {
     ctx.fillStyle = "white";
     ctx.fillRect(0,0,100,100);
 
-    var min = 9999;
+/*    var min = 9999;
     var max = -9999;
     for (var i=0; i<arr.length; i++) {
     	if (arr[i]<min) min=arr[i];
     	if (arr[i]>max) max=arr[i];
     }
+*/
+    min=0;
+    max=1;
     
     var sc = max-min;
 
@@ -227,11 +230,12 @@ function plot_tradeoff(arr,canvas_id,type,col,x_label,y_label) {
     ctx.strokeStyle = "black";
     ctx.lineWidth=2;
     ctx.beginPath();
-    ctx.moveTo(0, 100-((arr[0]-min)/sc)*100);
+    // tradeoffs are inverted
+    ctx.moveTo(0, ((arr[0]-min)/sc)*100);
     for (var i=1; i<arr.length; i++) {
     	// normalise to fill graph
      	var v = ((arr[i]-min)/sc)
-	ctx.lineTo(i, 100-v*100);
+	ctx.lineTo(i, v*100);
      	//ctx.fillRect( , 2, 2 );
     }
     ctx.stroke();

@@ -193,7 +193,7 @@ $( document ).ready(function() {
 ///////////////////////////////////////////////////////////
 // sim callbacks - tweak the globals!
 
-connect_slider("#host-cost", function(v) { CH1 = v*4+1; return CH1; });
+connect_slider("#host-cost", function(v) { CH1 = v; return CH1; });
 connect_slider("#host-recovery", function(v) { GAMMA = v; return GAMMA; });
 connect_slider("#host-curve", function(v) { 
   v = (v-0.5)*2; 
@@ -233,7 +233,7 @@ connect_slider("#parasite-mortality", function(v) { ALPHA = v; update_slider_num
 connect_slider("#parasite-transmission", function(v) { BETA=lerp(ALPHA+GAMMA+B,10*(ALPHA+GAMMA+B),v); return BETA; });
 connect_slider("#parasite-sterility", function(v) { F = v; return F; });
 
-connect_slider("#parasite-cost", function(v) { CP1 = v*4+1; return CP1; });
+connect_slider("#parasite-cost", function(v) { CP1 = v; return CP1; });
 
 connect_slider("#parasite-curve", function(v) { 
   v = (v-0.5)*2; 

@@ -471,6 +471,7 @@ function button_save() {
 	base_name: "test",
 	host_img_data: xdata,
 	parasite_img_data: ydata,
+	status: 0,
 
 	param_host_cost: get_float_value("#host-cost"),
 	param_host_recovery: get_float_value("#host-recovery"),

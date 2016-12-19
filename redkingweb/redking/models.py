@@ -39,6 +39,7 @@ class LiveSim(models.Model):
     base_name = models.CharField(max_length=4096)
     host_img_data = models.TextField(default="")
     parasite_img_data = models.TextField(default="")
+    status = models.IntegerField(default=0)    
 
     # parameters
     param_host_cost = models.FloatField(default=0)

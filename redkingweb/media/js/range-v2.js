@@ -111,7 +111,6 @@ function recalc_cost_functions() {
     /* Define host-parasite interaction matrix */
     /* User picks one of the following through transmission function and parasite cost options */  
 
-
     if (transmission_function == "range") {
 	if (transmission_type == "transmission") {  
 	    /* If Range && transmission cost */

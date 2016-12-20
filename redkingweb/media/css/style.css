@@ -175,7 +175,7 @@ h3 {
 .button-box {
     padding-left: 1em;
     padding-right: 1em;
-    margin-bottom: 1em;
+    /*margin-bottom: 1em;*/
     display: block;
     overflow: hidden;
     background: none; 
@@ -192,7 +192,7 @@ button {
     padding: 0.25em;
     font-size: 200%;
     margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    /*margin-bottom: 0.5em;*/
     border: 2px solid black; 
     border-radius: 15px;
     overflow: hidden;
@@ -355,6 +355,7 @@ input[type=range] {
 /* checkboxes/radio buttons */
 
 .radio_section {
+    margin-top:0.25em;
     margin-left:3em;
     text-align: left;
 }

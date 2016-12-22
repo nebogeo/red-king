@@ -2,67 +2,62 @@
 
 {% block stuff %}
 <div class="row">
-  <div class="col-xs-12 button-box">
-    <button id='sim-button' onclick='button_sim_toggle();'>Sim: on</button> 
-    <button id='reset-button' onclick='button_sim_reset();'>Restart</button>
-    <button id='sound-button' onclick='button_sound_toggle();'>Sound: off</button>
-    <button onclick='randomise_sim();'>Randomise</button>
-  </div>
 
   <div class="col-xs-12" style="text-align: center;">
     <h3>
       This allows you to simulate co-evolution. 
       Help us by playing with it to find and classify new evolution patterns. 
-      Listen to evolution as music by turning on the sound above.
+      Listen to evolution as music by turning on the sound.
     </h3> 
   </div>
 
   <div class="col-sm-12 col-md-4 host">
     <div class="gutter">
-      <h3>Host Options</h3>
-      <div class="col-sm-6 col-md-6">
-	Cost strength: <div id="host-cost-num" class="slider-num">10</div>
-	<input id="host-cost" type="range"/>
-	Cost curve: <div id="host-curve-num" class="slider-num">10</div>
-	<input id="host-curve" type="range"/>
-	Recovery rate: <div id="host-recovery-num" class="slider-num">10</div>
-	<input id="host-recovery" type="range"/>
-      </div>
-      <div class="col-sm-6 col-md-6">
+      <h3 style="margin-bottom:1.5em;">Host Options</h3>
+      Cost strength: <div id="host-cost-num" class="slider-num">10</div>
+      <input id="host-cost" type="range"/>
+      Cost curve: <div id="host-curve-num" class="slider-num">10</div>
+      <input id="host-curve" type="range"/>
+      Recovery rate: <div id="host-recovery-num" class="slider-num">10</div>
+      <input id="host-recovery" type="range"/>
+      <div class="graph-container" style="margin-top:2em;">
 	<canvas id="host_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
-      </div>  
+      </div>
     </div>
   </div>
 
   <div class="col-sm-12 col-md-4 parasite">
     <div class="gutter">
-    <h3>Disease Transmission</h3>
-      <div class="col-sm-6">
+      <h3>Disease Transmission</h3>
 
-	Transmission type
-	<section class="radio_section">
-	  <div class="radio_container">
-	    <input type="radio" name="function-type" id="function-type-universal">
-	    <label for="function-type-universal"><span class="radio">Universal</span></label>
-	  </div>
-	  <div class="radio_container">
-	    <input type="radio" name="function-type" id="function-type-range" checked="true">
-	    <label for="function-type-range"><span class="radio">Range</span></label>
-	  </div>
-	  <div class="radio_container">
-	    <input type="radio" name="function-type" id="function-type-matching">
-	    <label for="function-type-matching"><span class="radio">Matching</span></label>
-	  </div>
-	</section>
-
-	Shape 1:<div id="transmission-shape1-num" class="slider-num">10</div>
-	<input id="transmission-shape1" type="range"/>
-	<div id="shape2-container">
-	  Shape 2:<div id="transmission-shape2-num" class="slider-num">10</div>
-	  <input id="transmission-shape2" type="range"/>
+      <div style="width:100%; text-align: center;">
+	Transmission type:<br>
+	<div style="display:inline-block;">
+	  <section class="radio_section">
+	    <div class="radio_container">
+	      <input type="radio" name="function-type" id="function-type-universal">
+	      <label for="function-type-universal"><span class="radio">Universal</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="radio" name="function-type" id="function-type-range" checked="true">
+	      <label for="function-type-range"><span class="radio">Range</span></label>
+	    </div>
+	    <div class="radio_container">
+	      <input type="radio" name="function-type" id="function-type-matching">
+	      <label for="function-type-matching"><span class="radio">Matching</span></label>
+	    </div>
+	  </section>
 	</div>
       </div>
-      <div class="col-sm-6">
+
+      Shape 1:<div id="transmission-shape1-num" class="slider-num">10</div>
+      <input id="transmission-shape1" type="range"/>
+      <div id="shape2-container">
+	Shape 2:<div id="transmission-shape2-num" class="slider-num">10</div>
+	<input id="transmission-shape2" type="range"/>
+      </div>
+
+      <div class="graph-container">
 	<canvas id="matrix_canvas" class="live-graph" width=100 height=100></canvas>
 	<canvas id="heatmap_canvas" class="live-graph" width=100 height=100></canvas>
       </div>
@@ -72,18 +67,18 @@
   <div class="col-sm-12 col-md-4 parasite">
     <div class="gutter">
       <h3>Parasite Options</h3>
-      <div class="col-sm-6 col-md-6">
-	Cost strength:<div id="parasite-cost-num" class="slider-num">10</div>
-	<input id="parasite-cost" type="range"/>
-	Cost curve:<div id="parasite-curve-num" class="slider-num">10</div>
-	<input id="parasite-curve" type="range"/>
-	Mortality rate:<div id="parasite-mortality-num" class="slider-num">10</div>
-	<input id="parasite-mortality" type="range"/>
-	Transmission rate:<div id="parasite-transmission-num" class="slider-num">10</div>
-	<input id="parasite-transmission" type="range"/>
-	Sterility:<div id="parasite-sterility-num" class="slider-num">10</div>
-	<input id="parasite-sterility" type="range"/>
-	Parasite cost type
+      Cost strength:<div id="parasite-cost-num" class="slider-num">10</div>
+      <input id="parasite-cost" type="range"/>
+      Cost curve:<div id="parasite-curve-num" class="slider-num">10</div>
+      <input id="parasite-curve" type="range"/>
+      Mortality rate:<div id="parasite-mortality-num" class="slider-num">10</div>
+      <input id="parasite-mortality" type="range"/>
+      Transmission rate:<div id="parasite-transmission-num" class="slider-num">10</div>
+      <input id="parasite-transmission" type="range"/>
+      Sterility:<div id="parasite-sterility-num" class="slider-num">10</div>
+      <input id="parasite-sterility" type="range"/>
+      <div class="col-sm-12 col-md-6">
+	Parasite cost type:
 	<section class="radio_section">
 	  <div class="radio_container">
 	    <input type="radio" name="parasite-type" id="parasite-type-trans" checked="true">
@@ -95,14 +90,23 @@
 	  </div>
 	</section>
       </div>
-      
-      <div class="col-sm-6 col-md-6">
-	<canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
+      <div class="col-sm-12 col-md-6">
+	<div class="graph-container">
+	  <canvas id="parasite_tradeoff_canvas" class="live-graph" width=100 height=100></canvas>
+	</div>
       </div>
-      
     </div>
 
 
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12 button-box">
+    <button id='sim-button' onclick='button_sim_toggle();'>Sim: on</button> 
+    <button id='reset-button' onclick='button_sim_reset();'>Restart</button>
+    <button id='sound-button' onclick='button_sound_toggle();'>Sound: off</button>
+    <button onclick='randomise_sim();'>Randomise</button>
   </div>
 </div>
 
@@ -111,38 +115,39 @@
     Evolutionary time ->
   </div>
   <div class="col-sm-12 col-md-7">
-    <div class="col-xs-12">
+    <div class="col-xs-12" style="padding: 0;">
       <div class="overlay sim-title"><h4>Parasites</h4></div>
       <div id="parasite-extinct" class="overlay sim-extinct"><h1>Parasites are extinct</h1></div>
       <div class="rotate overlay sim-text">Parasite trait</div>
       <canvas id="ycanvas" class="sim-graph" width=500 height=100></canvas>
     </div>
-    <div class="col-xs-12">
+    <div class="col-xs-12" style="padding: 0;">
       <div class="overlay sim-title"><h4>Hosts</h4></div>
       <div class="rotate-host overlay sim-text">Host trait</div>
       <div id="host-extinct" class="overlay sim-extinct"><h1>Hosts are extinct</h1></div>
       <canvas id="xcanvas" class="sim-graph" width=500 height=100></canvas>
     </div>
-    <div class="col-xs-12">
+    <div class="col-xs-12" style="padding: 0;">
       <div class="overlay sim-title"><h4>Infection</h4></div>
       <div class="rotate overlay sim-text">Infection level</div>
       <canvas id="icanvas" class="sim-graph" width=500 height=100></canvas>
     </div>
   </div>
-  <div class="col-sm-12 col-md-5">
-    <div class="row">
-      <div id="catalt" class="gutter">
-	<h3 style="width:50%; margin:auto;">Ready in <span id="cattimer">??</span> seconds</h3>
-      </div>
 
-      <div id="catthank" class="gutter" style="top: 0px; position: absolute;">
+  <div class="col-sm-12 col-md-5">
+    <div class="gutter">
+      <div id="catalt">
+	<h3>Ready in <span id="cattimer">??</span> seconds</h3>
+      </div>
+      
+      <div id="catthank" style="position:relative; top:0;">
 	<h3>Thank you for contributing</h3>
       </div>
-
-      <div id="catbox" class="gutter" style="top: 0px; position: absolute;">
-	<h3>Categorise me</h3>
-	<div class="col-sm-12 col-md-6 host">
-	  <h3>Host</h3>
+      
+      <div id="catbox" style="position:relative; top:0;">
+	<h3>Categorise your results</h3>
+	<div class="col-xs-6 col-md-6 host">
+	  <h2>Host</h2>
 	  <section class="radio_section">
 	    <div class="radio_container">
 	      <input type="checkbox" name="cat" id="cat-h-cycling">
@@ -162,8 +167,8 @@
 	    </div>
 	  </section>
 	</div>
-	<div class="col-sm-12 col-md-6 parasite">
-	  <h3>Parasite</h3>
+	<div class="col-xs-6 col-md-6 parasite">
+	  <h2>Parasite</h2>
 	  <section class="radio_section">
 	    <div class="radio_container">
 	      <input type="checkbox" name="cat" id="cat-p-cycling">
@@ -183,10 +188,12 @@
 	    </div>
 	  </section>
 	</div>
-	<div class="col-xs-2 col-xs-offset-4">
+
+	<div class="col-xs-2 col-xs-offset-5" style="padding:0;">
 	  <button onclick='button_save();'>Save</button>
 	</div>
       </div>      
+
     </div>
   </div>
 </div>
@@ -230,9 +237,9 @@ connect_slider("#transmission-shape2", function(v) {
 });
 
 // todo: change CP2 range
-connect_checkbox("#function-type-universal", function(v) { $("#shape2-container").hide(); transmission_function="universal"; });
-connect_checkbox("#function-type-range", function(v) { $("#shape2-container").hide(); transmission_function="range"; });
-connect_checkbox("#function-type-matching", function(v) { $("#shape2-container").show(); transmission_function="matching"; });
+connect_checkbox("#function-type-universal", function(v) { $("#shape2-container").fadeOut("slow"); transmission_function="universal"; });
+connect_checkbox("#function-type-range", function(v) { $("#shape2-container").fadeOut("slow"); transmission_function="range"; });
+connect_checkbox("#function-type-matching", function(v) { $("#shape2-container").fadeIn("slow"); transmission_function="matching"; });
 
 connect_checkbox("#parasite-type-trans", function(v) { transmission_type="transmission"; });
 connect_checkbox("#parasite-type-vir", function(v) { transmission_type="virulence"; });

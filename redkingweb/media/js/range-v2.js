@@ -34,8 +34,8 @@ var transmission_type = "transmission";
  ******************************************/
 var MAXTIME=10 /* Length of simulation */
 var N=101 /* Number of host and parasite phenotypes */
-var HSTART=0.0 /* Initial host phenotype */
-var PSTART=0.0 /* Initial parasite phenotype */
+var HSTART=0.05 /* Initial host phenotype */
+var PSTART=0.05 /* Initial parasite phenotype */
 var NEVOL=500 /* Number of iterations (evolutionary timesteps) - ideally this needs to be higher */
 var EPSILON=1e-3 /* Extinction tolerance */
 var WHO=0.5 /* Controls relative mutation rates */

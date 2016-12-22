@@ -18,7 +18,7 @@ function sim_handler() {
     this.running = false;
 
     this.sound = new sound_handler();
-    this.max_cat_timer = 1500;
+    this.max_cat_timer = 150;
     this.cat_timer = 0;
     this.step_time = 0;
     this.last_time = 0;
@@ -75,6 +75,7 @@ function sim_handler() {
 	    
 	    if (this.cat_timer>this.max_cat_timer) {
 		$("#catbox").fadeIn("slow");
+		$("#catthank").fadeOut("slow");
 		$("#catalt").fadeOut("slow");
 	    }
 
@@ -231,11 +232,11 @@ function plot_tradeoff(arr,canvas_id,type,col,x_label,y_label) {
     ctx.lineWidth=2;
     ctx.beginPath();
     // tradeoffs are inverted
-    ctx.moveTo(0, ((arr[0]-min)/sc)*100);
+    ctx.moveTo(15, ((arr[0]-min)/sc)*80+5);
     for (var i=1; i<arr.length; i++) {
     	// normalise to fill graph
      	var v = ((arr[i]-min)/sc)
-	ctx.lineTo(i, v*100);
+	ctx.lineTo(15+i*0.8, v*80+5);
      	//ctx.fillRect( , 2, 2 );
     }
     ctx.stroke();

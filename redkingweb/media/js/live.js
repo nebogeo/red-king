@@ -18,7 +18,7 @@ function sim_handler() {
     this.running = false;
 
     this.sound = new sound_handler();
-    this.max_cat_timer = 150;
+    this.max_cat_timer = 1500;
     this.cat_timer = 0;
     this.step_time = 0;
     this.last_time = 0;
